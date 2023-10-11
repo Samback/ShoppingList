@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		341048392AAE182900C38084 /* Gen in Frameworks */ = {isa = PBXBuildFile; productRef = 341048382AAE182900C38084 /* Gen */; };
 		343E2B342AA4D25C00F76D2C /* ShoppingListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343E2B332AA4D25C00F76D2C /* ShoppingListApp.swift */; };
 		343E2B362AA4D25C00F76D2C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343E2B352AA4D25C00F76D2C /* ContentView.swift */; };
 		343E2B382AA4D25E00F76D2C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 343E2B372AA4D25E00F76D2C /* Assets.xcassets */; };
@@ -14,6 +15,11 @@
 		343E2B452AA4D25E00F76D2C /* ShoppingListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343E2B442AA4D25E00F76D2C /* ShoppingListTests.swift */; };
 		343E2B4F2AA4D25E00F76D2C /* ShoppingListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343E2B4E2AA4D25E00F76D2C /* ShoppingListUITests.swift */; };
 		343E2B512AA4D25E00F76D2C /* ShoppingListUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343E2B502AA4D25E00F76D2C /* ShoppingListUITestsLaunchTests.swift */; };
+		344DD6312AA64B76002E8210 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 344DD6302AA64B76002E8210 /* ComposableArchitecture */; };
+		346979A62ABCDEC700C37C6B /* BuildChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346979A52ABCDEC700C37C6B /* BuildChecker.swift */; };
+		34757C522AC86C96007CB629 /* Note in Frameworks */ = {isa = PBXBuildFile; productRef = 34757C512AC86C96007CB629 /* Note */; };
+		34959AC52ACD99E800C55987 /* ListManager in Frameworks */ = {isa = PBXBuildFile; productRef = 34959AC42ACD99E800C55987 /* ListManager */; };
+		34959AC72ACD99E800C55987 /* PurchaseList in Frameworks */ = {isa = PBXBuildFile; productRef = 34959AC62ACD99E800C55987 /* PurchaseList */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		340CF3D72AC8858000C2C928 /* ListManager */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ListManager; sourceTree = "<group>"; };
 		343E2B302AA4D25C00F76D2C /* ShoppingList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShoppingList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		343E2B332AA4D25C00F76D2C /* ShoppingListApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListApp.swift; sourceTree = "<group>"; };
 		343E2B352AA4D25C00F76D2C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -44,6 +51,12 @@
 		343E2B4A2AA4D25E00F76D2C /* ShoppingListUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShoppingListUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		343E2B4E2AA4D25E00F76D2C /* ShoppingListUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListUITests.swift; sourceTree = "<group>"; };
 		343E2B502AA4D25E00F76D2C /* ShoppingListUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		344A4BA32AA8AA770099BFAE /* Laboratory.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = Laboratory.playground; path = Playgrounds/Laboratory.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		346979A52ABCDEC700C37C6B /* BuildChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildChecker.swift; sourceTree = "<group>"; };
+		34757C4F2AC8670D007CB629 /* Note */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Note; sourceTree = "<group>"; };
+		34832CF92AD5CD2A00BB8DCF /* Models */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Models; sourceTree = "<group>"; };
+		348D69842AD06A1E005DD100 /* Utils */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Utils; sourceTree = "<group>"; };
+		34EDC0CF2AC871CE009E6FE7 /* PurchaseList */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PurchaseList; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +64,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34757C522AC86C96007CB629 /* Note in Frameworks */,
+				344DD6312AA64B76002E8210 /* ComposableArchitecture in Frameworks */,
+				34959AC52ACD99E800C55987 /* ListManager in Frameworks */,
+				341048392AAE182900C38084 /* Gen in Frameworks */,
+				34959AC72ACD99E800C55987 /* PurchaseList in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,10 +92,13 @@
 		343E2B272AA4D25B00F76D2C = {
 			isa = PBXGroup;
 			children = (
+				34757C4E2AC866CE007CB629 /* Modules */,
+				344A4BA32AA8AA770099BFAE /* Laboratory.playground */,
 				343E2B322AA4D25C00F76D2C /* ShoppingList */,
 				343E2B432AA4D25E00F76D2C /* ShoppingListTests */,
 				343E2B4D2AA4D25E00F76D2C /* ShoppingListUITests */,
 				343E2B312AA4D25C00F76D2C /* Products */,
+				34757C502AC86C96007CB629 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -94,10 +115,12 @@
 		343E2B322AA4D25C00F76D2C /* ShoppingList */ = {
 			isa = PBXGroup;
 			children = (
+				343E2B5D2AA4D2B000F76D2C /* App */,
 				343E2B332AA4D25C00F76D2C /* ShoppingListApp.swift */,
 				343E2B352AA4D25C00F76D2C /* ContentView.swift */,
 				343E2B372AA4D25E00F76D2C /* Assets.xcassets */,
 				343E2B392AA4D25E00F76D2C /* Preview Content */,
+				346979A52ABCDEC700C37C6B /* BuildChecker.swift */,
 			);
 			path = ShoppingList;
 			sourceTree = "<group>";
@@ -127,6 +150,32 @@
 			path = ShoppingListUITests;
 			sourceTree = "<group>";
 		};
+		343E2B5D2AA4D2B000F76D2C /* App */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		34757C4E2AC866CE007CB629 /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				34832CF92AD5CD2A00BB8DCF /* Models */,
+				348D69842AD06A1E005DD100 /* Utils */,
+				340CF3D72AC8858000C2C928 /* ListManager */,
+				34EDC0CF2AC871CE009E6FE7 /* PurchaseList */,
+				34757C4F2AC8670D007CB629 /* Note */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		34757C502AC86C96007CB629 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -143,6 +192,13 @@
 			dependencies = (
 			);
 			name = ShoppingList;
+			packageProductDependencies = (
+				344DD6302AA64B76002E8210 /* ComposableArchitecture */,
+				341048382AAE182900C38084 /* Gen */,
+				34757C512AC86C96007CB629 /* Note */,
+				34959AC42ACD99E800C55987 /* ListManager */,
+				34959AC62ACD99E800C55987 /* PurchaseList */,
+			);
 			productName = ShoppingList;
 			productReference = 343E2B302AA4D25C00F76D2C /* ShoppingList.app */;
 			productType = "com.apple.product-type.application";
@@ -191,7 +247,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					343E2B2F2AA4D25C00F76D2C = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -215,6 +271,10 @@
 				Base,
 			);
 			mainGroup = 343E2B272AA4D25B00F76D2C;
+			packageReferences = (
+				344DD62F2AA64B76002E8210 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				341048372AAE182900C38084 /* XCRemoteSwiftPackageReference "swift-gen" */,
+			);
 			productRefGroup = 343E2B312AA4D25C00F76D2C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -257,6 +317,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				346979A62ABCDEC700C37C6B /* BuildChecker.swift in Sources */,
 				343E2B362AA4D25C00F76D2C /* ContentView.swift in Sources */,
 				343E2B342AA4D25C00F76D2C /* ShoppingListApp.swift in Sources */,
 			);
@@ -331,6 +392,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -391,6 +453,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -425,6 +488,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -454,6 +518,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -583,6 +648,50 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		341048372AAE182900C38084 /* XCRemoteSwiftPackageReference "swift-gen" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-gen.git";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 0.4.0;
+			};
+		};
+		344DD62F2AA64B76002E8210 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 1.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		341048382AAE182900C38084 /* Gen */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 341048372AAE182900C38084 /* XCRemoteSwiftPackageReference "swift-gen" */;
+			productName = Gen;
+		};
+		344DD6302AA64B76002E8210 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 344DD62F2AA64B76002E8210 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+		34757C512AC86C96007CB629 /* Note */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Note;
+		};
+		34959AC42ACD99E800C55987 /* ListManager */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ListManager;
+		};
+		34959AC62ACD99E800C55987 /* PurchaseList */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PurchaseList;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 343E2B282AA4D25B00F76D2C /* Project object */;
 }
