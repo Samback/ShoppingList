@@ -10,8 +10,6 @@ import SwiftUI
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
 
-        guard BuildChecker.arePreviewsRunning() == false else { return true }
-
         return true
     }
 }
@@ -23,11 +21,7 @@ struct ShoppingListApp: App {
 
     var body: some Scene {
         WindowGroup {
-            if BuildChecker.arePreviewsRunning() == false {
-                EmptyView()
-            } else {
-                ContentView()
-            }
+           ContentView()
         }
     }
 }

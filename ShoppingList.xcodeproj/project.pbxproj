@@ -16,8 +16,8 @@
 		343E2B4F2AA4D25E00F76D2C /* ShoppingListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343E2B4E2AA4D25E00F76D2C /* ShoppingListUITests.swift */; };
 		343E2B512AA4D25E00F76D2C /* ShoppingListUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343E2B502AA4D25E00F76D2C /* ShoppingListUITestsLaunchTests.swift */; };
 		344DD6312AA64B76002E8210 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 344DD6302AA64B76002E8210 /* ComposableArchitecture */; };
-		346979A62ABCDEC700C37C6B /* BuildChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346979A52ABCDEC700C37C6B /* BuildChecker.swift */; };
 		34757C522AC86C96007CB629 /* Note in Frameworks */ = {isa = PBXBuildFile; productRef = 34757C512AC86C96007CB629 /* Note */; };
+		34832CFB2AD6AF8B00BB8DCF /* Utils in Frameworks */ = {isa = PBXBuildFile; productRef = 34832CFA2AD6AF8B00BB8DCF /* Utils */; };
 		34959AC52ACD99E800C55987 /* ListManager in Frameworks */ = {isa = PBXBuildFile; productRef = 34959AC42ACD99E800C55987 /* ListManager */; };
 		34959AC72ACD99E800C55987 /* PurchaseList in Frameworks */ = {isa = PBXBuildFile; productRef = 34959AC62ACD99E800C55987 /* PurchaseList */; };
 /* End PBXBuildFile section */
@@ -51,8 +51,6 @@
 		343E2B4A2AA4D25E00F76D2C /* ShoppingListUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShoppingListUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		343E2B4E2AA4D25E00F76D2C /* ShoppingListUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListUITests.swift; sourceTree = "<group>"; };
 		343E2B502AA4D25E00F76D2C /* ShoppingListUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		344A4BA32AA8AA770099BFAE /* Laboratory.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = Laboratory.playground; path = Playgrounds/Laboratory.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		346979A52ABCDEC700C37C6B /* BuildChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildChecker.swift; sourceTree = "<group>"; };
 		34757C4F2AC8670D007CB629 /* Note */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Note; sourceTree = "<group>"; };
 		34832CF92AD5CD2A00BB8DCF /* Models */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Models; sourceTree = "<group>"; };
 		348D69842AD06A1E005DD100 /* Utils */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Utils; sourceTree = "<group>"; };
@@ -64,6 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34832CFB2AD6AF8B00BB8DCF /* Utils in Frameworks */,
 				34757C522AC86C96007CB629 /* Note in Frameworks */,
 				344DD6312AA64B76002E8210 /* ComposableArchitecture in Frameworks */,
 				34959AC52ACD99E800C55987 /* ListManager in Frameworks */,
@@ -93,7 +92,6 @@
 			isa = PBXGroup;
 			children = (
 				34757C4E2AC866CE007CB629 /* Modules */,
-				344A4BA32AA8AA770099BFAE /* Laboratory.playground */,
 				343E2B322AA4D25C00F76D2C /* ShoppingList */,
 				343E2B432AA4D25E00F76D2C /* ShoppingListTests */,
 				343E2B4D2AA4D25E00F76D2C /* ShoppingListUITests */,
@@ -120,7 +118,6 @@
 				343E2B352AA4D25C00F76D2C /* ContentView.swift */,
 				343E2B372AA4D25E00F76D2C /* Assets.xcassets */,
 				343E2B392AA4D25E00F76D2C /* Preview Content */,
-				346979A52ABCDEC700C37C6B /* BuildChecker.swift */,
 			);
 			path = ShoppingList;
 			sourceTree = "<group>";
@@ -198,6 +195,7 @@
 				34757C512AC86C96007CB629 /* Note */,
 				34959AC42ACD99E800C55987 /* ListManager */,
 				34959AC62ACD99E800C55987 /* PurchaseList */,
+				34832CFA2AD6AF8B00BB8DCF /* Utils */,
 			);
 			productName = ShoppingList;
 			productReference = 343E2B302AA4D25C00F76D2C /* ShoppingList.app */;
@@ -317,7 +315,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				346979A62ABCDEC700C37C6B /* BuildChecker.swift in Sources */,
 				343E2B362AA4D25C00F76D2C /* ContentView.swift in Sources */,
 				343E2B342AA4D25C00F76D2C /* ShoppingListApp.swift in Sources */,
 			);
@@ -682,6 +679,10 @@
 		34757C512AC86C96007CB629 /* Note */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Note;
+		};
+		34832CFA2AD6AF8B00BB8DCF /* Utils */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Utils;
 		};
 		34959AC42ACD99E800C55987 /* ListManager */ = {
 			isa = XCSwiftPackageProductDependency;

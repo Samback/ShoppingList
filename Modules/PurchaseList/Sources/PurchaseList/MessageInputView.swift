@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import Utils
 
 struct MessageInputView: View {
     let store: StoreOf<MessageInputFeature>
