@@ -21,7 +21,9 @@ public struct PurchaseList: View {
                       observe: { $0 },
                       content: { viewStore in
             NavigationStack {
-                listView(with: viewStore)
+                VStack {
+                    listView(with: viewStore)
+                }
                 .navigationTitle(viewStore.title)
                 .toolbar {
                     toolbarView(with: viewStore)
@@ -37,6 +39,11 @@ public struct PurchaseList: View {
                     Text("🧽")
                    })
         }
+    }
+
+    @ViewBuilder
+    private func inputView(with viewStore: ViewStoreOf<PurchaseListFeature>) -> some View {
+        EmptyView()
     }
 
     @ViewBuilder

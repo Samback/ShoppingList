@@ -40,18 +40,24 @@ public extension IdentifiedArray where ID == NoteFeature.State.ID, Element == No
 public struct PurchaseListFeature: Reducer {
     @Dependency(\.continuousClock) var clock
     @Dependency(\.uuid) var uuid
+    @Dependency(\.dataManager) var dataManager
 
     public init() {}
 
     public struct State: Equatable, Identifiable {
-       public let id: UUID
-       public var notes: IdentifiedArrayOf<NoteFeature.State> = []
-       public var title: String = "Welcome"
+        public let id: UUID
+        public var notes: IdentifiedArrayOf<NoteFeature.State> = []
+        public var title: String = "Welcome"
+        var inputText: MessageInputFeature.State
 
-        public init(id: UUID, notes: IdentifiedArrayOf<NoteFeature.State>, title: String) {
+        public init(id: UUID,
+                    notes: IdentifiedArrayOf<NoteFeature.State>,
+                    title: String,
+                    inputText: MessageInputFeature.State = MessageInputFeature.State()) {
             self.id = id
             self.notes = notes
             self.title = title
+            self.inputText = inputText
         }
 
         public static func convert(from model: PurchaseModel) -> Self {
@@ -108,8 +114,8 @@ public struct PurchaseListFeature: Reducer {
             case let .move(source, destination):
                 state.notes.move(fromOffsets: source, toOffset: destination)
                 return .run { send in
-                  try await self.clock.sleep(for: .milliseconds(500))
-                  await send(.sortCompletedNotes)
+                    try await self.clock.sleep(for: .milliseconds(500))
+                    await send(.sortCompletedNotes)
                 }
 
             case .sortCompletedNotes:

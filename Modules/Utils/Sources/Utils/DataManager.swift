@@ -19,9 +19,9 @@ extension DataManager: DependencyKey {
     }
 
     public static var previewValue: Self {
-        return DataManager(loadData: { try readAllDocuments() },
-                           deleteDocument: { try deleteDocument(name: $0) },
-                           createDocument: { purchase in try write(purchase: purchase) })
+        return DataManager(loadData: { [PurchaseModel.fabric()] },
+                           deleteDocument: { _ in },
+                           createDocument: { _ in _ = PurchaseModel.fabric() })
 
     }
 

@@ -8,9 +8,9 @@
 import Foundation
 import ComposableArchitecture
 
-struct MessageInputFeature: Reducer {
+public struct MessageInputFeature: Reducer {
 
-    var body: some Reducer<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
@@ -29,11 +29,15 @@ struct MessageInputFeature: Reducer {
         }
     }
 
-    struct State: Equatable {
-      @BindingState var inputText = ""
+    public struct State: Equatable {
+        @BindingState var inputText: String
+
+        public init(inputText: String = "") {
+            self.inputText = inputText
+        }
     }
 
-    enum Action: BindableAction, Equatable {
+    public enum Action: BindableAction, Equatable {
         case binding(BindingAction<State>)
         case tapOnActionButton(String)
         case textChanged(String)

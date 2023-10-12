@@ -23,10 +23,12 @@ public struct ListManager: View {
             WithViewStore(store,
                           observe: { $0 },
                           content: { viewStore in
-                listView(viewStore: viewStore)
+                VStack {
+                    listView(with: viewStore)
+                }
                     .navigationTitle("My list")
                     .toolbar {
-                        toolBarView(viewStore: viewStore)
+                        toolBarView(with: viewStore)
                     }
                     .navigationDestination(store: self.store.scope(state: \.$activePurchaseList,
                                                                    action: { .activePurchaseList($0) }),
@@ -35,7 +37,7 @@ public struct ListManager: View {
         }
     }
 
-    private func toolBarView(viewStore: ViewStoreOf<ListManagerFeature>) -> some ToolbarContent {
+    private func toolBarView(with viewStore: ViewStoreOf<ListManagerFeature>) -> some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
             Button(action: {
                 viewStore.send(.addNewList)
@@ -46,7 +48,7 @@ public struct ListManager: View {
     }
 
     @ViewBuilder
-    private func listView(viewStore: ViewStoreOf<ListManagerFeature>) -> some View {
+    private func listView(with viewStore: ViewStoreOf<ListManagerFeature>) -> some View {
         List {
             ForEachStore(
                 self.store.scope(state: \.purchaseListCollection,

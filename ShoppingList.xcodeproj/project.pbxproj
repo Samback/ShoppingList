@@ -16,10 +16,11 @@
 		343E2B4F2AA4D25E00F76D2C /* ShoppingListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343E2B4E2AA4D25E00F76D2C /* ShoppingListUITests.swift */; };
 		343E2B512AA4D25E00F76D2C /* ShoppingListUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343E2B502AA4D25E00F76D2C /* ShoppingListUITestsLaunchTests.swift */; };
 		344DD6312AA64B76002E8210 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 344DD6302AA64B76002E8210 /* ComposableArchitecture */; };
-		34757C522AC86C96007CB629 /* Note in Frameworks */ = {isa = PBXBuildFile; productRef = 34757C512AC86C96007CB629 /* Note */; };
-		34832CFB2AD6AF8B00BB8DCF /* Utils in Frameworks */ = {isa = PBXBuildFile; productRef = 34832CFA2AD6AF8B00BB8DCF /* Utils */; };
-		34959AC52ACD99E800C55987 /* ListManager in Frameworks */ = {isa = PBXBuildFile; productRef = 34959AC42ACD99E800C55987 /* ListManager */; };
-		34959AC72ACD99E800C55987 /* PurchaseList in Frameworks */ = {isa = PBXBuildFile; productRef = 34959AC62ACD99E800C55987 /* PurchaseList */; };
+		34BCE9932AD85760002D71C5 /* ListManager in Frameworks */ = {isa = PBXBuildFile; productRef = 34BCE9922AD85760002D71C5 /* ListManager */; };
+		34BCE9952AD85760002D71C5 /* Models in Frameworks */ = {isa = PBXBuildFile; productRef = 34BCE9942AD85760002D71C5 /* Models */; };
+		34BCE9972AD85760002D71C5 /* Note in Frameworks */ = {isa = PBXBuildFile; productRef = 34BCE9962AD85760002D71C5 /* Note */; };
+		34BCE9992AD85760002D71C5 /* PurchaseList in Frameworks */ = {isa = PBXBuildFile; productRef = 34BCE9982AD85760002D71C5 /* PurchaseList */; };
+		34BCE99B2AD85760002D71C5 /* Utils in Frameworks */ = {isa = PBXBuildFile; productRef = 34BCE99A2AD85760002D71C5 /* Utils */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,12 +63,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				34832CFB2AD6AF8B00BB8DCF /* Utils in Frameworks */,
-				34757C522AC86C96007CB629 /* Note in Frameworks */,
+				34BCE9932AD85760002D71C5 /* ListManager in Frameworks */,
 				344DD6312AA64B76002E8210 /* ComposableArchitecture in Frameworks */,
-				34959AC52ACD99E800C55987 /* ListManager in Frameworks */,
+				34BCE9972AD85760002D71C5 /* Note in Frameworks */,
+				34BCE9952AD85760002D71C5 /* Models in Frameworks */,
 				341048392AAE182900C38084 /* Gen in Frameworks */,
-				34959AC72ACD99E800C55987 /* PurchaseList in Frameworks */,
+				34BCE99B2AD85760002D71C5 /* Utils in Frameworks */,
+				34BCE9992AD85760002D71C5 /* PurchaseList in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -193,10 +195,11 @@
 			packageProductDependencies = (
 				344DD6302AA64B76002E8210 /* ComposableArchitecture */,
 				341048382AAE182900C38084 /* Gen */,
-				34757C512AC86C96007CB629 /* Note */,
-				34959AC42ACD99E800C55987 /* ListManager */,
-				34959AC62ACD99E800C55987 /* PurchaseList */,
-				34832CFA2AD6AF8B00BB8DCF /* Utils */,
+				34BCE9922AD85760002D71C5 /* ListManager */,
+				34BCE9942AD85760002D71C5 /* Models */,
+				34BCE9962AD85760002D71C5 /* Note */,
+				34BCE9982AD85760002D71C5 /* PurchaseList */,
+				34BCE99A2AD85760002D71C5 /* Utils */,
 			);
 			productName = ShoppingList;
 			productReference = 343E2B302AA4D25C00F76D2C /* ShoppingList.app */;
@@ -513,6 +516,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-fprofile-instr-generate";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sebek.ShoppingList;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -544,6 +548,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-fprofile-instr-generate";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sebek.ShoppingList;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -699,21 +704,25 @@
 			package = 344DD62F2AA64B76002E8210 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
 		};
-		34757C512AC86C96007CB629 /* Note */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Note;
-		};
-		34832CFA2AD6AF8B00BB8DCF /* Utils */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Utils;
-		};
-		34959AC42ACD99E800C55987 /* ListManager */ = {
+		34BCE9922AD85760002D71C5 /* ListManager */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ListManager;
 		};
-		34959AC62ACD99E800C55987 /* PurchaseList */ = {
+		34BCE9942AD85760002D71C5 /* Models */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Models;
+		};
+		34BCE9962AD85760002D71C5 /* Note */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Note;
+		};
+		34BCE9982AD85760002D71C5 /* PurchaseList */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PurchaseList;
+		};
+		34BCE99A2AD85760002D71C5 /* Utils */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Utils;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
