@@ -20,20 +20,23 @@ public struct ListManagerFeature: Reducer {
     public init() {}
 
     public struct State: Equatable {
+        @PresentationState public var activePurchaseList: PurchaseListFeature.State?
+
         var purchaseListCollection: IdentifiedArrayOf<PurchaseListFeature.State> = []
 
         public init(purchaseListCollection: IdentifiedArrayOf<PurchaseListFeature.State>) {
             self.purchaseListCollection = purchaseListCollection
         }
-
     }
 
     public enum Action {
         case initialLoad
+        case activePurchaseList(PresentationAction <PurchaseListFeature.Action>)
         case listAction(id: UUID, action: PurchaseListFeature.Action)
         case addNewList
         case delete(IndexSet)
         case loadedListResult(TaskResult<[PurchaseModel]>)
+        case openList(PurchaseListFeature.State)
     }
 
     public var body: some ReducerOf<Self> {
@@ -47,9 +50,11 @@ public struct ListManagerFeature: Reducer {
                                                         notes: IdentifiedArrayOf<NoteFeature.State>(uniqueElements: []),
                                                         title: newPurchase.title)
                 state.purchaseListCollection.append(newList)
-                return .run {  _ in
+                return .run { send in
                     try await dataManager.createDocument(newPurchase)
+                    await send(.openList(newList))
                 }
+
             case let .delete(indexSet):
                 guard let firstIndex = indexSet.first else {
                     return .none
@@ -76,9 +81,18 @@ public struct ListManagerFeature: Reducer {
             case let .loadedListResult(.failure(error)):
                 print(error)
                 return .none
+            case .activePurchaseList:
+                return .none
+            case let .openList(purchaseListState):
+                state.activePurchaseList = purchaseListState
+                return .none
             }
-
         }
+        .ifLet(\.$activePurchaseList,
+                action: /Action.activePurchaseList,
+                destination: {
+            PurchaseListFeature()
+        })
         .forEach(\.purchaseListCollection,
                   action: /Action.listAction) {
             PurchaseListFeature()

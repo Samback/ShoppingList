@@ -28,6 +28,9 @@ public struct ListManager: View {
                     .toolbar {
                         toolBarView(viewStore: viewStore)
                     }
+                    .navigationDestination(store: self.store.scope(state: \.$activePurchaseList,
+                                                                   action: { .activePurchaseList($0) }),
+                                           destination: PurchaseList.init)
             })
         }
     }
@@ -49,16 +52,16 @@ public struct ListManager: View {
                 self.store.scope(state: \.purchaseListCollection,
                                  action: ListManagerFeature.Action.listAction(id: action:))) { store in
                                      store.withState { state in
-                                         NavigationLink {
-                                             PurchaseList(store: store)
-                                         } label: {
-                                             PurchaseListCell(title: state.title)
-                                         }
+                                         PurchaseListCell(title: state.title)
+                                             .onTapGesture {
+                                                 viewStore.send(.openList(state))
+                                             }
                                      }
                                  }
                                  .onDelete(perform: { indexSet in
                                      viewStore.send(.delete(indexSet))
                                  })
+                                 .listStyle(.plain)
         }
     }
 }
