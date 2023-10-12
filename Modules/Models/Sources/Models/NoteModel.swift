@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct NoteModel: Codable {
+public struct NoteModel: Codable, Identifiable {
     public let id: UUID
     public let title: String
     public let subtitle: String?

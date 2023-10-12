@@ -6,48 +6,44 @@ import NonEmpty
 import Validated
 
 public struct DataManager {
-    public var loadData: @Sendable () async -> Validated<[PurchaseModel], NonEmptyArray<Error>>
+    public var loadData: @Sendable () async throws -> [PurchaseModel]
+    public var deleteDocument: @Sendable (String) async throws -> Void
+    public var createDocument: @Sendable (PurchaseModel) async throws -> Void
 }
 
 extension DataManager: DependencyKey {
     public static var liveValue: Self {
-        return DataManager {
-            return unimplemented("DataManager.load")
-        }
+        return DataManager(loadData: unimplemented("DataManager.load"),
+                           deleteDocument: unimplemented("DataManager.deleteDocument"),
+                           createDocument: unimplemented("DataManager.createDocument"))
     }
 
     public static var previewValue: Self {
-        return DataManager {
-            return readSomeFilesList()
-        }
+        return DataManager(loadData: { try readAllDocuments() },
+                           deleteDocument: { try deleteDocument(name: $0) },
+                           createDocument: { purchase in try write(purchase: purchase) })
+
     }
 
     public static var fileSystem: Self {
-        return DataManager {
-            return .valid(PurchaseModel.mock.flatMap { $0} )
-        }
+        return DataManager(loadData: { try readAllDocuments() },
+                           deleteDocument: { try deleteDocument(name: $0) },
+                           createDocument: { purchase in try write(purchase: purchase) })
     }
 
-    private static func readSomeFilesList() -> Validated<[PurchaseModel], NonEmptyArray<Error>> {
-        let controller = FileIOController()
-        do {
-            let list: [PurchaseModel] = try controller.readAll()
-            return .valid(list)
-        } catch {
-            return .error(NonEmptyArray(error))
-        }
+    private static func readAllDocuments() throws -> [PurchaseModel] {
+         try FileIOController().readAll()
     }
 
-
-    private static func writeSomeFile() {
+    private static func deleteDocument(name: String) throws {
+        print("try to delete document \(name)")
         let controller = FileIOController()
-        let purchase = PurchaseModel.fabric()
-        do {
-            try controller.write(purchase, toDocumentNamed: purchase.id.uuidString)
-            print("Write succeed")
-        } catch {
-            print("Get error on write \(error)")
-        }
+        try controller.delete(document: name)
+    }
+
+    private static func write(purchase: PurchaseModel) throws {
+        let controller = FileIOController()
+        try controller.write(purchase, toDocumentNamed: purchase.id.uuidString)
     }
 
 }

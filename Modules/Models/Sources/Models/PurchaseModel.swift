@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct PurchaseModel: Codable {
+public struct PurchaseModel: Codable, Identifiable {
     public let id: UUID
     public let notes: [NoteModel]
     public var title: String
@@ -16,6 +16,10 @@ public struct PurchaseModel: Codable {
         self.id = id
         self.notes = notes
         self.title = title
+    }
+
+    public static func newPurchase() -> Self {
+        return .init(id: UUID(), notes: [], title: "New purchase list")
     }
 
 }

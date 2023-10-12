@@ -8,13 +8,18 @@
 import Foundation
 
 public extension FileManager {
-    func urls(for directory: FileManager.SearchPathDirectory = .documentDirectory, skipsHiddenFiles: Bool = true ) throws -> [URL] {
+    func urls(for directory: FileManager.SearchPathDirectory = .documentDirectory,
+              skipsHiddenFiles: Bool = true ) throws -> [URL] {
         let documentsURL = urls(for: directory, in: .userDomainMask)[0]
-        let fileURLs = try contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil, options: skipsHiddenFiles ? .skipsHiddenFiles : [] )
+        let fileURLs = try contentsOfDirectory(at: documentsURL,
+                                               includingPropertiesForKeys: nil,
+                                               options: skipsHiddenFiles ? .skipsHiddenFiles : [] )
         return fileURLs
     }
 
     func urls(for folderURL: URL, skipsHiddenFiles: Bool = true ) throws -> [URL] {
-        try contentsOfDirectory(at: folderURL, includingPropertiesForKeys: nil, options: skipsHiddenFiles ? .skipsHiddenFiles : [] )
+        try contentsOfDirectory(at: folderURL,
+                                includingPropertiesForKeys: nil,
+                                options: skipsHiddenFiles ? .skipsHiddenFiles : [] )
     }
 }

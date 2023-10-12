@@ -55,7 +55,6 @@ struct ActionButtonModifier: ViewModifier {
     }
 }
 
-
 public struct NoteView: View {
     let store: StoreOf<NoteFeature>
 
@@ -64,7 +63,9 @@ public struct NoteView: View {
     }
 
     public var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithViewStore(self.store,
+                      observe: { $0 },
+                      content: { viewStore in
             HStack {
                 VStack(alignment: .leading) {
                     Text(viewStore.title)
@@ -84,8 +85,7 @@ public struct NoteView: View {
                 .frame(width: 44, height: 44)
                 .buttonStyle(.plain)
             }
-        }
-
+        })
     }
 }
 

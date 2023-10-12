@@ -8,8 +8,6 @@
 import SwiftUI
 import UIKit
 
-
-
 struct PurchaseListCell: View {
 
     let title: String

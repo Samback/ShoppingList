@@ -12,11 +12,15 @@ let package = Package(
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "Note",
-            targets: ["Note"]),
+            targets: ["Note"])
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture",
-                 from: "1.2.0")],
+                 from: "1.2.0"),
+        .package(path: "../Models")
+
+    ],
+
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
@@ -24,10 +28,11 @@ let package = Package(
             name: "Note",
             dependencies: [
                 .product(name: "ComposableArchitecture",
-                         package: "swift-composable-architecture")]
+                         package: "swift-composable-architecture"),
+            "Models"]
         ),
         .testTarget(
             name: "NoteTests",
-            dependencies: ["Note"]),
+            dependencies: ["Note"])
     ]
 )

@@ -7,6 +7,7 @@
 
 import Foundation
 import ComposableArchitecture
+import Models
 
 public struct NoteFeature: Reducer {
 
@@ -47,9 +48,14 @@ public struct NoteFeature: Reducer {
             self.subTitle = subTitle
             self._status = BindingState(wrappedValue: status)
         }
-    
-    }
 
+        public static func convert(from model: NoteModel) -> Self {
+            return .init(id: model.id,
+                         title: model.title,
+                         subTitle: model.subtitle,
+                         status: model.isCompleted ? .done : .new)
+        }
+    }
 
     public enum Action: BindableAction, Equatable, Sendable {
         case binding(BindingAction<State>)

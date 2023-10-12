@@ -12,13 +12,15 @@ let package = Package(
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "PurchaseList",
-            targets: ["PurchaseList"]),
+            targets: ["PurchaseList"])
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture",
                  from: "1.2.0"),
         .package(path: "../Note"),
-        .package(path: "../Utils")
+        .package(path: "../Utils"),
+        .package(path: "../Models")
+
     ],
 
     targets: [
@@ -30,12 +32,13 @@ let package = Package(
                 .product(name: "ComposableArchitecture",
                          package: "swift-composable-architecture"),
                 "Note",
-                "Utils"
+                "Utils",
+                "Models"
             ]
 
         ),
         .testTarget(
             name: "PurchaseListTests",
-            dependencies: ["PurchaseList"]),
+            dependencies: ["PurchaseList"])
     ]
 )

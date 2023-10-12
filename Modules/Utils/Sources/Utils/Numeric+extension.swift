@@ -12,5 +12,3 @@ public extension Numeric {
         return self * 4
     }
 }
-
-

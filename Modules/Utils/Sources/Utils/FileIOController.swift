@@ -35,11 +35,10 @@ struct FileIOController {
     }
 
     func update<T: Codable>(document name: String, object: T) throws {
-        let documentURL = try documentURL(for: name)
         try write(object, toDocumentNamed: name)
     }
 
-    func readAllFiles() throws -> [URL]{
+    func readAllFiles() throws -> [URL] {
         let nestedFolderURL = try nestedFolderURL()
         return try FileManager.default.urls(for: nestedFolderURL)
     }
@@ -79,7 +78,6 @@ struct FileIOController {
 
 }
 
-
 extension PurchaseModel {
     static func fabric() -> PurchaseModel {
         let notes = [
@@ -93,4 +91,3 @@ extension PurchaseModel {
                              title: "My shopping list \(UUID().uuidString.dropLast(10))")
     }
 }
-

@@ -6,9 +6,19 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
+import ListManager
+import Utils
+
+/*
+ SwiftLint configs Xcode 15
+ https://thisdevbrain.com/swiftlint-permission-issue/
+ */
 
 class AppDelegate: NSObject, UIApplicationDelegate {
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil)
+    -> Bool {
 
         return true
     }
@@ -21,7 +31,16 @@ struct ShoppingListApp: App {
 
     var body: some Scene {
         WindowGroup {
-           ContentView()
+            ListManager(
+                store: Store(initialState: ListManagerFeature.State(purchaseListCollection: []),
+                             reducer: {
+                                 ListManagerFeature()
+                             },
+                             withDependencies: {
+                                 $0.dataManager = DataManager.previewValue
+                             }
+                            )
+            )
         }
     }
 }

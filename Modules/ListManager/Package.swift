@@ -11,7 +11,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "ListManager",
-            targets: ["ListManager"]),
+            targets: ["ListManager"])
     ],
 
     dependencies: [
@@ -34,6 +34,6 @@ let package = Package(
             ]),
         .testTarget(
             name: "ListManagerTests",
-            dependencies: ["ListManager"]),
+            dependencies: ["ListManager"])
     ]
 )

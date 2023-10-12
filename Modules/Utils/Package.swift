@@ -10,7 +10,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "Utils",
-            targets: ["Utils"]),
+            targets: ["Utils"])
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture",
@@ -31,12 +31,12 @@ let package = Package(
                "Models",
                 .product(name: "NonEmpty",
                             package: "swift-nonempty"),
-                
+
                 .product(name: "Validated",
                             package: "swift-validated")
             ]),
         .testTarget(
             name: "UtilsTests",
-            dependencies: ["Utils"]),
+            dependencies: ["Utils"])
     ]
 )

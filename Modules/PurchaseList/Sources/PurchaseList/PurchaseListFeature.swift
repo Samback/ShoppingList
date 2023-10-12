@@ -8,6 +8,7 @@
 import Foundation
 import ComposableArchitecture
 import SwiftUI
+import Models
 import Note
 
 public extension IdentifiedArray where ID == NoteFeature.State.ID, Element == NoteFeature.State {
@@ -31,7 +32,7 @@ public extension IdentifiedArray where ID == NoteFeature.State.ID, Element == No
         NoteFeature.State(id: UUID(6),
                           title: "Sprite",
                           subTitle: "1 L.",
-                          status: .new),
+                          status: .new)
 
     ]
 }
@@ -51,6 +52,12 @@ public struct PurchaseListFeature: Reducer {
             self.id = id
             self.notes = notes
             self.title = title
+        }
+
+        public static func convert(from model: PurchaseModel) -> Self {
+            return .init(id: model.id,
+                         notes: .init(uniqueElements: model.notes.map(NoteFeature.State.convert(from:))),
+                         title: model.title)
         }
     }
 
