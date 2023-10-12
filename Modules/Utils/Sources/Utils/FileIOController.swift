@@ -77,17 +77,3 @@ struct FileIOController {
     }
 
 }
-
-extension PurchaseModel {
-    static func fabric() -> PurchaseModel {
-        let notes = [
-            NoteModel(id: UUID(0), title: "Milk", subtitle: "Only fresh", isCompleted: false),
-            NoteModel(id: UUID(1), title: "Bread", subtitle: nil, isCompleted: false),
-            NoteModel(id: UUID(2), title: "Water", subtitle: "Only fresh", isCompleted: false),
-            NoteModel(id: UUID(3), title: "Beer", subtitle: nil, isCompleted: false)
-        ]
-        return PurchaseModel(id: UUID(),
-                             notes: notes,
-                             title: "My shopping list \(UUID().uuidString.dropLast(10))")
-    }
-}
