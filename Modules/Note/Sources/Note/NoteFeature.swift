@@ -34,7 +34,7 @@ public struct NoteFeature: Reducer {
         public let subTitle: String?
         @BindingState public var status: Status
 
-        public static let demo = State(id: .init(1),
+        public static let demo = State(id: UUID(),
                                 title: "Milk",
                                 subTitle: "Only fresh",
                                 status: .new)

@@ -11,31 +11,6 @@ import SwiftUI
 import Models
 import Note
 
-public extension IdentifiedArray where ID == NoteFeature.State.ID, Element == NoteFeature.State {
-    static let mock: Self = [
-        NoteFeature.State(id: UUID(1),
-                          title: "Milk",
-                          subTitle: nil,
-                          status: .new),
-        NoteFeature.State(id: UUID(2),
-                          title: "Bread",
-                          subTitle: "2 items",
-                          status: .new),
-        NoteFeature.State(id: UUID(4),
-                          title: "Chockolate",
-                          subTitle: nil,
-                          status: .new),
-        NoteFeature.State(id: UUID(5),
-                          title: "Chees",
-                          subTitle: "200 gr.",
-                          status: .new),
-        NoteFeature.State(id: UUID(6),
-                          title: "Sprite",
-                          subTitle: "1 L.",
-                          status: .new)
-
-    ]
-}
 
 public struct PurchaseListFeature: Reducer {
     @Dependency(\.continuousClock) var clock
@@ -134,7 +109,7 @@ public struct PurchaseListFeature: Reducer {
         }
     }
 
-    public static let demo: State = .init(id: UUID(0), notes: [
+    public static let demo: State = .init(id: UUID(), notes: [
         .demo
     ], title: "Demo Notes")
 

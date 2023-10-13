@@ -13,9 +13,9 @@ public struct DataManager {
 
 extension DataManager: DependencyKey {
     public static var liveValue: Self {
-        return DataManager(loadData: unimplemented("DataManager.load"),
-                           deleteDocument: unimplemented("DataManager.deleteDocument"),
-                           createDocument: unimplemented("DataManager.createDocument"))
+        return DataManager(loadData: { try readAllDocuments() },
+                           deleteDocument: { try deleteDocument(name: $0) },
+                           createDocument: { purchase in try write(purchase: purchase) })
     }
 
     public static var previewValue: Self {

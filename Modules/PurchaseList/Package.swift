@@ -19,8 +19,8 @@ let package = Package(
                  from: "1.2.0"),
         .package(path: "../Note"),
         .package(path: "../Utils"),
-        .package(path: "../Models")
-
+        .package(path: "../Models"),
+        .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.0.0")
     ],
 
     targets: [
@@ -33,7 +33,8 @@ let package = Package(
                          package: "swift-composable-architecture"),
                 "Note",
                 "Utils",
-                "Models"
+                "Models",
+                .product(name: "Dependencies", package: "swift-dependencies")
             ]
 
         ),

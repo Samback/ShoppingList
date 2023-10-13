@@ -17,7 +17,8 @@ let package = Package(
                  from: "1.2.0"),
         .package(path: "../Models"),
         .package(url: "https://github.com/pointfreeco/swift-nonempty.git", from: "0.3.0"),
-        .package(url: "https://github.com/pointfreeco/swift-validated", from: "0.2.1")
+        .package(url: "https://github.com/pointfreeco/swift-validated", from: "0.2.1"),
+        .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.0.0")
     ],
 
     targets: [
@@ -33,7 +34,8 @@ let package = Package(
                             package: "swift-nonempty"),
 
                 .product(name: "Validated",
-                            package: "swift-validated")
+                            package: "swift-validated"),
+                .product(name: "Dependencies", package: "swift-dependencies")
             ]),
         .testTarget(
             name: "UtilsTests",
