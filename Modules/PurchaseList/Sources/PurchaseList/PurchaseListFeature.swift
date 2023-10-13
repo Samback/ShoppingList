@@ -29,6 +29,7 @@ public struct PurchaseListFeature: Reducer {
                     notes: IdentifiedArrayOf<NoteFeature.State>,
                     title: String,
                     inputText: MessageInputFeature.State = MessageInputFeature.State()) {
+
             self.id = id
             self.notes = notes
             self.title = title
@@ -43,13 +44,14 @@ public struct PurchaseListFeature: Reducer {
     }
 
     public enum Action: BindableAction, Equatable, Sendable {
-        case addNote
+        case addNote(String)
         case binding(BindingAction<State>)
         case uncheckAll
         case notesAction(id: UUID, action: NoteFeature.Action)
         case delete(IndexSet)
         case move(IndexSet, Int)
         case sortCompletedNotes
+        case inputTextAction(MessageInputFeature.Action)
     }
 
     enum CancelID {
@@ -59,6 +61,11 @@ public struct PurchaseListFeature: Reducer {
 
     public var body: some ReducerOf<Self> {
         BindingReducer()
+
+        Scope(state: \.inputText,
+              action: /Action.inputTextAction) {
+            MessageInputFeature()
+        }
 
         Reduce { state, action in
             switch action {
@@ -73,7 +80,7 @@ public struct PurchaseListFeature: Reducer {
                     await send(.sortCompletedNotes)
                 }
                 .cancellable(id: CancelID.noteUncheckAll, cancelInFlight: true)
-
+                
             case .notesAction(id: _, action: .binding(\.$status)):
                 return .run { send in
                     try await self.clock.sleep(for: .seconds(0.3))
@@ -81,8 +88,8 @@ public struct PurchaseListFeature: Reducer {
                                animation: Animation.easeInOut(duration: 0.5))
                 }
                 .cancellable(id: CancelID.noteCompletion, cancelInFlight: true)
-            case .addNote:
-                return .none
+            case let .addNote(text):
+                return addNewNote(with: text, state: &state)
             case let .delete(index):
                 state.notes.remove(atOffsets: index)
                 return .none
@@ -92,14 +99,16 @@ public struct PurchaseListFeature: Reducer {
                     try await self.clock.sleep(for: .milliseconds(500))
                     await send(.sortCompletedNotes)
                 }
-
             case .sortCompletedNotes:
                 state.notes.sort { first, second in
                     first.status == .new && second.status == .done
                 }
                 return .none
-
             case .notesAction:
+                return .none
+            case let .inputTextAction(.tapOnActionButton(text)):
+                return Effect<Action>.send(.addNote(text))
+            case .inputTextAction:
                 return .none
             }
         }
@@ -108,6 +117,16 @@ public struct PurchaseListFeature: Reducer {
             NoteFeature()
         }
     }
+
+    private func addNewNote(with text: String, state: inout State) -> Effect<Action> {
+        let note = NoteFeature.State(id: uuid(),
+                                     title: text,
+                                     subTitle: nil,
+                                     status: .new)
+        state.notes.append(note)
+        return .send(.inputTextAction(.clearInput))
+    }
+
 
     public static let demo: State = .init(id: UUID(), notes: [
         .demo

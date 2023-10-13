@@ -21,8 +21,9 @@ public struct PurchaseList: View {
                       observe: { $0 },
                       content: { viewStore in
             NavigationStack {
-                VStack {
+                VStack(spacing: 0) {
                     listView(with: viewStore)
+                    inputView(with: viewStore)
                 }
                 .navigationTitle(viewStore.title)
                 .toolbar {
@@ -43,7 +44,13 @@ public struct PurchaseList: View {
 
     @ViewBuilder
     private func inputView(with viewStore: ViewStoreOf<PurchaseListFeature>) -> some View {
-        EmptyView()
+        MessageInputView(store:
+                            self.store.scope(state: \.inputText, action: PurchaseListFeature.Action.inputTextAction))
+        .background(.green)
+        .clipShape(
+            .rect(topLeadingRadius: 2.steps,
+                  topTrailingRadius: 2.steps)
+        )
     }
 
     @ViewBuilder

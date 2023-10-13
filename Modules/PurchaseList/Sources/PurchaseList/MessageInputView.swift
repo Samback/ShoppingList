@@ -31,6 +31,7 @@ struct MessageInputView: View {
             }
             .background(.white)
             .cornerRadius(4.steps)
+            .padding(.top, 2.steps)
 
             actionButton(viewStore)
                 .padding(.bottom, 3.steps)

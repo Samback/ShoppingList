@@ -10,6 +10,14 @@ import ComposableArchitecture
 
 public struct MessageInputFeature: Reducer {
 
+    public enum Action: BindableAction, Equatable {
+        case binding(BindingAction<State>)
+        case tapOnActionButton(String)
+        case textChanged(String)
+        case clearInput
+    }
+    
+
     public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
@@ -37,10 +45,5 @@ public struct MessageInputFeature: Reducer {
         }
     }
 
-    public enum Action: BindableAction, Equatable {
-        case binding(BindingAction<State>)
-        case tapOnActionButton(String)
-        case textChanged(String)
-        case clearInput
-    }
+
 }
