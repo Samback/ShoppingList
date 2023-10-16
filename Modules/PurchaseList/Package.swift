@@ -20,6 +20,7 @@ let package = Package(
         .package(path: "../Note"),
         .package(path: "../Utils"),
         .package(path: "../Models"),
+        .package(path: "../Scanner"),
         .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.0.0")
     ],
 
@@ -34,6 +35,7 @@ let package = Package(
                 "Note",
                 "Utils",
                 "Models",
+                "Scanner",
                 .product(name: "Dependencies", package: "swift-dependencies")
             ]
 

@@ -37,7 +37,6 @@ public struct ListManager: View {
         }
     }
 
-
     private func toolBarView(with viewStore: ViewStoreOf<ListManagerFeature>) -> some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
             Button(action: {

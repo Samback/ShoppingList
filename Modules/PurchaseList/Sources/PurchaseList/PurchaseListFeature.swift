@@ -126,7 +126,7 @@ public struct PurchaseListFeature: Reducer {
                                                 subtitle: $0.subTitle,
                                                 isCompleted: $0.status == .done) }
         let model = PurchaseModel(id: state.id,
-                                  notes: notes, 
+                                  notes: notes,
                                   title: state.title)
 
         return Effect<Action>.merge(
@@ -149,7 +149,7 @@ public struct PurchaseListFeature: Reducer {
         state.notes.insert(note, at: 0)
 
         return Effect<Action>
-            .merge( 
+            .merge(
                 .send(.sortCompletedNotes),
                     .send(.inputTextAction(.clearInput))
         )
@@ -166,7 +166,6 @@ public struct PurchaseListFeature: Reducer {
         }
         .cancellable(id: CancelID.noteUncheckAll, cancelInFlight: true)
     }
-
 
     private func notesAction() -> Effect<Action> {
         return .run { send in
