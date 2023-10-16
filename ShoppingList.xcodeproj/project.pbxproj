@@ -16,6 +16,10 @@
 		343E2B4F2AA4D25E00F76D2C /* ShoppingListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343E2B4E2AA4D25E00F76D2C /* ShoppingListUITests.swift */; };
 		343E2B512AA4D25E00F76D2C /* ShoppingListUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343E2B502AA4D25E00F76D2C /* ShoppingListUITestsLaunchTests.swift */; };
 		347F52922AD95229003C55A8 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 347F52912AD95229003C55A8 /* ComposableArchitecture */; };
+		349C45DB2AD97DE6003228C5 /* ListManager in Frameworks */ = {isa = PBXBuildFile; productRef = 349C45DA2AD97DE6003228C5 /* ListManager */; };
+		349C45DD2AD97DE6003228C5 /* Models in Frameworks */ = {isa = PBXBuildFile; productRef = 349C45DC2AD97DE6003228C5 /* Models */; };
+		349C45DF2AD97DE6003228C5 /* Note in Frameworks */ = {isa = PBXBuildFile; productRef = 349C45DE2AD97DE6003228C5 /* Note */; };
+		349C45E12AD97DE6003228C5 /* PurchaseList in Frameworks */ = {isa = PBXBuildFile; productRef = 349C45E02AD97DE6003228C5 /* PurchaseList */; };
 		349D3D102AD95BD5001E1B0E /* Utils in Frameworks */ = {isa = PBXBuildFile; productRef = 349D3D0F2AD95BD5001E1B0E /* Utils */; };
 /* End PBXBuildFile section */
 
@@ -59,8 +63,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				349C45DF2AD97DE6003228C5 /* Note in Frameworks */,
+				349C45E12AD97DE6003228C5 /* PurchaseList in Frameworks */,
+				349C45DD2AD97DE6003228C5 /* Models in Frameworks */,
 				3425F7E02AD95E43002BF8CF /* Gen in Frameworks */,
 				349D3D102AD95BD5001E1B0E /* Utils in Frameworks */,
+				349C45DB2AD97DE6003228C5 /* ListManager in Frameworks */,
 				347F52922AD95229003C55A8 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -188,6 +196,10 @@
 				347F52912AD95229003C55A8 /* ComposableArchitecture */,
 				349D3D0F2AD95BD5001E1B0E /* Utils */,
 				3425F7DF2AD95E43002BF8CF /* Gen */,
+				349C45DA2AD97DE6003228C5 /* ListManager */,
+				349C45DC2AD97DE6003228C5 /* Models */,
+				349C45DE2AD97DE6003228C5 /* Note */,
+				349C45E02AD97DE6003228C5 /* PurchaseList */,
 			);
 			productName = ShoppingList;
 			productReference = 343E2B302AA4D25C00F76D2C /* ShoppingList.app */;
@@ -691,6 +703,22 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 347F52902AD95229003C55A8 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
+		};
+		349C45DA2AD97DE6003228C5 /* ListManager */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ListManager;
+		};
+		349C45DC2AD97DE6003228C5 /* Models */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Models;
+		};
+		349C45DE2AD97DE6003228C5 /* Note */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Note;
+		};
+		349C45E02AD97DE6003228C5 /* PurchaseList */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PurchaseList;
 		};
 		349D3D0F2AD95BD5001E1B0E /* Utils */ = {
 			isa = XCSwiftPackageProductDependency;

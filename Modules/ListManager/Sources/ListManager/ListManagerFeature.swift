@@ -81,10 +81,13 @@ public struct ListManagerFeature: Reducer {
             case let .loadedListResult(.failure(error)):
                 print(error)
                 return .none
-            case .activePurchaseList:
+            case let .activePurchaseList(.presented(.delegate(.update(activeState)))):
+                state.purchaseListCollection.updateOrAppend(activeState)
                 return .none
             case let .openList(purchaseListState):
                 state.activePurchaseList = purchaseListState
+                return .none
+            case .activePurchaseList:
                 return .none
             }
         }
