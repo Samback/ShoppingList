@@ -32,7 +32,7 @@ extension PurchaseModel {
     }
 
     static func nextUUID() -> UUID {
-        index = index + 1
+        index += 1
         return UUID(index)
     }
 }

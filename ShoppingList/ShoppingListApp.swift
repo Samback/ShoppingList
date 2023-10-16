@@ -35,9 +35,10 @@ struct ShoppingListApp: App {
                 store: Store(initialState: ListManagerFeature.State(purchaseListCollection: []),
                              reducer: {
                                  ListManagerFeature()
+                                     ._printChanges()
                              },
                              withDependencies: {
-                                 $0.dataManager = DataManager.previewValue
+                                 $0.dataManager = DataManager.fileSystem
                              }
                             )
             )

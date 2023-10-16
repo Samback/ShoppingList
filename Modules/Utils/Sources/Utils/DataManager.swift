@@ -28,7 +28,8 @@ extension DataManager: DependencyKey {
     public static var fileSystem: Self {
         return DataManager(loadData: { try readAllDocuments() },
                            deleteDocument: { try deleteDocument(name: $0) },
-                           createDocument: { purchase in try write(purchase: purchase) })
+                           createDocument: { purchase in
+            try write(purchase: purchase) })
     }
 
     private static func readAllDocuments() throws -> [PurchaseModel] {
@@ -36,7 +37,6 @@ extension DataManager: DependencyKey {
     }
 
     private static func deleteDocument(name: String) throws {
-        print("try to delete document \(name)")
         let controller = FileIOController()
         try controller.delete(document: name)
     }

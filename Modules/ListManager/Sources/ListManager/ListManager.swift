@@ -37,6 +37,7 @@ public struct ListManager: View {
         }
     }
 
+
     private func toolBarView(with viewStore: ViewStoreOf<ListManagerFeature>) -> some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
             Button(action: {
@@ -75,7 +76,7 @@ public struct ListManager: View {
                          ListManagerFeature()
                      },
                      withDependencies: {
-                         $0.dataManager = DataManager.previewValue
+                         $0.dataManager = DataManager.fileSystem
                      }
                     )
     )
