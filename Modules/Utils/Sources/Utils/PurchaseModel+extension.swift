@@ -10,7 +10,6 @@ import Models
 import ComposableArchitecture
 import NonEmpty
 
-
 extension PurchaseModel {
     static var index = 0
     private static var mockNotes = [

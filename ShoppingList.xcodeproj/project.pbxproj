@@ -51,6 +51,7 @@
 		343E2B4A2AA4D25E00F76D2C /* ShoppingListUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShoppingListUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		343E2B4E2AA4D25E00F76D2C /* ShoppingListUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListUITests.swift; sourceTree = "<group>"; };
 		343E2B502AA4D25E00F76D2C /* ShoppingListUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		345A40782ADD78B800CF5B23 /* Scanner */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Scanner; sourceTree = "<group>"; };
 		349D3D112AD95C0E001E1B0E /* Note */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Note; sourceTree = "<group>"; };
 		349D3D122AD95C0E001E1B0E /* ListManager */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ListManager; sourceTree = "<group>"; };
 		349D3D132AD95C0E001E1B0E /* PurchaseList */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PurchaseList; sourceTree = "<group>"; };
@@ -166,6 +167,7 @@
 		34EE93BF2AD9548200CC07DD /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				345A40782ADD78B800CF5B23 /* Scanner */,
 				349D3D122AD95C0E001E1B0E /* ListManager */,
 				349D3D152AD95C0E001E1B0E /* Models */,
 				349D3D112AD95C0E001E1B0E /* Note */,
@@ -505,6 +507,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Granting permission for camera access allows you to scan text from a document or any other source and add it to your shopping list.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -537,6 +540,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Granting permission for camera access allows you to scan text from a document or any other source and add it to your shopping list.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
