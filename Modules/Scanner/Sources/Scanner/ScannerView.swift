@@ -16,10 +16,10 @@ extension EnvironmentValues {
 
 public struct ScannerView: UIViewControllerRepresentable {
 
-    public enum Action {
+    public enum Action: Equatable {
         case cancel
         case result([UIImage])
-        case error(Error)
+        case error
     }
 
     @Environment(\.scannerViewAction) var actionPublisher: PassthroughSubject<ScannerView.Action, Never>
@@ -78,7 +78,7 @@ extension ScannerView.Coordinator: VNDocumentCameraViewControllerDelegate {
         scannerView
             .actionPublisher
             .send(
-                .error(error))
+                .error)
     }
 
 }

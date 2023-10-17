@@ -9,21 +9,26 @@ import Foundation
 import Combine
 import ComposableArchitecture
 import UIKit
+import SwiftUI
 
 public struct ScannerTCAFeature: Reducer {
 
     @Dependency(\.recognitionService) var recognitionService
+    @Environment(\.scannerViewAction) var actionPublisher: PassthroughSubject<ScannerView.Action, Never>
+
+    public init() {}
 
     public struct State: Equatable {
+        public init() {}
     }
 
-    public enum Action {
-        case initialLoad(publisher: PassthroughSubject<ScannerView.Action, Never>)
+    public enum Action: Equatable {
+        case initialLoad
         case delegate(Delegate)
-        public enum Delegate {
+        public enum Delegate: Equatable {
             case canceled
             case closed
-            case error(Error)
+            case error
             case texts(TaskResult<[String]>)
         }
 
@@ -33,8 +38,8 @@ public struct ScannerTCAFeature: Reducer {
     public var body: some ReducerOf<Self> {
         Reduce { _, action in
             switch action {
-            case let .initialLoad(publisher):
-                return subscribeOnEvents(actionPublisher: publisher)
+            case .initialLoad:
+                return subscribeOnEvents()
             case .delegate:
                 return .none
             case let .receivedImages(images):
@@ -57,7 +62,7 @@ public struct ScannerTCAFeature: Reducer {
         }
     }
 
-    private func subscribeOnEvents(actionPublisher: PassthroughSubject<ScannerView.Action, Never>) -> Effect<Action> {
+    private func subscribeOnEvents() -> Effect<Action> {
         return Effect<Action>
             .publisher {
                 actionPublisher.map { action in
@@ -66,8 +71,8 @@ public struct ScannerTCAFeature: Reducer {
                         return .receivedImages(images)
                     case .cancel:
                         return .delegate(.canceled)
-                    case let .error(error):
-                        return .delegate(.error(error))
+                    case .error:
+                        return .delegate(.error)
                     }
                 }
             }

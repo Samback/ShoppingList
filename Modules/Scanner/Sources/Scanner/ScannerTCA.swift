@@ -25,9 +25,7 @@ public struct ScannerTCA: View {
                 store.withState { _ in
                     ScannerView()
                         .onAppear {
-                            viewStore
-                                .send(
-                                    .initialLoad(publisher: Environment(\.scannerViewAction).wrappedValue))
+                            viewStore.send(.initialLoad)
                         }
                 }
             }

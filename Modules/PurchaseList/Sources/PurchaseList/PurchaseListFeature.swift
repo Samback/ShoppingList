@@ -10,6 +10,7 @@ import ComposableArchitecture
 import SwiftUI
 import Models
 import Note
+import Scanner
 
 public struct PurchaseListFeature: Reducer {
     @Dependency(\.continuousClock) var clock
@@ -23,6 +24,7 @@ public struct PurchaseListFeature: Reducer {
         public var notes: IdentifiedArrayOf<NoteFeature.State> = []
         public var title: String = "Welcome"
         var inputText: MessageInputFeature.State
+        @PresentationState public var scanPurchaseList: ScannerTCAFeature.State?
 
         public init(id: UUID,
                     notes: IdentifiedArrayOf<NoteFeature.State>,
@@ -42,8 +44,10 @@ public struct PurchaseListFeature: Reducer {
         }
     }
 
-    public enum Action: BindableAction, Equatable, Sendable {
+    public enum Action: BindableAction, Equatable {
         case addNote(String)
+        case scannerAction(PresentationAction<ScannerTCAFeature.Action>)
+        case showScanner
         case binding(BindingAction<State>)
         case uncheckAll
         case notesAction(id: UUID, action: NoteFeature.Action)
@@ -77,7 +81,7 @@ public struct PurchaseListFeature: Reducer {
                 return .none
 
             case .uncheckAll:
-               return uncheckedAll(state: &state)
+                return uncheckedAll(state: &state)
 
             case .notesAction(id: _, action: .binding(\.$status)):
                 return notesAction()
@@ -112,12 +116,41 @@ public struct PurchaseListFeature: Reducer {
                 return saveUpdates(state: &state)
             case .delegate:
                 return .none
+            case .scannerAction:
+                return scannerActionsAggregator(state: &state, action: action)
+            case .showScanner:
+                state.scanPurchaseList = ScannerTCAFeature.State()
+                return .none
             }
+
         }
+        .ifLet(\.$scanPurchaseList,
+                action: /Action.scannerAction, destination: {
+                    ScannerTCAFeature()
+        })
         .forEach(\.notes,
                   action: /Action.notesAction) {
             NoteFeature()
         }
+
+    }
+
+    private func scannerActionsAggregator(state: inout State, action: Action) -> Effect<Action> {
+        switch action {
+        case let .scannerAction(.presented(.delegate(.texts(.success(texts))))):
+            print("Delivered texts : \(texts)")
+            state.scanPurchaseList = nil
+            return .none
+        case .scannerAction(.presented(.delegate(.canceled))):
+            state.scanPurchaseList = nil
+            return .none
+        case .scannerAction(.presented(.delegate(.closed))):
+            state.scanPurchaseList = nil
+            return .none
+        default:
+            return .none
+        }
+
     }
 
     private func saveUpdates(state: inout State) -> Effect<Action> {
@@ -130,12 +163,12 @@ public struct PurchaseListFeature: Reducer {
                                   title: state.title)
 
         return Effect<Action>.merge(
-        Effect<Action>.run { _ in
-            await TaskResult {
-                try await self.dataManager.createDocument(model)
-            }
-        },
-        Effect<Action>.send(.delegate(.update(state)))
+            Effect<Action>.run { _ in
+                await TaskResult {
+                    try await self.dataManager.createDocument(model)
+                }
+            },
+            Effect<Action>.send(.delegate(.update(state)))
         )
 
     }
@@ -151,8 +184,8 @@ public struct PurchaseListFeature: Reducer {
         return Effect<Action>
             .merge(
                 .send(.sortCompletedNotes),
-                    .send(.inputTextAction(.clearInput))
-        )
+                .send(.inputTextAction(.clearInput))
+            )
     }
 
     private func uncheckedAll(state: inout State) -> Effect<Action> {
