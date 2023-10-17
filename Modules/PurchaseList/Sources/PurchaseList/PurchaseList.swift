@@ -8,6 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 import Note
+import Scanner
 
 public struct PurchaseList: View {
     let store: StoreOf<PurchaseListFeature>
@@ -29,7 +30,11 @@ public struct PurchaseList: View {
                 .toolbar {
                     toolbarView(with: viewStore)
                 }
+                .sheet(store: self.store.scope(state: \.$scanPurchaseList,
+                                               action: {.scannerAction($0)}),
+                       content: ScannerTCA.init)
             }
+
         })
     }
 

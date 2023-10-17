@@ -26,8 +26,12 @@ struct MessageInputView: View {
     @ViewBuilder
     private func textView(with viewStore: ViewStoreOf<MessageInputFeature>) -> some View {
         HStack(alignment: .bottom, spacing: 4.steps) {
+
+            scannerButton(viewStore)
+                .padding(.bottom, 3.steps)
+
             VStack {
-               textField(viewStore)
+                textField(viewStore)
             }
             .background(.white)
             .cornerRadius(4.steps)
@@ -38,7 +42,7 @@ struct MessageInputView: View {
         }
     }
 
-   private func textField(_ viewStore: ViewStore<MessageInputFeature.State, MessageInputFeature.Action>) -> some View {
+   private func textField(_ viewStore: ViewStoreOf<MessageInputFeature>) -> some View {
         TextField("", text: viewStore.binding(get: \.inputText,
                                               send: MessageInputFeature.Action.textChanged),
                   axis: .vertical)
@@ -48,8 +52,23 @@ struct MessageInputView: View {
             .padding(2.steps)
     }
 
-    private func actionButton(_ viewStore: ViewStore<MessageInputFeature.State,
-                              MessageInputFeature.Action>) -> some View {
+    private func scannerButton(_ viewStore: ViewStoreOf<MessageInputFeature>) -> some View {
+        Button(action: {
+            viewStore.send(.tapOnScannerButton)
+        },
+               label: {
+            Image(systemName: "doc.viewfinder")
+                .foregroundColor(.black)
+        })
+        .background {
+            Circle()
+                .foregroundColor(.white)
+                .frame(width: 10.steps, height: 10.steps)
+        }
+    
+    }
+
+    private func actionButton(_ viewStore: ViewStoreOf<MessageInputFeature>) -> some View {
         Button(action: {
             viewStore.send(.tapOnActionButton(viewStore.inputText))
         },

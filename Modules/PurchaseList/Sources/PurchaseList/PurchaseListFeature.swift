@@ -47,7 +47,6 @@ public struct PurchaseListFeature: Reducer {
     public enum Action: BindableAction, Equatable {
         case addNote(String)
         case scannerAction(PresentationAction<ScannerTCAFeature.Action>)
-        case showScanner
         case binding(BindingAction<State>)
         case uncheckAll
         case notesAction(id: UUID, action: NoteFeature.Action)
@@ -109,7 +108,9 @@ public struct PurchaseListFeature: Reducer {
 
             case let .inputTextAction(.tapOnActionButton(text)):
                 return Effect<Action>.send(.addNote(text))
-
+            case .inputTextAction(.tapOnScannerButton):
+                state.scanPurchaseList = ScannerTCAFeature.State()
+                return .none
             case .inputTextAction:
                 return .none
             case .saveUpdatesAtList:
@@ -118,9 +119,6 @@ public struct PurchaseListFeature: Reducer {
                 return .none
             case .scannerAction:
                 return scannerActionsAggregator(state: &state, action: action)
-            case .showScanner:
-                state.scanPurchaseList = ScannerTCAFeature.State()
-                return .none
             }
 
         }

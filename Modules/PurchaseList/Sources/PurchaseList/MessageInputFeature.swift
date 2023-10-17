@@ -14,6 +14,7 @@ public struct MessageInputFeature: Reducer {
         case binding(BindingAction<State>)
         case tapOnActionButton(String)
         case textChanged(String)
+        case tapOnScannerButton
         case clearInput
     }
 
@@ -31,6 +32,8 @@ public struct MessageInputFeature: Reducer {
                 return .none
             case .clearInput:
                 state.inputText = ""
+                return .none
+            case .tapOnScannerButton:
                 return .none
             }
         }
