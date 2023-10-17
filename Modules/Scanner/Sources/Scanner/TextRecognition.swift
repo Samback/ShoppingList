@@ -38,15 +38,23 @@ struct TextRecognition {
     }
 
     @Sendable func recognizeText(in image: UIImage) async throws -> String {
-        guard let cgImage = image.cgImage else { throw TextRecognitionError.noImage }
+        return try await withCheckedThrowingContinuation { continuation in
+            do {
+                guard let cgImage = image.cgImage else {
+                    continuation.resume(throwing: TextRecognitionError.noImage)
+                    return
+                }
 
-        let requestHandler = VNImageRequestHandler(cgImage: cgImage, options: [:])
-        var text: String = ""
-        try requestHandler.perform([getTextRecognitionRequest(&text)])
-        return text
+                let requestHandler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+                try requestHandler.perform([getTextRecognitionRequest(with: continuation)])
+            } catch {
+                continuation.resume(throwing: error)
+            }
+        }
     }
 
-    private func getTextRecognitionRequest(_ text: inout String) -> VNRecognizeTextRequest {
+
+    private func getTextRecognitionRequest(with continuation: CheckedContinuation<String, Error>) -> VNRecognizeTextRequest {
         let request = VNRecognizeTextRequest { request, error in
             if let error = error {
                 print(error.localizedDescription)
@@ -55,10 +63,14 @@ struct TextRecognition {
 
             guard let observations = request.results as? [VNRecognizedTextObservation] else { return }
 
+            var text = ""
             observations.forEach { observation in
                 guard let recognizedText = observation.topCandidates(1).first else { return }
                 print("TEXT: \(recognizedText.string)")
+                text.append(recognizedText.string)
             }
+
+            continuation.resume(returning: text)
         }
 
         request.recognitionLevel = .accurate
@@ -67,3 +79,5 @@ struct TextRecognition {
         return request
     }
 }
+
+
