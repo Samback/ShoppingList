@@ -25,6 +25,7 @@ public struct PurchaseListFeature: Reducer {
         public var title: String = "Welcome"
         var inputText: MessageInputFeature.State
         @PresentationState public var scanPurchaseList: ScannerTCAFeature.State?
+        @PresentationState public var draftList: DraftListFeature.State?
 
         public init(id: UUID,
                     notes: IdentifiedArrayOf<NoteFeature.State>,
@@ -47,6 +48,7 @@ public struct PurchaseListFeature: Reducer {
     public enum Action: BindableAction, Equatable {
         case addNote(String)
         case scannerAction(PresentationAction<ScannerTCAFeature.Action>)
+        case draftListAction(PresentationAction<DraftListFeature.Action>)
         case binding(BindingAction<State>)
         case uncheckAll
         case notesAction(id: UUID, action: NoteFeature.Action)
@@ -108,23 +110,53 @@ public struct PurchaseListFeature: Reducer {
 
             case let .inputTextAction(.tapOnActionButton(text)):
                 return Effect<Action>.send(.addNote(text))
+
             case .inputTextAction(.tapOnScannerButton):
                 state.scanPurchaseList = ScannerTCAFeature.State()
                 return .none
+
             case .inputTextAction:
                 return .none
+
             case .saveUpdatesAtList:
                 return saveUpdates(state: &state)
+                
             case .delegate:
                 return .none
+
             case .scannerAction:
                 return scannerActionsAggregator(state: &state, action: action)
+
+            case let .draftListAction(.presented(.delegate(.addNewShoppingNotes(newItems)))):
+                state
+                    .notes
+                    .append(contentsOf: newItems
+                        .map {
+                            NoteModel(id: uuid(),
+                                      title: $0,
+                                      subtitle: nil,
+                                      isCompleted: false)
+                        }
+                        .map(NoteFeature.State.convert(from:))
+                    )
+
+                state.draftList = nil
+
+                return .send(.sortCompletedNotes)
+
+            case .draftListAction:
+                return .none
             }
 
         }
         .ifLet(\.$scanPurchaseList,
                 action: /Action.scannerAction, destination: {
                     ScannerTCAFeature()
+        })
+        .ifLet(\.$draftList,
+                action: /Action.draftListAction,
+                destination: {
+                    DraftListFeature()
         })
         .forEach(\.notes,
                   action: /Action.notesAction) {
@@ -138,6 +170,7 @@ public struct PurchaseListFeature: Reducer {
         case let .scannerAction(.presented(.delegate(.texts(.success(texts))))):
             print("Delivered texts : \(texts)")
             state.scanPurchaseList = nil
+            state.draftList = DraftListFeature.State(rawList: texts)
             return .none
         case .scannerAction(.presented(.delegate(.canceled))):
             state.scanPurchaseList = nil

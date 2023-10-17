@@ -33,6 +33,9 @@ public struct PurchaseList: View {
                 .sheet(store: self.store.scope(state: \.$scanPurchaseList,
                                                action: {.scannerAction($0)}),
                        content: ScannerTCA.init)
+                .sheet(store: self.store.scope(state: \.$draftList,
+                                               action: {.draftListAction($0)}),
+                       content: DraftList.init)
             }
 
         })

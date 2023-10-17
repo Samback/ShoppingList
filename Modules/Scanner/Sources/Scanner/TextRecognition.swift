@@ -53,7 +53,6 @@ struct TextRecognition {
         }
     }
 
-
     private func getTextRecognitionRequest(with continuation: CheckedContinuation<String, Error>) -> VNRecognizeTextRequest {
         let request = VNRecognizeTextRequest { request, error in
             if let error = error {
@@ -68,6 +67,7 @@ struct TextRecognition {
                 guard let recognizedText = observation.topCandidates(1).first else { return }
                 print("TEXT: \(recognizedText.string)")
                 text.append(recognizedText.string)
+                text.append("\n")
             }
 
             continuation.resume(returning: text)
