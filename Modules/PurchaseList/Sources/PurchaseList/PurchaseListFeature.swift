@@ -77,6 +77,7 @@ public struct PurchaseListFeature: Reducer {
         }
 
         Reduce { state, action in
+
             switch action {
             case .binding:
                 return .none
@@ -120,7 +121,7 @@ public struct PurchaseListFeature: Reducer {
 
             case .saveUpdatesAtList:
                 return saveUpdates(state: &state)
-                
+
             case .delegate:
                 return .none
 
@@ -168,7 +169,6 @@ public struct PurchaseListFeature: Reducer {
     private func scannerActionsAggregator(state: inout State, action: Action) -> Effect<Action> {
         switch action {
         case let .scannerAction(.presented(.delegate(.texts(.success(texts))))):
-            print("Delivered texts : \(texts)")
             state.scanPurchaseList = nil
             state.draftList = DraftListFeature.State(rawList: texts)
             return .none

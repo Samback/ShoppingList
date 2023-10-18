@@ -46,7 +46,6 @@ struct MessageInputView: View {
         TextField("", text: viewStore.binding(get: \.inputText,
                                               send: MessageInputFeature.Action.textChanged),
                   axis: .vertical)
-            .lineLimit(1...4)
             .accentColor(.black)
             .frame(maxWidth: .infinity)
             .padding(2.steps)
