@@ -21,7 +21,9 @@ let package = Package(
         .package(path: "../Utils"),
         .package(path: "../Models"),
         .package(path: "../Scanner"),
-        .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.0.0")
+        .package(path: "../Analytics"),
+        .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.0.0"),
+        .package(url: "https://github.com/oliverfoggin/swift-composable-analytics", from: "1.0.0"),
     ],
 
     targets: [
@@ -36,7 +38,9 @@ let package = Package(
                 "Utils",
                 "Models",
                 "Scanner",
-                .product(name: "Dependencies", package: "swift-dependencies")
+                "Analytics",
+                .product(name: "Dependencies", package: "swift-dependencies"),
+                .product(name: "ComposableAnalytics", package: "swift-composable-analytics")
             ]
 
         ),

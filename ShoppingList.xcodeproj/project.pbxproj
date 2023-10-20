@@ -21,6 +21,9 @@
 		349C45DF2AD97DE6003228C5 /* Note in Frameworks */ = {isa = PBXBuildFile; productRef = 349C45DE2AD97DE6003228C5 /* Note */; };
 		349C45E12AD97DE6003228C5 /* PurchaseList in Frameworks */ = {isa = PBXBuildFile; productRef = 349C45E02AD97DE6003228C5 /* PurchaseList */; };
 		349D3D102AD95BD5001E1B0E /* Utils in Frameworks */ = {isa = PBXBuildFile; productRef = 349D3D0F2AD95BD5001E1B0E /* Utils */; };
+		34A80DB42AE04A24006176F9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 34A80DB32AE04A24006176F9 /* GoogleService-Info.plist */; };
+		34A80DB72AE04ED6006176F9 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 34A80DB62AE04ED6006176F9 /* FirebaseAnalyticsSwift */; };
+		34A80DB92AE04ED6006176F9 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 34A80DB82AE04ED6006176F9 /* FirebaseAnalyticsWithoutAdIdSupport */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +60,8 @@
 		349D3D132AD95C0E001E1B0E /* PurchaseList */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PurchaseList; sourceTree = "<group>"; };
 		349D3D142AD95C0E001E1B0E /* Utils */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Utils; sourceTree = "<group>"; };
 		349D3D152AD95C0E001E1B0E /* Models */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Models; sourceTree = "<group>"; };
+		34A80DB22AE03A36006176F9 /* Analytics */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Analytics; sourceTree = "<group>"; };
+		34A80DB32AE04A24006176F9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,8 +73,10 @@
 				349C45E12AD97DE6003228C5 /* PurchaseList in Frameworks */,
 				349C45DD2AD97DE6003228C5 /* Models in Frameworks */,
 				3425F7E02AD95E43002BF8CF /* Gen in Frameworks */,
+				34A80DB72AE04ED6006176F9 /* FirebaseAnalyticsSwift in Frameworks */,
 				349D3D102AD95BD5001E1B0E /* Utils in Frameworks */,
 				349C45DB2AD97DE6003228C5 /* ListManager in Frameworks */,
+				34A80DB92AE04ED6006176F9 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				347F52922AD95229003C55A8 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -119,6 +126,7 @@
 				343E2B5D2AA4D2B000F76D2C /* App */,
 				343E2B332AA4D25C00F76D2C /* ShoppingListApp.swift */,
 				343E2B352AA4D25C00F76D2C /* ContentView.swift */,
+				34A80DB32AE04A24006176F9 /* GoogleService-Info.plist */,
 				343E2B372AA4D25E00F76D2C /* Assets.xcassets */,
 				343E2B392AA4D25E00F76D2C /* Preview Content */,
 			);
@@ -167,6 +175,7 @@
 		34EE93BF2AD9548200CC07DD /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				34A80DB22AE03A36006176F9 /* Analytics */,
 				345A40782ADD78B800CF5B23 /* Scanner */,
 				349D3D122AD95C0E001E1B0E /* ListManager */,
 				349D3D152AD95C0E001E1B0E /* Models */,
@@ -202,6 +211,8 @@
 				349C45DC2AD97DE6003228C5 /* Models */,
 				349C45DE2AD97DE6003228C5 /* Note */,
 				349C45E02AD97DE6003228C5 /* PurchaseList */,
+				34A80DB62AE04ED6006176F9 /* FirebaseAnalyticsSwift */,
+				34A80DB82AE04ED6006176F9 /* FirebaseAnalyticsWithoutAdIdSupport */,
 			);
 			productName = ShoppingList;
 			productReference = 343E2B302AA4D25C00F76D2C /* ShoppingList.app */;
@@ -278,6 +289,7 @@
 			packageReferences = (
 				347F52902AD95229003C55A8 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				3425F7DE2AD95E43002BF8CF /* XCRemoteSwiftPackageReference "swift-gen" */,
+				34A80DB52AE04ED5006176F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 343E2B312AA4D25C00F76D2C /* Products */;
 			projectDirPath = "";
@@ -297,6 +309,7 @@
 			files = (
 				343E2B3B2AA4D25E00F76D2C /* Preview Assets.xcassets in Resources */,
 				343E2B382AA4D25E00F76D2C /* Assets.xcassets in Resources */,
+				34A80DB42AE04A24006176F9 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -500,6 +513,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ShoppingList/Preview Content\"";
@@ -513,6 +527,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -520,8 +535,9 @@
 				);
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = "-fprofile-instr-generate";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sebek.ShoppingList;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sebek.ShoppingNotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -533,6 +549,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ShoppingList/Preview Content\"";
@@ -546,6 +563,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -553,8 +571,9 @@
 				);
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = "-fprofile-instr-generate";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sebek.ShoppingList;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sebek.ShoppingNotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -695,6 +714,14 @@
 				minimumVersion = 1.2.0;
 			};
 		};
+		34A80DB52AE04ED5006176F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 10.16.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -727,6 +754,16 @@
 		349D3D0F2AD95BD5001E1B0E /* Utils */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Utils;
+		};
+		34A80DB62AE04ED6006176F9 /* FirebaseAnalyticsSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34A80DB52AE04ED5006176F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsSwift;
+		};
+		34A80DB82AE04ED6006176F9 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34A80DB52AE04ED5006176F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

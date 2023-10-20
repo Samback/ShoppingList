@@ -10,6 +10,13 @@ import ComposableArchitecture
 import ListManager
 import Utils
 import PurchaseList
+import FirebaseCore
+import FirebaseAnalytics
+import Firebase
+import Analytics
+import ComposableAnalytics
+
+
 
 /*
  SwiftLint configs Xcode 15
@@ -20,7 +27,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil)
     -> Bool {
-        
+        FirebaseApp.configure()
         return true
     }
 }
@@ -41,11 +48,14 @@ struct ShoppingListApp: App {
 //                                   reducer: {
 //                DraftListFeature()
 //            }))
-            
             ListManager(
                 store: Store(initialState: ListManagerFeature.State(purchaseListCollection: []),
                              reducer: {
                                  ListManagerFeature()
+                                     .dependency(\.analyticsClient,
+                                                  AnalyticsClient.merge(
+                                                         .consoleLogger,
+                                                         .firebaseClient))
                                      ._printChanges()
                              },
                              withDependencies: {
@@ -53,6 +63,9 @@ struct ShoppingListApp: App {
                              }
                             )
             )
+            .onAppear {
+                Firebase.Analytics.logEvent("ThisISATest", parameters: ["title": "AppDelegate"])
+            }
         }
     }
 }

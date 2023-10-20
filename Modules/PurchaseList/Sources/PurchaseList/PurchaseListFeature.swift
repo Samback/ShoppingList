@@ -11,6 +11,8 @@ import SwiftUI
 import Models
 import Note
 import Scanner
+import Analytics
+import ComposableAnalytics
 
 public struct PurchaseListFeature: Reducer {
     @Dependency(\.continuousClock) var clock
@@ -70,6 +72,16 @@ public struct PurchaseListFeature: Reducer {
 
     public var body: some ReducerOf<Self> {
         BindingReducer()
+
+        AnalyticsReducer { state, action in
+            switch action {
+            case let .addNote(note):
+                return .event(name: "AddNewNote", properties: ["title": note])
+            default:
+                return nil
+            }
+        }
+
 
         Scope(state: \.inputText,
               action: /Action.inputTextAction) {
@@ -205,6 +217,10 @@ public struct PurchaseListFeature: Reducer {
     }
 
     private func addNewNote(with text: String, state: inout State) -> Effect<Action> {
+        guard !text.isEmpty else {
+            return .none
+        }
+
         let note = NoteFeature.State(id: uuid(),
                                      title: text,
                                      subTitle: nil,

@@ -9,6 +9,8 @@ import SwiftUI
 import ComposableArchitecture
 import Note
 import Scanner
+import ComposableAnalytics
+import Analytics
 
 public struct PurchaseList: View {
     let store: StoreOf<PurchaseListFeature>
@@ -81,7 +83,8 @@ public struct PurchaseList: View {
 #Preview {
     PurchaseList(
         store: Store(initialState: PurchaseListFeature.demo,
-                     reducer: { PurchaseListFeature() }
-                         )
+                     reducer: { PurchaseListFeature()
+                         .dependency(\.analyticsClient, AnalyticsClient.firebaseClient)}
+                    )
     )
 }
