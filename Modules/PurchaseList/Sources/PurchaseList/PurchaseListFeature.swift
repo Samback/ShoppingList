@@ -73,7 +73,7 @@ public struct PurchaseListFeature: Reducer {
     public var body: some ReducerOf<Self> {
         BindingReducer()
 
-        AnalyticsReducer { state, action in
+        AnalyticsReducer { _, action in
             switch action {
             case let .addNote(note):
                 return .event(name: "AddNewNote", properties: ["title": note])
@@ -81,7 +81,6 @@ public struct PurchaseListFeature: Reducer {
                 return nil
             }
         }
-
 
         Scope(state: \.inputText,
               action: /Action.inputTextAction) {
@@ -140,25 +139,8 @@ public struct PurchaseListFeature: Reducer {
             case .scannerAction:
                 return scannerActionsAggregator(state: &state, action: action)
 
-            case let .draftListAction(.presented(.delegate(.addNewShoppingNotes(newItems)))):
-                state
-                    .notes
-                    .append(contentsOf: newItems
-                        .map {
-                            NoteModel(id: uuid(),
-                                      title: $0,
-                                      subtitle: nil,
-                                      isCompleted: false)
-                        }
-                        .map(NoteFeature.State.convert(from:))
-                    )
-
-                state.draftList = nil
-
-                return .send(.sortCompletedNotes)
-
             case .draftListAction:
-                return .none
+                return draftListActionsAggregator(state: &state, action: action)
             }
 
         }
@@ -176,6 +158,33 @@ public struct PurchaseListFeature: Reducer {
             NoteFeature()
         }
 
+    }
+
+    private func draftListActionsAggregator(state: inout State, action: Action) -> Effect<Action> {
+        switch action {
+        case let .draftListAction(.presented(.delegate(.addNewShoppingNotes(newItems)))):
+            state
+                .notes
+                .append(contentsOf: newItems
+                    .map {
+                        NoteModel(id: uuid(),
+                                  title: $0,
+                                  subtitle: nil,
+                                  isCompleted: false)
+                    }
+                    .map(NoteFeature.State.convert(from:))
+                )
+
+            state.draftList = nil
+            return .send(.sortCompletedNotes)
+
+        case .draftListAction(.presented(.delegate(.cancel))):
+            state.draftList = nil
+            return .none
+
+        default:
+            return .none
+        }
     }
 
     private func scannerActionsAggregator(state: inout State, action: Action) -> Effect<Action> {

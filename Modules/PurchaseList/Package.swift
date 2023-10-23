@@ -23,7 +23,7 @@ let package = Package(
         .package(path: "../Scanner"),
         .package(path: "../Analytics"),
         .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.0.0"),
-        .package(url: "https://github.com/oliverfoggin/swift-composable-analytics", from: "1.0.0"),
+        .package(url: "https://github.com/oliverfoggin/swift-composable-analytics", from: "1.0.0")
     ],
 
     targets: [

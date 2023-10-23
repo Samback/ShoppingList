@@ -2,8 +2,8 @@ import SwiftUI
 import VisionKit
 import Combine
 
-//https://medium.com/@mobile_44538/how-to-create-text-recognition-with-vision-framework-in-swift-459779bf3586
-//https://www.appcoda.com/swiftui-text-recognition/
+// https://medium.com/@mobile_44538/how-to-create-text-recognition-with-vision-framework-in-swift-459779bf3586
+// https://www.appcoda.com/swiftui-text-recognition/
 
 private struct ScannerViewActionKey: EnvironmentKey {
   static let defaultValue = PassthroughSubject<ScannerView.Action, Never>()
@@ -75,7 +75,7 @@ extension ScannerView.Coordinator: VNDocumentCameraViewControllerDelegate {
                 .cancel)
     }
 
-    public func documentCameraViewController(_ controller: VNDocumentCameraViewController, 
+    public func documentCameraViewController(_ controller: VNDocumentCameraViewController,
                                              didFailWithError error: Error) {
         print("didFailWithError")
         scannerView

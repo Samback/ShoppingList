@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 extension Character {
     var isValid: Bool {
         return isLetter || isNumber
@@ -31,7 +30,6 @@ extension Array where Element == String {
         }
     }
 }
-
 
 public struct TextSanitizer {
 

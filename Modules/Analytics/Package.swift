@@ -10,7 +10,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "Analytics",
-            targets: ["Analytics"]),
+            targets: ["Analytics"])
     ],
     dependencies: [
         .package(url: "https://github.com/oliverfoggin/swift-composable-analytics", from: "1.0.0"),
@@ -28,6 +28,6 @@ let package = Package(
         ),
         .testTarget(
             name: "AnalyticsTests",
-            dependencies: ["Analytics"]),
+            dependencies: ["Analytics"])
     ]
 )

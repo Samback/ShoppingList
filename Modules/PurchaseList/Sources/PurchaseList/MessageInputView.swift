@@ -64,7 +64,7 @@ struct MessageInputView: View {
                 .foregroundColor(.white)
                 .frame(width: 10.steps, height: 10.steps)
         }
-    
+
     }
 
     private func actionButton(_ viewStore: ViewStoreOf<MessageInputFeature>) -> some View {

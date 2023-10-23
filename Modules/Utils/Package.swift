@@ -35,7 +35,7 @@ let package = Package(
 
                 .product(name: "Validated",
                             package: "swift-validated"),
-                .product(name: "Dependencies", package: "swift-dependencies"),
+                .product(name: "Dependencies", package: "swift-dependencies")
             ]),
         .testTarget(
             name: "UtilsTests",

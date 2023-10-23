@@ -16,8 +16,6 @@ import Firebase
 import Analytics
 import ComposableAnalytics
 
-
-
 /*
  SwiftLint configs Xcode 15
  https://thisdevbrain.com/swiftlint-permission-issue/
@@ -34,9 +32,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 @main
 struct ShoppingListApp: App {
-    
+
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    
+
     var body: some Scene {
         WindowGroup {
 //            DraftList(store: Store(initialState: 
