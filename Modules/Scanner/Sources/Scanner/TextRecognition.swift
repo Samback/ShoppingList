@@ -17,27 +17,25 @@ struct TextRecognition {
     }
 
     func recognizeText() async -> [String] {
-        let texts = await withTaskGroup(of: String.self) { group -> [String] in
+        return await withTaskGroup(of: [String].self) { group -> [String] in
             for image in scannedImages {
                 group.addTask {
                         let text = try? await recognizeText(in: image)
-                        return text ?? ""
+                        return text ?? []
                 }
             }
 
             var results = [String]()
 
             for await result in group {
-                results.append(result)
+                results.append(contentsOf: result)
             }
 
             return results
         }
-
-        return texts
     }
 
-    @Sendable func recognizeText(in image: UIImage) async throws -> String {
+    @Sendable func recognizeText(in image: UIImage) async throws -> [String] {
         return try await withCheckedThrowingContinuation { continuation in
             do {
                 guard let cgImage = image.cgImage else {
@@ -53,7 +51,7 @@ struct TextRecognition {
         }
     }
 
-    private func getTextRecognitionRequest(with continuation: CheckedContinuation<String, Error>) -> VNRecognizeTextRequest {
+    private func getTextRecognitionRequest(with continuation: CheckedContinuation<[String], Error>) -> VNRecognizeTextRequest {
         let request = VNRecognizeTextRequest { request, error in
             if let error = error {
                 print(error.localizedDescription)
@@ -62,15 +60,14 @@ struct TextRecognition {
 
             guard let observations = request.results as? [VNRecognizedTextObservation] else { return }
 
-            var text = ""
+            var texts = [String]()
             observations.forEach { observation in
                 guard let recognizedText = observation.topCandidates(1).first else { return }
                 print("TEXT: \(recognizedText.string)")
-                text.append(recognizedText.string)
-                text.append("\n")
+                texts.append(recognizedText.string)
             }
 
-            continuation.resume(returning: text)
+            continuation.resume(returning: texts)
         }
 
         request.recognitionLevel = .accurate
@@ -79,5 +76,3 @@ struct TextRecognition {
         return request
     }
 }
-
-

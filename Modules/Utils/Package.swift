@@ -18,7 +18,7 @@ let package = Package(
         .package(path: "../Models"),
         .package(url: "https://github.com/pointfreeco/swift-nonempty.git", from: "0.3.0"),
         .package(url: "https://github.com/pointfreeco/swift-validated", from: "0.2.1"),
-        .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.0.0"),
+        .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.0.0")
     ],
 
     targets: [

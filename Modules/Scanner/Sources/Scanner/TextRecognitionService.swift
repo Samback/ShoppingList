@@ -16,7 +16,8 @@ public struct TextRecognitionService {
 extension TextRecognitionService: DependencyKey {
     public static var liveValue: Self {
         return TextRecognitionService(recognizeText: { images in
-                await TextRecognition(scannedImages: images).recognizeText()
+                await TextRecognition(scannedImages: images)
+                .recognizeText()
         })
     }
 

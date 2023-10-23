@@ -182,7 +182,9 @@ public struct PurchaseListFeature: Reducer {
         switch action {
         case let .scannerAction(.presented(.delegate(.texts(.success(texts))))):
             state.scanPurchaseList = nil
-            state.draftList = DraftListFeature.State(rawList: texts)
+            let sanitized = TextSanitizer.sanitize(texts)
+            state.draftList = DraftListFeature
+                .State(rawList: sanitized)
             return .none
         case .scannerAction(.presented(.delegate(.canceled))):
             state.scanPurchaseList = nil
