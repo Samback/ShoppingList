@@ -18,7 +18,7 @@ public struct DraftList: View {
     public var body: some View {
         WithViewStore(store,
                       observe: {$0}) { viewStore in
-            store.withState { state in
+            store.withState { _ in
                 NavigationStack {
                     VStack {
                         TextEditor(text: viewStore.$inputText)
@@ -26,9 +26,14 @@ public struct DraftList: View {
                     .padding()
                     .toolbar(content: {
                         Button(action: {
+                            viewStore.send(.delegate(.cancel))
+                        }, label: {
+                            Text("Cancel")
+                        })
+                        Button(action: {
                             viewStore.send(.tapOnAddAtShoppingList)
                         }, label: {
-                            Text("Save")
+                            Text("Add to list")
                         })
                     })
                 }

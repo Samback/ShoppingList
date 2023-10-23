@@ -18,6 +18,7 @@ public struct DraftListFeature: Reducer {
         case delegate(Delegate)
         public enum Delegate: Equatable {
             case addNewShoppingNotes([String])
+            case cancel
         }
     }
 
