@@ -31,6 +31,7 @@ public struct PurchaseList: View {
                     listView(with: viewStore)
                     inputView(with: viewStore)
                 }
+                .scrollDismissesKeyboard(.immediately)
                 .navigationTitle(viewStore.title)
                 .toolbar {
                     toolbarView(with: viewStore)
@@ -84,7 +85,7 @@ public struct PurchaseList: View {
                            .onDelete { viewStore.send(.delete($0))}
                            .onMove { viewStore.send(.move($0, $1))}
         }
-        .scrollDismissesKeyboard(.interactively)
+
     }
 
     @ViewBuilder
