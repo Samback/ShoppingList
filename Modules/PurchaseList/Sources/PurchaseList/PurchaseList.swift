@@ -12,6 +12,9 @@ import Scanner
 import ComposableAnalytics
 import Analytics
 
+// https://www.hackingwithswift.com/quick-start/swiftui/how-to-add-custom-swipe-action-buttons-to-a-list-row
+//https://www.swiftanytime.com/blog/contextmenu-in-swiftui
+
 public struct PurchaseList: View {
     let store: StoreOf<PurchaseListFeature>
 
@@ -70,14 +73,68 @@ public struct PurchaseList: View {
                 self
                     .store
                     .scope(state: \.notes,
-                           action: PurchaseListFeature.Action.notesAction(id:action:))) {
-                               NoteView(store: $0)
+                           action: PurchaseListFeature.Action.notesAction(id:action:))) { itemStore in
+                               NoteView(store: itemStore)
+                                   .contextMenu {
+                                       itemStore.withState { state in
+                                           contextMenuItems(with: viewStore, item: state)
+                                       }
+                                   }
                            }
                            .onDelete { viewStore.send(.delete($0))}
                            .onMove { viewStore.send(.move($0, $1))}
         }
+        .scrollDismissesKeyboard(.interactively)
     }
 
+    @ViewBuilder
+    private func contextMenuItems(with viewStore: ViewStoreOf<PurchaseListFeature>,
+                                  item state: NoteFeature.State) -> some View {
+        Group {
+            Button(action: {
+                print("Tap on edit")
+                viewStore.send(.edit(state.id))
+            }, label: {
+                HStack {
+                    Text("Edit")
+                }
+            })
+            Button(action: {
+                print("Tap on duplicate")
+                viewStore.send(.duplicate(state.id))
+            }, label: {
+                HStack {
+                    Text("Duplicate")
+                }
+            })
+            Button(
+                role: .destructive,
+                action: {
+                    viewStore.send(.deleteNote(state.id))
+                }, label: {
+                    HStack {
+                        Text("Delete")
+                    }
+                })
+            Divider()
+            Button(action: {
+                viewStore.send(.checkAll)
+            }, label: {
+                HStack {
+                    Text("Check all")
+                }
+            })
+
+            Button(action: {
+                print("Uncheck all")
+                viewStore.send(.uncheckAll)
+            }, label: {
+                HStack {
+                    Text("Uncheck all")
+                }
+            })
+        }
+    }
 }
 
 #Preview {

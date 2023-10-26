@@ -49,20 +49,26 @@ public struct PurchaseListFeature: Reducer {
 
     public enum Action: BindableAction, Equatable {
         case addNote(String)
-        case scannerAction(PresentationAction<ScannerTCAFeature.Action>)
-        case draftListAction(PresentationAction<DraftListFeature.Action>)
         case binding(BindingAction<State>)
-        case uncheckAll
-        case notesAction(id: UUID, action: NoteFeature.Action)
+        case checkAll
+        case duplicate(UUID)
         case delete(IndexSet)
-        case move(IndexSet, Int)
-        case sortCompletedNotes
-        case inputTextAction(MessageInputFeature.Action)
-        case saveUpdatesAtList
+        case deleteNote(UUID)
+        case draftListAction(PresentationAction<DraftListFeature.Action>)
+
         case delegate(Delegate)
         public enum Delegate: Equatable {
             case update(State)
         }
+
+        case edit(UUID)
+        case inputTextAction(MessageInputFeature.Action)
+        case notesAction(id: UUID, action: NoteFeature.Action)
+        case move(IndexSet, Int)
+        case scannerAction(PresentationAction<ScannerTCAFeature.Action>)
+        case sortCompletedNotes
+        case saveUpdatesAtList
+        case uncheckAll
     }
 
     enum CancelID {
@@ -92,10 +98,6 @@ public struct PurchaseListFeature: Reducer {
             switch action {
             case .binding:
                 return .none
-
-            case .uncheckAll:
-                return uncheckedAll(state: &state)
-
             case .notesAction(id: _, action: .binding(\.$status)):
                 return notesAction()
 
@@ -141,6 +143,27 @@ public struct PurchaseListFeature: Reducer {
 
             case .draftListAction:
                 return draftListActionsAggregator(state: &state, action: action)
+
+            case .uncheckAll:
+                return uncheckedAll(state: &state)
+            case .checkAll:
+                return checkAll(state: &state)
+            case let .duplicate(id):
+                guard let title = state.notes[id: id]?.title else {
+                    return .none
+                }
+
+                return
+                    .run { send in
+                        try await self.clock.sleep(for: .seconds(0.3))
+                        await send(.addNote(title))
+                    }
+
+            case let .deleteNote(id):
+                state.notes.remove(id: id)
+                return .none
+            case .edit(_):
+                return .none
             }
 
         }
@@ -249,6 +272,18 @@ public struct PurchaseListFeature: Reducer {
     private func uncheckedAll(state: inout State) -> Effect<Action> {
         state.notes.indices.forEach {
             state.notes[$0].status = .new
+        }
+
+        return .run { send in
+            try await self.clock.sleep(for: .seconds(0.3))
+            await send(.sortCompletedNotes)
+        }
+        .cancellable(id: CancelID.noteUncheckAll, cancelInFlight: true)
+    }
+
+    private func checkAll(state: inout State) -> Effect<Action> {
+        state.notes.indices.forEach {
+            state.notes[$0].status = .done
         }
 
         return .run { send in
