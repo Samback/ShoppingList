@@ -15,6 +15,8 @@ import Analytics
 // https://www.hackingwithswift.com/quick-start/swiftui/how-to-add-custom-swipe-action-buttons-to-a-list-row
 //https://www.swiftanytime.com/blog/contextmenu-in-swiftui
 
+//https://kristaps.me/blog/swiftui-navigationview/
+
 public struct PurchaseList: View {
     let store: StoreOf<PurchaseListFeature>
 
@@ -23,36 +25,37 @@ public struct PurchaseList: View {
     }
 
     public var body: some View {
-        WithViewStore(store,
-                      observe: { $0 },
-                      content: { viewStore in
-            NavigationStack {
-                VStack(spacing: 0) {
-                    listView(with: viewStore)
-                    inputView(with: viewStore)
+
+            WithViewStore(store,
+                          observe: { $0 },
+                          content: { viewStore in
+                NavigationStack {
+                    VStack(spacing: 0) {
+                        listView(with: viewStore)
+                            .background(.clear)
+                        inputView(with: viewStore)
+                    }
+                    .background(.clear)
                 }
                 .scrollDismissesKeyboard(.immediately)
-                .navigationTitle(viewStore.title)
-                .toolbar {
+                .navigationTitle(viewStore.title + viewStore.title)
+
+                .toolbar(content: {
                     toolbarView(with: viewStore)
-                }
+                })
                 .sheet(store: self.store.scope(state: \.$scanPurchaseList,
                                                action: {.scannerAction($0)}),
                        content: ScannerTCA.init)
                 .sheet(store: self.store.scope(state: \.$draftList,
                                                action: {.draftListAction($0)}),
                        content: DraftList.init)
-            }
+            })
 
-        })
     }
 
     private func toolbarView(with viewStore: ViewStoreOf<PurchaseListFeature>) -> some ToolbarContent {
-        ToolbarItem(placement: .navigationBarTrailing) {
-            Button(action: { viewStore.send(.uncheckAll) },
-                   label: {
-                    Text("🧽")
-                   })
+        ToolbarItem(placement: .topBarTrailing) {
+            Text("10/10")
         }
     }
 
@@ -76,16 +79,44 @@ public struct PurchaseList: View {
                     .scope(state: \.notes,
                            action: PurchaseListFeature.Action.notesAction(id:action:))) { itemStore in
                                NoteView(store: itemStore)
+                                   .swipeActions {
+                                       itemStore.withState { localState in
+                                           HStack {
+                                               Button(action: {
+                                                   print("Options")
+                                               }, label: {
+                                                   Text("Options")
+                                               })
+                                               .contextMenu {
+                                                   Button(action: {
+                                                       print("Options")
+                                                   }, label: {
+                                                       Text("Options")
+                                                   })
+                                               }
+                                               Button(
+                                                role: .destructive,
+                                                action: {
+                                                    viewStore.send(.deleteNote(localState.id))
+                                                }, label: {
+                                                    HStack {
+                                                        Text("Delete")
+                                                    }
+                                                })
+                                           }
+                                       }
+                                   }
                                    .contextMenu {
                                        itemStore.withState { state in
                                            contextMenuItems(with: viewStore, item: state)
                                        }
                                    }
+                                   .frame(height: 30)
                            }
                            .onDelete { viewStore.send(.delete($0))}
                            .onMove { viewStore.send(.move($0, $1))}
         }
-
+        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
     }
 
     @ViewBuilder

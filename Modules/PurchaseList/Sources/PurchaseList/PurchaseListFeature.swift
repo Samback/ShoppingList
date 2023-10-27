@@ -69,6 +69,7 @@ public struct PurchaseListFeature: Reducer {
         case sortCompletedNotes
         case saveUpdatesAtList
         case uncheckAll
+        case update(note: UUID, text: String)
     }
 
     enum CancelID {
@@ -122,15 +123,8 @@ public struct PurchaseListFeature: Reducer {
             case .notesAction:
                 return .none
 
-            case let .inputTextAction(.tapOnActionButton(text)):
-                return Effect<Action>.send(.addNote(text))
-
-            case .inputTextAction(.tapOnScannerButton):
-                state.scanPurchaseList = ScannerTCAFeature.State()
-                return .none
-
             case .inputTextAction:
-                return .none
+                return inputTextAction(state: &state, action: action)
 
             case .saveUpdatesAtList:
                 return saveUpdates(state: &state)
@@ -162,8 +156,13 @@ public struct PurchaseListFeature: Reducer {
             case let .deleteNote(id):
                 state.notes.remove(id: id)
                 return .none
-            case .edit(_):
-                return .none
+            case let .edit(id):
+                let text = state.notes[id: id]?.title ?? ""
+                state.inputText = MessageInputFeature.State(inputText: text, mode: .update(id))
+                return .send(.inputTextAction(.activateTextField))
+            case let .update(note: note, text: text):
+                state.notes[id: note]?.title = text
+                return .send(.inputTextAction(.clearInput))
             }
 
         }
@@ -181,6 +180,25 @@ public struct PurchaseListFeature: Reducer {
             NoteFeature()
         }
 
+    }
+
+    private func inputTextAction(state: inout State, action: Action) -> Effect<Action> {
+        switch action {
+        case let .inputTextAction(.tapOnActionButton(text, mode)):
+            switch mode {
+            case .create:
+                return Effect<Action>.send(.addNote(text))
+            case let .update(id):
+                return Effect<Action>.send(.update(note: id, text: text))
+            }
+
+        case .inputTextAction(.tapOnScannerButton):
+            state.scanPurchaseList = ScannerTCAFeature.State()
+            return .none
+
+        default:
+            return .none
+        }
     }
 
     private func draftListActionsAggregator(state: inout State, action: Action) -> Effect<Action> {
@@ -255,12 +273,16 @@ public struct PurchaseListFeature: Reducer {
             return .none
         }
 
-        let note = NoteFeature.State(id: uuid(),
-                                     title: text,
-                                     subTitle: nil,
-                                     status: .new)
+        let notes = TextSanitizer
+            .sanitize(text)
+            .compactMap {
+            NoteFeature.State(id: uuid(),
+                                        title: $0,
+                                        subTitle: nil,
+                                        status: .new)
+        }
 
-        state.notes.insert(note, at: 0)
+        state.notes.insert(contentsOf: notes, at: 0)
 
         return Effect<Action>
             .merge(
