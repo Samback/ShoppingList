@@ -13,9 +13,9 @@ import ComposableAnalytics
 import Analytics
 
 // https://www.hackingwithswift.com/quick-start/swiftui/how-to-add-custom-swipe-action-buttons-to-a-list-row
-//https://www.swiftanytime.com/blog/contextmenu-in-swiftui
+// https://www.swiftanytime.com/blog/contextmenu-in-swiftui
 
-//https://kristaps.me/blog/swiftui-navigationview/
+// https://kristaps.me/blog/swiftui-navigationview/
 
 public struct PurchaseList: View {
     let store: StoreOf<PurchaseListFeature>
@@ -38,7 +38,7 @@ public struct PurchaseList: View {
                     .background(.clear)
                 }
                 .scrollDismissesKeyboard(.immediately)
-                .navigationTitle(viewStore.title + viewStore.title)
+                .navigationTitle(viewStore.title)
 
                 .toolbar(content: {
                     toolbarView(with: viewStore)
@@ -62,7 +62,7 @@ public struct PurchaseList: View {
     @ViewBuilder
     private func inputView(with viewStore: ViewStoreOf<PurchaseListFeature>) -> some View {
         MessageInputView(store:
-                            self.store.scope(state: \.inputText, action: PurchaseListFeature.Action.inputTextAction))
+                            self.store.scope(state: \.inputField, action: PurchaseListFeature.Action.inputTextAction))
         .background(.green)
         .clipShape(
             .rect(topLeadingRadius: 2.steps,
@@ -139,6 +139,7 @@ public struct PurchaseList: View {
                     Text("Duplicate")
                 }
             })
+
             Button(
                 role: .destructive,
                 action: {

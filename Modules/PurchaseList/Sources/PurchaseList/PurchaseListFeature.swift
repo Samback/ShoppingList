@@ -25,9 +25,33 @@ public struct PurchaseListFeature: Reducer {
         public let id: UUID
         public var notes: IdentifiedArrayOf<NoteFeature.State> = []
         public var title: String = "Welcome"
-        var inputText: MessageInputFeature.State
+        var inputField: MessageInputFeature.State
         @PresentationState public var scanPurchaseList: ScannerTCAFeature.State?
         @PresentationState public var draftList: DraftListFeature.State?
+
+        public enum Status: Equatable {
+             case markAsDone
+             case undone
+
+            public var imageIcon: String {
+                 switch self {
+                 case .markAsDone:
+                     return "checkmark.circle"
+                 case .undone:
+                     return "circle"
+                 }
+             }
+
+             public var title: String {
+                 switch self {
+                 case .markAsDone:
+                     return "Mark as done"
+                 case .undone:
+                     return "Undone"
+                 }
+             }
+
+         }
 
         public init(id: UUID,
                     notes: IdentifiedArrayOf<NoteFeature.State>,
@@ -37,7 +61,7 @@ public struct PurchaseListFeature: Reducer {
             self.id = id
             self.notes = notes
             self.title = title
-            self.inputText = inputText
+            self.inputField = inputText
         }
 
         public static func convert(from model: PurchaseModel) -> Self {
@@ -45,6 +69,12 @@ public struct PurchaseListFeature: Reducer {
                          notes: .init(uniqueElements: model.notes.map(NoteFeature.State.convert(from:))),
                          title: model.title)
         }
+
+       public var status: Status {
+            let undone = notes.filter { $0.status == .new }
+            return undone.isEmpty ? .undone : .markAsDone
+        }
+
     }
 
     public enum Action: BindableAction, Equatable {
@@ -89,7 +119,7 @@ public struct PurchaseListFeature: Reducer {
             }
         }
 
-        Scope(state: \.inputText,
+        Scope(state: \.inputField,
               action: /Action.inputTextAction) {
             MessageInputFeature()
         }
@@ -123,8 +153,8 @@ public struct PurchaseListFeature: Reducer {
             case .notesAction:
                 return .none
 
-            case .inputTextAction:
-                return inputTextAction(state: &state, action: action)
+            case let .inputTextAction(value):
+                return inputTextAction(state: &state, action: value)
 
             case .saveUpdatesAtList:
                 return saveUpdates(state: &state)
@@ -158,7 +188,7 @@ public struct PurchaseListFeature: Reducer {
                 return .none
             case let .edit(id):
                 let text = state.notes[id: id]?.title ?? ""
-                state.inputText = MessageInputFeature.State(inputText: text, mode: .update(id))
+                state.inputField = MessageInputFeature.State(inputText: text, mode: .update(id))
                 return .send(.inputTextAction(.activateTextField))
             case let .update(note: note, text: text):
                 state.notes[id: note]?.title = text
@@ -182,9 +212,10 @@ public struct PurchaseListFeature: Reducer {
 
     }
 
-    private func inputTextAction(state: inout State, action: Action) -> Effect<Action> {
+    private func inputTextAction(state: inout State,
+                                 action: MessageInputFeature.Action) -> Effect<Action> {
         switch action {
-        case let .inputTextAction(.tapOnActionButton(text, mode)):
+        case let .tapOnActionButton(text, mode):
             switch mode {
             case .create:
                 return Effect<Action>.send(.addNote(text))
@@ -192,7 +223,7 @@ public struct PurchaseListFeature: Reducer {
                 return Effect<Action>.send(.update(note: id, text: text))
             }
 
-        case .inputTextAction(.tapOnScannerButton):
+        case .tapOnScannerButton:
             state.scanPurchaseList = ScannerTCAFeature.State()
             return .none
 
