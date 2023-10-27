@@ -25,14 +25,12 @@ public struct ListManager: View {
                           content: { viewStore in
                 VStack {
                     listView(with: viewStore)
+                    inputView(with: viewStore)
                 }
-                    .navigationTitle("My list")
-                    .toolbar {
-                        toolBarView(with: viewStore)
-                    }
-                    .navigationDestination(store: self.store.scope(state: \.$activePurchaseList,
-                                                                   action: { .activePurchaseList($0) }),
-                                           destination: PurchaseList.init)
+                .navigationTitle("My list")
+                .navigationDestination(store: self.store.scope(state: \.$activePurchaseList,
+                                                               action: { .activePurchaseList($0) }),
+                                       destination: PurchaseList.init)
             })
         }
     }
@@ -40,7 +38,7 @@ public struct ListManager: View {
     private func toolBarView(with viewStore: ViewStoreOf<ListManagerFeature>) -> some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
             Button(action: {
-                viewStore.send(.addNewList)
+                //                viewStore.send(.addNewList)
             }, label: {
                 Image(systemName: "plus")
             })
@@ -58,6 +56,10 @@ public struct ListManager: View {
                                              .onTapGesture {
                                                  viewStore.send(.openList(state))
                                              }
+                                             .contextMenu {
+                                                 contextMenu(with: viewStore, state: state)
+                                             }
+
                                      }
                                  }
                                  .onDelete(perform: { indexSet in
@@ -65,18 +67,102 @@ public struct ListManager: View {
                                  })
                                  .listStyle(.plain)
         }
+        .scrollDismissesKeyboard(.immediately)
+    }
+
+    @ViewBuilder
+    private func inputView(with viewStore: ViewStoreOf<ListManagerFeature>) -> some View {
+        MessageInputView(store:
+                            self.store.scope(state: \.inputField, action: ListManagerFeature.Action.inputFieldAction))
+        .background(.green)
+        .clipShape(
+            .rect(topLeadingRadius: 2.steps,
+                  topTrailingRadius: 2.steps)
+        )
+    }
+
+    @ViewBuilder
+    private func contextMenu(with viewStore: ViewStoreOf<ListManagerFeature>, state: PurchaseListFeature.State) -> some View {
+        VStack {
+
+            Button(action: {
+                viewStore.send(.contextMenuAction(.rename(state.id)))
+            }, label: {
+                HStack {
+                    Text("Rename")
+                    Spacer()
+                    Image(systemName: "character.cursor.ibeam")
+                }
+            })
+
+            Button(action: {
+                viewStore
+                    .send(.contextMenuAction(.selectEmoji(state.id)))
+            }, label: {
+                HStack {
+                    Text("Change image")
+                    Spacer()
+                    Image(systemName: "smiley")
+                }
+            })
+
+            Button(action: {
+                viewStore
+                    .send(.contextMenuAction(.duplicate(state.id)))
+            }, label: {
+                HStack {
+                    Text("Duplicate")
+                    Spacer()
+                    Image(systemName: "doc.on.doc")
+                }
+            })
+
+            Button(action: {
+                viewStore
+                    .send(.contextMenuAction(.share(state.id)))
+            }, label: {
+                HStack {
+                    Text("Share")
+                    Spacer()
+                    Image(systemName: "square.and.arrow.up")
+                }
+            })
+
+            Button(role: .destructive, action: {
+                viewStore
+                    .send(.contextMenuAction(.delete(state.id)))
+            }, label: {
+                HStack {
+                    Text("Delete")
+                    Spacer()
+                    Image(systemName: "trash")
+                }
+            })
+            Divider()
+
+            Button(action: {
+                viewStore
+                    .send(.contextMenuAction(.mark(state.id)))
+            }, label: {
+                HStack {
+                    Text(state.status.title)
+                    Spacer()
+                    Image(systemName: state.status.imageIcon)
+                }
+            })
+        }
     }
 }
 
 #Preview {
     ListManager(
         store: Store(initialState: ListManagerFeature.State(purchaseListCollection: []),
-                     reducer: {
-                         ListManagerFeature()
-                     },
-                     withDependencies: {
-                         $0.dataManager = DataManager.fileSystem
-                     }
-                    )
-    )
+                                                            reducer: {
+                                                                ListManagerFeature()
+                                                            },
+                                                            withDependencies: {
+                                                                $0.dataManager = DataManager.fileSystem
+                                                            }
+                                                           )
+        )
 }
