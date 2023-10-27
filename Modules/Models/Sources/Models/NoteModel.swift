@@ -9,8 +9,8 @@ import Foundation
 
 public struct NoteModel: Codable, Identifiable {
     public let id: UUID
-    public let title: String
-    public let subtitle: String?
+    public var title: String
+    public var subtitle: String?
     public var isCompleted: Bool
 
     public init(id: UUID, title: String, subtitle: String?, isCompleted: Bool) {

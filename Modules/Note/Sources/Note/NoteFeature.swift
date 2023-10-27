@@ -30,7 +30,7 @@ public struct NoteFeature: Reducer {
 
     public struct State: Equatable, Identifiable {
         public let id: UUID
-        public let title: String
+        @BindingState public var title: String
         public let subTitle: String?
         @BindingState public var status: Status
 
