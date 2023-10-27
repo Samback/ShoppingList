@@ -66,16 +66,7 @@ public struct NoteView: View {
         WithViewStore(self.store,
                       observe: { $0 },
                       content: { viewStore in
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(viewStore.title)
-                        .foregroundStyle(viewStore.status.color)
-                    if !(viewStore.subTitle?.isEmpty ?? true) {
-                        Text(viewStore.subTitle ?? "")
-                            .foregroundStyle(viewStore.status.color.opacity(0.5))
-                    }
-                }
-                Spacer()
+            HStack(spacing: 0) {
                 Button(action: {
                     viewStore.$status.wrappedValue.toggle()
                 }, label: {
@@ -84,9 +75,27 @@ public struct NoteView: View {
                 })
                 .frame(width: 44, height: 44)
                 .buttonStyle(.plain)
+
+                VStack(alignment: .leading, spacing: 0) {
+                    textView(viewStore.title)
+                        .foregroundStyle(viewStore.status.color)
+                    if !(viewStore.subTitle?.isEmpty ?? true) {
+                        Text(viewStore.subTitle ?? "")
+                            .foregroundStyle(viewStore.status.color.opacity(0.5))
+                    }
+                }
+                .padding(.leading, 10)
             }
         })
     }
+
+    private func textView(_ text: String) -> some View {
+        HStack(spacing: 0) {
+            Text(String(text.prefix(3))).font(.system(size: 22, weight: .semibold))
+            Text(String(text.dropFirst(3))).font(.system(size: 22, weight: .regular))
+        }
+    }
+
 }
 
 #Preview {
