@@ -12,10 +12,11 @@ public struct MessageInputFeature: Reducer {
 
     public enum Action: BindableAction, Equatable, Sendable {
         case binding(BindingAction<State>)
-        case tapOnActionButton(String)
+        case tapOnActionButton(String, State.Mode)
         case textChanged(String)
         case tapOnScannerButton
         case clearInput
+        case activateTextField
     }
 
     public var body: some Reducer<State, Action> {
@@ -24,7 +25,7 @@ public struct MessageInputFeature: Reducer {
             switch action {
             case .binding:
                 return .none
-            case .tapOnActionButton(let text):
+            case let .tapOnActionButton(text, _):
                 print(text)
                 return .none
             case .textChanged(let text):
@@ -32,8 +33,12 @@ public struct MessageInputFeature: Reducer {
                 return .none
             case .clearInput:
                 state.inputText = ""
+                state.focusedField = nil
                 return .none
             case .tapOnScannerButton:
+                return .none
+            case .activateTextField:
+                state.focusedField = .inputMessage
                 return .none
             }
         }
@@ -41,9 +46,22 @@ public struct MessageInputFeature: Reducer {
 
     public struct State: Equatable {
         @BindingState var inputText: String
+        let mode: Mode
 
-        public init(inputText: String = "") {
+        @BindingState var focusedField: Field?
+
+        enum Field: String, Hashable {
+          case inputMessage
+        }
+
+        public enum Mode: Equatable, Sendable {
+            case create
+            case update(UUID)
+        }
+
+        public init(inputText: String = "", mode: Mode = .create) {
             self.inputText = inputText
+            self.mode = mode
         }
     }
 

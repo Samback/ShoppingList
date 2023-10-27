@@ -12,6 +12,8 @@ import Utils
 struct MessageInputView: View {
     let store: StoreOf<MessageInputFeature>
 
+    @FocusState var focusedField: MessageInputFeature.State.Field?
+
     var body: some View {
           WithViewStore(store,
                       observe: { $0 },
@@ -20,6 +22,7 @@ struct MessageInputView: View {
             .padding(.bottom, 2.steps)
             .padding(.top, 1.steps)
             .padding(.horizontal, 4.steps)
+            .bind(viewStore.$focusedField, to: self.$focusedField)
         })
     }
 
@@ -49,6 +52,7 @@ struct MessageInputView: View {
             .accentColor(.black)
             .frame(maxWidth: .infinity)
             .padding(2.steps)
+            .focused($focusedField, equals: .inputMessage)
     }
 
     private func scannerButton(_ viewStore: ViewStoreOf<MessageInputFeature>) -> some View {
@@ -69,7 +73,7 @@ struct MessageInputView: View {
 
     private func actionButton(_ viewStore: ViewStoreOf<MessageInputFeature>) -> some View {
         Button(action: {
-            viewStore.send(.tapOnActionButton(viewStore.inputText))
+            viewStore.send(.tapOnActionButton(viewStore.inputText, viewStore.mode))
         },
                label: {
             Image(systemName: "pencil") // Add your icon name here
