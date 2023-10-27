@@ -18,8 +18,8 @@ public struct PurchaseModel: Codable, Identifiable {
         self.title = title
     }
 
-    public static func newPurchase() -> Self {
-        return .init(id: UUID(), notes: [], title: "New purchase list")
+    public static func newPurchase(title: String) -> Self {
+        return .init(id: UUID(), notes: [], title: title)
     }
 
 }
