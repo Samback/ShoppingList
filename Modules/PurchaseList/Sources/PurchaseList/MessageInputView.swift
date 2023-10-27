@@ -9,12 +9,16 @@ import SwiftUI
 import ComposableArchitecture
 import Utils
 
-struct MessageInputView: View {
+public struct MessageInputView: View {
     let store: StoreOf<MessageInputFeature>
 
     @FocusState var focusedField: MessageInputFeature.State.Field?
 
-    var body: some View {
+    public init(store: StoreOf<MessageInputFeature>, focusedField: MessageInputFeature.State.Field? = nil) {
+        self.store = store
+        self.focusedField = focusedField
+    }
+    public var body: some View {
           WithViewStore(store,
                       observe: { $0 },
                       content: { viewStore in
