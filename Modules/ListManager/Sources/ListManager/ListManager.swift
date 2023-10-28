@@ -162,7 +162,7 @@ public struct ListManager: View {
                                                                 ListManagerFeature()
                                                             },
                                                             withDependencies: {
-                                                                $0.dataManager = DataManager.fileSystem
+                                                                $0.dataManager = DataManager.liveValue
                                                             }
                                                            )
         )

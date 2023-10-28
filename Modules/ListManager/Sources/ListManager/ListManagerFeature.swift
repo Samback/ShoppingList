@@ -25,8 +25,8 @@ public struct ListManagerFeature: Reducer {
     public struct State: Equatable {
         @PresentationState public var activePurchaseList: PurchaseListFeature.State?
         var inputField: MessageInputFeature.State
-
         var purchaseListCollection: IdentifiedArrayOf<PurchaseListFeature.State> = []
+        var account: AccountModel = AccountModel(list: [])
 
         public init(purchaseListCollection: IdentifiedArrayOf<PurchaseListFeature.State>,
                     inputField: MessageInputFeature.State = MessageInputFeature.State()) {
@@ -43,8 +43,10 @@ public struct ListManagerFeature: Reducer {
         case listAction(id: UUID, action: PurchaseListFeature.Action)
         case listInteractionAction(ListInteractionAction)
         case loadedListResult(TaskResult<[PurchaseModel]>)
+        case loadAccountResult(TaskResult<AccountModel>)
         case openList(PurchaseListFeature.State)
         case sortList
+        case saveAccount
 
         public enum ContextMenuAction: Equatable {
             case rename(UUID)
@@ -83,6 +85,14 @@ public struct ListManagerFeature: Reducer {
             case .initialLoad:
                 return .run { send in
                     await send(
+                        .loadAccountResult(
+                            await TaskResult {
+                                try await dataManager.loadAccount()
+                            }
+                        )
+                    )
+
+                    await send(
                         .loadedListResult(
                             await TaskResult {
                                 try await dataManager.loadData()
@@ -93,11 +103,22 @@ public struct ListManagerFeature: Reducer {
                 }
 
             case let .loadedListResult(.success(list)):
-                let items = list.compactMap(PurchaseListFeature.State.convert(from:))
+                let sortedShoppingLists = state.account.list.compactMap { orderedId in
+                    return list.first { $0.id == orderedId }
+                }
+
+                let items = sortedShoppingLists.compactMap(PurchaseListFeature.State.convert(from:))
                 state.purchaseListCollection = IdentifiedArray(uniqueElements: items)
                 return .none
 
             case let .loadedListResult(.failure(error)):
+                print(error)
+                return .none
+
+            case let .loadAccountResult(.success(account)):
+                state.account = account
+                return .none
+            case let .loadAccountResult(.failure(error)):
                 print(error)
                 return .none
 
@@ -113,10 +134,18 @@ public struct ListManagerFeature: Reducer {
 
             case let .inputFieldAction(localActions):
                 return inputFieldAction(with: &state, action: localActions)
+
             case .sortList:
                 state.purchaseListCollection.sort { $0.status == .inProgress && $1.status == .done }
-                return .none
+                return .send(.saveAccount)
+
+            case .saveAccount:
+                state.account.list = state.purchaseListCollection.map(\.id)
+                return .run {[localState = state] _ in
+                    try await dataManager.saveAccount(localState.account)
+                }
             }
+
         }
         .ifLet(\.$activePurchaseList,
                 action: /Action.activePurchaseList,
@@ -138,12 +167,13 @@ public struct ListManagerFeature: Reducer {
             }
             let value = state.purchaseListCollection.elements[firstIndex]
             state.purchaseListCollection.remove(atOffsets: indexSet)
-            return .run { _ in
+            return .run { send in
                 try await dataManager.deleteDocument(value.id.uuidString)
+                await send(.saveAccount)
             }
         case let .move(indexSet, destination):
             state.purchaseListCollection.move(fromOffsets: indexSet, toOffset: destination)
-            return .none
+            return .send(.saveAccount)
         }
     }
 
@@ -169,8 +199,9 @@ public struct ListManagerFeature: Reducer {
 
         case let .delete(id):
             state.purchaseListCollection[id: id] = nil
-            return .run { _ in
+            return .run { send in
                 try await dataManager.deleteDocument(id.uuidString)
+                await send(.saveAccount)
             }
 
         case let .duplicate(id):

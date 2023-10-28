@@ -57,7 +57,7 @@ struct ShoppingListApp: App {
                                      ._printChanges()
                              },
                              withDependencies: {
-                                 $0.dataManager = DataManager.fileSystem
+                                 $0.dataManager = DataManager.liveValue
                              }
                             )
             )
