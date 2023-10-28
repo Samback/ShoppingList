@@ -7,6 +7,12 @@
 
 import Foundation
 
+extension Bool {
+    var emoji: String {
+        return self ? "✅" : "❌"
+    }
+}
+
 public struct NoteModel: Codable, Identifiable {
     public let id: UUID
     public var title: String
