@@ -22,4 +22,14 @@ public struct PurchaseModel: Codable, Identifiable {
         return .init(id: UUID(), notes: [], title: title)
     }
 
+    public func duplicate(uuid: UUID = .init()) -> Self {
+        return .init(id: uuid, notes: notes, title: title)
+    }
+
+   public func shareVersion() -> String {
+       return notes.reduce(title + "\n") { result, note in
+           return result + note.title + " " + note.isCompleted.emoji + "\n"
+       }
+    }
+
 }
