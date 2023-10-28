@@ -66,26 +66,29 @@ public struct NoteView: View {
         WithViewStore(self.store,
                       observe: { $0 },
                       content: { viewStore in
-            HStack(spacing: 0) {
-                Button(action: {
-                    viewStore.$status.wrappedValue.toggle()
-                }, label: {
-                    Image(systemName: viewStore.status.imageName)
-                        .modifier(ActionButtonModifier(status: viewStore.status))
-                })
-                .frame(width: 44, height: 44)
-                .buttonStyle(.plain)
 
-                VStack(alignment: .leading, spacing: 0) {
+            VStack(spacing: 0) {
+                Spacer()
+                Spacer()
+                HStack(spacing: 0) {
                     textView(viewStore.title)
                         .foregroundStyle(viewStore.status.color)
-                    if !(viewStore.subTitle?.isEmpty ?? true) {
-                        Text(viewStore.subTitle ?? "")
-                            .foregroundStyle(viewStore.status.color.opacity(0.5))
-                    }
+
+                    Spacer()
+
+                    Button(action: {
+                        viewStore.$status.wrappedValue.toggle()
+                    }, label: {
+                        Image(systemName: viewStore.status.imageName)
+                            .modifier(ActionButtonModifier(status: viewStore.status))
+                    })
+                    .frame(width: 44, height: 44)
+                    .buttonStyle(.plain)
                 }
-                .padding(.leading, 10)
+
+                Spacer()
             }
+
         })
     }
 
@@ -99,8 +102,13 @@ public struct NoteView: View {
 }
 
 #Preview {
-    NoteView(store: StoreOf<NoteFeature>(initialState: .demo,
-                                         reducer: {
-        NoteFeature()
-    }))
+    VStack {
+        NoteView(store: StoreOf<NoteFeature>(initialState: .demo,
+                                             reducer: {
+            NoteFeature()
+        }))
+        .frame(height: 52)
+        .background(.red)
+    }
+    .background(.blue)
 }
