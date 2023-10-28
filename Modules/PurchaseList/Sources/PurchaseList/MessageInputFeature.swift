@@ -10,6 +10,8 @@ import ComposableArchitecture
 
 public struct MessageInputFeature: Reducer {
 
+    public init() {}
+
     public enum Action: BindableAction, Equatable, Sendable {
         case binding(BindingAction<State>)
         case tapOnActionButton(String, State.Mode)
@@ -33,7 +35,6 @@ public struct MessageInputFeature: Reducer {
                 return .none
             case .clearInput:
                 state.inputText = ""
-                state.focusedField = nil
                 return .none
             case .tapOnScannerButton:
                 return .none
@@ -50,7 +51,7 @@ public struct MessageInputFeature: Reducer {
 
         @BindingState var focusedField: Field?
 
-        enum Field: String, Hashable {
+        public enum Field: String, Hashable {
           case inputMessage
         }
 

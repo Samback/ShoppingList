@@ -25,9 +25,21 @@ public struct PurchaseListFeature: Reducer {
         public let id: UUID
         public var notes: IdentifiedArrayOf<NoteFeature.State> = []
         public var title: String = "Welcome"
+
         var inputField: MessageInputFeature.State
         @PresentationState public var scanPurchaseList: ScannerTCAFeature.State?
         @PresentationState public var draftList: DraftListFeature.State?
+
+       public var purchaseModel: PurchaseModel {
+            return  PurchaseModel(id: id,
+                                  notes: notes
+                .elements
+                .map { NoteModel(id: $0.id,
+                                 title: $0.title,
+                                 subtitle: $0.subTitle,
+                                 isCompleted: $0.status == .done) },
+                                  title: title)
+        }
 
         public enum Status: Equatable {
              case markAsDone
@@ -220,6 +232,7 @@ public struct PurchaseListFeature: Reducer {
             case .create:
                 return Effect<Action>.send(.addNote(text))
             case let .update(id):
+                state.inputField = MessageInputFeature.State(inputText: "", mode: .create)
                 return Effect<Action>.send(.update(note: id, text: text))
             }
 
@@ -280,13 +293,7 @@ public struct PurchaseListFeature: Reducer {
     }
 
     private func saveUpdates(state: inout State) -> Effect<Action> {
-        let notes = state.notes.map { NoteModel(id: $0.id,
-                                                title: $0.title,
-                                                subtitle: $0.subTitle,
-                                                isCompleted: $0.status == .done) }
-        let model = PurchaseModel(id: state.id,
-                                  notes: notes,
-                                  title: state.title)
+        let model = state.purchaseModel
 
         return Effect<Action>.merge(
             Effect<Action>.run { _ in
@@ -314,7 +321,6 @@ public struct PurchaseListFeature: Reducer {
         }
 
         state.notes.insert(contentsOf: notes, at: 0)
-
         return Effect<Action>
             .merge(
                 .send(.sortCompletedNotes),
