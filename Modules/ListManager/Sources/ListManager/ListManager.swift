@@ -63,8 +63,12 @@ public struct ListManager: View {
                                      }
                                  }
                                  .onDelete(perform: { indexSet in
-                                     viewStore.send(.delete(indexSet))
+                                     viewStore.send(.listInteractionAction(.delete(indexSet)))
                                  })
+                                 .onMove(perform: { indices, newOffset in
+                                     viewStore.send(.listInteractionAction(.move(indices, newOffset)))
+                                 })
+
                                  .listStyle(.plain)
         }
         .scrollDismissesKeyboard(.immediately)

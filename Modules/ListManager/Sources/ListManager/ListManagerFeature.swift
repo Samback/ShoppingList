@@ -40,8 +40,8 @@ public struct ListManagerFeature: Reducer {
         case contextMenuAction(ContextMenuAction)
         case inputFieldAction(MessageInputFeature.Action)
         case listAction(id: UUID, action: PurchaseListFeature.Action)
+        case listInteractionAction(ListInteractionAction)
         case addNewList(String?)
-        case delete(IndexSet)
         case loadedListResult(TaskResult<[PurchaseModel]>)
         case openList(PurchaseListFeature.State)
 
@@ -52,6 +52,12 @@ public struct ListManagerFeature: Reducer {
             case share(UUID)
             case delete(UUID)
             case mark(UUID)
+        }
+
+        public enum ListInteractionAction {
+            case delete(IndexSet)
+            case move(IndexSet, Int)
+
         }
     }
 
@@ -81,15 +87,8 @@ public struct ListManagerFeature: Reducer {
             case let .contextMenuAction(localActions):
                 return contextMenuActions(with: &state, action: localActions)
 
-            case let .delete(indexSet):
-                guard let firstIndex = indexSet.first else {
-                    return .none
-                }
-                let value = state.purchaseListCollection.elements[firstIndex]
-                state.purchaseListCollection.remove(atOffsets: indexSet)
-                return .run { _ in
-                    try await dataManager.deleteDocument(value.id.uuidString)
-                }
+            case let .listInteractionAction(localActions):
+                return listInteractionActions(with: &state, action: localActions)
 
             case .initialLoad:
                 return .run { send in
@@ -133,6 +132,24 @@ public struct ListManagerFeature: Reducer {
         .forEach(\.purchaseListCollection,
                   action: /Action.listAction) {
             PurchaseListFeature()
+        }
+    }
+
+    private func listInteractionActions(with state: inout State,
+                                        action: Action.ListInteractionAction) -> Effect<Action> {
+        switch action {
+        case let .delete(indexSet):
+            guard let firstIndex = indexSet.first else {
+                return .none
+            }
+            let value = state.purchaseListCollection.elements[firstIndex]
+            state.purchaseListCollection.remove(atOffsets: indexSet)
+            return .run { _ in
+                try await dataManager.deleteDocument(value.id.uuidString)
+            }
+        case let .move(indexSet, destination):
+            state.purchaseListCollection.move(fromOffsets: indexSet, toOffset: destination)
+            return .none
         }
     }
 
