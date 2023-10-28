@@ -18,6 +18,7 @@ public struct PurchaseListFeature: Reducer {
     @Dependency(\.continuousClock) var clock
     @Dependency(\.uuid) var uuid
     @Dependency(\.dataManager) var dataManager
+    @Dependency(\.userDefaultsManager) var userDefaultsManager
 
     public init() {}
 
@@ -29,14 +30,14 @@ public struct PurchaseListFeature: Reducer {
         var inputField: MessageInputFeature.State
         @PresentationState public var scanPurchaseList: ScannerTCAFeature.State?
         @PresentationState public var draftList: DraftListFeature.State?
+        @BindingState public var viewMode: ViewMode = .expand
 
-       public var purchaseModel: PurchaseModel {
+        public var purchaseModel: PurchaseModel {
             return  PurchaseModel(id: id,
                                   notes: notes
                 .elements
                 .map { NoteModel(id: $0.id,
                                  title: $0.title,
-                                 subtitle: $0.subTitle,
                                  isCompleted: $0.status == .done) },
                                   title: title)
         }
@@ -62,8 +63,40 @@ public struct PurchaseListFeature: Reducer {
                      return "Mark as done"
                  }
              }
-
          }
+
+        public enum ViewMode {
+            case compact
+            case expand
+
+            var invertedValue: Self {
+                switch self {
+                case .compact:
+                    return .expand
+                case .expand:
+                    return .compact
+                }
+            }
+
+            var image: Image {
+                switch self {
+                case .compact:
+                    return Image(.compact)
+                case .expand:
+                    return Image(.expand)
+                }
+            }
+
+            var height: CGFloat {
+                switch self {
+                case .compact:
+                    return 52
+                case .expand:
+                    return 68
+                }
+
+            }
+        }
 
         public init(id: UUID,
                     notes: IdentifiedArrayOf<NoteFeature.State>,
@@ -107,6 +140,7 @@ public struct PurchaseListFeature: Reducer {
             case update(State)
         }
 
+        case onAppear
         case edit(UUID)
         case inputTextAction(MessageInputFeature.Action)
         case notesAction(id: UUID, action: NoteFeature.Action)
@@ -114,6 +148,8 @@ public struct PurchaseListFeature: Reducer {
         case scannerAction(PresentationAction<ScannerTCAFeature.Action>)
         case sortCompletedNotes
         case saveUpdatesAtList
+
+        case tapOnResizeButton
         case uncheckAll
         case update(note: UUID, text: String)
     }
@@ -143,10 +179,12 @@ public struct PurchaseListFeature: Reducer {
         Reduce { state, action in
 
             switch action {
-            case .binding:
-                return .none
             case .notesAction(id: _, action: .binding(\.$status)):
                 return notesAction()
+
+            case .onAppear:
+                state.viewMode = userDefaultsManager.listStateExpanded() ? .expand : .compact
+                return .none
 
             case let .addNote(text):
                 return addNewNote(with: text, state: &state)
@@ -184,10 +222,17 @@ public struct PurchaseListFeature: Reducer {
             case .draftListAction:
                 return draftListActionsAggregator(state: &state, action: action)
 
+            case .tapOnResizeButton:
+                state.viewMode = state.viewMode.invertedValue
+                userDefaultsManager.setListStateExpanded(state.viewMode == .expand)
+                return .none
+
             case .uncheckAll:
                 return uncheckedAll(state: &state)
+
             case .checkAll:
                 return checkAll(state: &state)
+
             case let .duplicate(id):
                 guard let title = state.notes[id: id]?.title else {
                     return .none
@@ -209,6 +254,8 @@ public struct PurchaseListFeature: Reducer {
             case let .update(note: note, text: text):
                 state.notes[id: note]?.title = text
                 return .send(.inputTextAction(.clearInput))
+            case .binding:
+                return .none
             }
 
         }
@@ -258,7 +305,6 @@ public struct PurchaseListFeature: Reducer {
                     .map {
                         NoteModel(id: uuid(),
                                   title: $0,
-                                  subtitle: nil,
                                   isCompleted: false)
                     }
                     .map(NoteFeature.State.convert(from:))
@@ -320,7 +366,6 @@ public struct PurchaseListFeature: Reducer {
             .compactMap {
             NoteFeature.State(id: uuid(),
                                         title: $0,
-                                        subTitle: nil,
                                         status: .new)
         }
 
@@ -366,7 +411,8 @@ public struct PurchaseListFeature: Reducer {
     }
 
     public static let demo: State = .init(id: UUID(), notes: [
-        .demo
+        .demo,
+        .init(id: UUID(), title: "Vine", status: .new)
     ], title: "Demo Notes")
 
 }

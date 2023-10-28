@@ -37,6 +37,9 @@ public struct PurchaseList: View {
                     }
                     .background(.clear)
                 }
+                .onAppear {
+                    viewStore.send(.onAppear)
+                }
                 .scrollDismissesKeyboard(.immediately)
                 .navigationTitle(viewStore.title)
 
@@ -55,7 +58,11 @@ public struct PurchaseList: View {
 
     private func toolbarView(with viewStore: ViewStoreOf<PurchaseListFeature>) -> some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
-            Text("10/10")
+            Button(action: {
+                viewStore.send(.tapOnResizeButton)
+            }, label: {
+                viewStore.viewMode.invertedValue.image
+            })
         }
     }
 
@@ -82,18 +89,6 @@ public struct PurchaseList: View {
                                    .swipeActions {
                                        itemStore.withState { localState in
                                            HStack {
-                                               Button(action: {
-                                                   print("Options")
-                                               }, label: {
-                                                   Text("Options")
-                                               })
-                                               .contextMenu {
-                                                   Button(action: {
-                                                       print("Options")
-                                                   }, label: {
-                                                       Text("Options")
-                                                   })
-                                               }
                                                Button(
                                                 role: .destructive,
                                                 action: {
@@ -103,6 +98,13 @@ public struct PurchaseList: View {
                                                         Text("Delete")
                                                     }
                                                 })
+
+                                               Button(action: {
+                                                   print("Options")
+                                               }, label: {
+                                                   Text("Options")
+                                               })
+
                                            }
                                        }
                                    }
@@ -111,12 +113,17 @@ public struct PurchaseList: View {
                                            contextMenuItems(with: viewStore, item: state)
                                        }
                                    }
-                                   .frame(height: 30)
+                                   .listRowInsets(.init(top: 0, leading: 24, bottom: 0, trailing: 0))
+                                   .frame(height: viewStore.viewMode.height)
                            }
                            .onDelete { viewStore.send(.delete($0))}
                            .onMove { viewStore.send(.move($0, $1))}
+                           .listSectionSeparator(.hidden, edges: .top)
+
         }
-        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+        .listStyle(.plain)
+        .environment(\.defaultMinListRowHeight, 10)
+
     }
 
     @ViewBuilder
@@ -128,9 +135,12 @@ public struct PurchaseList: View {
                 viewStore.send(.edit(state.id))
             }, label: {
                 HStack {
-                    Text("Edit")
+                    Text("Rename")
+                    Spacer()
+                    Image(systemName: "character.cursor.ibeam")
                 }
             })
+
             Button(action: {
                 print("Tap on duplicate")
                 viewStore.send(.duplicate(state.id))
@@ -139,6 +149,8 @@ public struct PurchaseList: View {
                     Text("Duplicate")
                 }
             })
+
+            Divider()
 
             Button(
                 role: .destructive,
@@ -149,32 +161,17 @@ public struct PurchaseList: View {
                         Text("Delete")
                     }
                 })
-            Divider()
-            Button(action: {
-                viewStore.send(.checkAll)
-            }, label: {
-                HStack {
-                    Text("Check all")
-                }
-            })
-
-            Button(action: {
-                print("Uncheck all")
-                viewStore.send(.uncheckAll)
-            }, label: {
-                HStack {
-                    Text("Uncheck all")
-                }
-            })
         }
     }
 }
 
 #Preview {
-    PurchaseList(
-        store: Store(initialState: PurchaseListFeature.demo,
-                     reducer: { PurchaseListFeature()
-                         .dependency(\.analyticsClient, AnalyticsClient.firebaseClient)}
-                    )
-    )
+    NavigationStack {
+        PurchaseList(
+            store: Store(initialState: PurchaseListFeature.demo,
+                         reducer: { PurchaseListFeature()
+                             .dependency(\.analyticsClient, AnalyticsClient.firebaseClient)}
+                        )
+        )
+    }
 }
