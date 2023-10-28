@@ -117,16 +117,13 @@ public struct ListManager: View {
                 }
             })
 
-            Button(action: {
-                viewStore
-                    .send(.contextMenuAction(.share(state.id)))
-            }, label: {
+            ShareLink(item: state.purchaseModel.shareVersion()) {
                 HStack {
                     Text("Share")
                     Spacer()
                     Image(systemName: "square.and.arrow.up")
                 }
-            })
+            }
 
             Button(role: .destructive, action: {
                 viewStore
