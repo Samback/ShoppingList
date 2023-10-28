@@ -31,28 +31,23 @@ public struct NoteFeature: Reducer {
     public struct State: Equatable, Identifiable {
         public let id: UUID
         @BindingState public var title: String
-        public let subTitle: String?
         @BindingState public var status: Status
 
         public static let demo = State(id: UUID(),
                                 title: "Milk",
-                                subTitle: "Only fresh",
                                 status: .new)
 
         public init(id: UUID,
                     title: String,
-                    subTitle: String?,
                     status: Status) {
             self.id = id
             self.title = title
-            self.subTitle = subTitle
             self._status = BindingState(wrappedValue: status)
         }
 
         public static func convert(from model: NoteModel) -> Self {
             return .init(id: model.id,
                          title: model.title,
-                         subTitle: model.subtitle,
                          status: model.isCompleted ? .done : .new)
         }
     }

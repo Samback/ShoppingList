@@ -16,13 +16,11 @@ extension Bool {
 public struct NoteModel: Codable, Identifiable {
     public let id: UUID
     public var title: String
-    public var subtitle: String?
     public var isCompleted: Bool
 
-    public init(id: UUID, title: String, subtitle: String?, isCompleted: Bool) {
+    public init(id: UUID, title: String, isCompleted: Bool) {
         self.id = id
         self.title = title
-        self.subtitle = subtitle
         self.isCompleted = isCompleted
     }
 }
