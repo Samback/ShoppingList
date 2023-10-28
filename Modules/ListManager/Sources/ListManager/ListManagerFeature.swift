@@ -14,6 +14,7 @@ import Models
 import NonEmpty
 import Analytics
 import ComposableAnalytics
+import SwiftUI
 
 public struct ListManagerFeature: Reducer {
     @Dependency(\.uuid) var uuid
@@ -41,9 +42,9 @@ public struct ListManagerFeature: Reducer {
         case inputFieldAction(MessageInputFeature.Action)
         case listAction(id: UUID, action: PurchaseListFeature.Action)
         case listInteractionAction(ListInteractionAction)
-        case addNewList(String?)
         case loadedListResult(TaskResult<[PurchaseModel]>)
         case openList(PurchaseListFeature.State)
+        case sortList
 
         public enum ContextMenuAction: Equatable {
             case rename(UUID)
@@ -73,17 +74,6 @@ public struct ListManagerFeature: Reducer {
             case let .listAction(id, localActions):
                 return listActions(with: &state,
                                    id: id, action: localActions)
-            case let .addNewList(title):
-                let newPurchase = PurchaseModel.newPurchase(title: title ?? "New item")
-                let newList = PurchaseListFeature.State(id: newPurchase.id,
-                                                        notes: IdentifiedArrayOf<NoteFeature.State>(uniqueElements: []),
-                                                        title: newPurchase.title)
-                state.purchaseListCollection.append(newList)
-                return .run { send in
-                    try await dataManager.createDocument(newPurchase)
-                    await send(.openList(newList))
-                }
-
             case let .contextMenuAction(localActions):
                 return contextMenuActions(with: &state, action: localActions)
 
@@ -99,6 +89,7 @@ public struct ListManagerFeature: Reducer {
                             }
                         )
                     )
+                    await send(.sortList)
                 }
 
             case let .loadedListResult(.success(list)):
@@ -122,6 +113,9 @@ public struct ListManagerFeature: Reducer {
 
             case let .inputFieldAction(localActions):
                 return inputFieldAction(with: &state, action: localActions)
+            case .sortList:
+                state.purchaseListCollection.sort { $0.status == .inProgress && $1.status == .done }
+                return .none
             }
         }
         .ifLet(\.$activePurchaseList,
@@ -186,8 +180,10 @@ public struct ListManagerFeature: Reducer {
             let duplicateState = PurchaseListFeature.State.convert(from: purchaseListState.purchaseModel.duplicate())
             state.purchaseListCollection.insert(duplicateState, at: 0)
 
-            return .run { _ in
+            return .run { send in
                 try await dataManager.createDocument(duplicateState.purchaseModel)
+                await send(.sortList,
+                           animation: Animation.easeInOut(duration: 0.5))
             }
 
         case let .mark(id):
@@ -195,18 +191,22 @@ public struct ListManagerFeature: Reducer {
                 return .none
             }
 
-            return Effect<Action>
-                .send(.listAction(id: id,
-                                  action: purchaseState.status == .markAsDone ?
-                    .checkAll : .uncheckAll))
-        case let .share(id):
+            return Effect<Action>.merge(
+                Effect<Action>
+                    .send(.listAction(id: id,
+                                      action: purchaseState.status == .inProgress ? .checkAll : .uncheckAll)),
+                Effect<Action>
+                    .send(.sortList,
+                          animation: Animation.easeInOut(duration: 0.5)))
+
+        case .share:
             return .none
 
         default:
             return .none
         }
 
-//        case .selectEmoji(_):
+        //        case .selectEmoji(_):
 
     }
 
@@ -222,9 +222,7 @@ public struct ListManagerFeature: Reducer {
             switch mode {
             case .create:
                 state.inputField = MessageInputFeature.State(inputText: "", mode: .create)
-                return .run { send in
-                    await send(.addNewList(title))
-                }
+                return addNewList(state: &state, title: title)
             case let .update(id):
                 state.purchaseListCollection[id: id]?.title = title
                 guard let model = state.purchaseListCollection[id: id] else {
@@ -242,6 +240,19 @@ public struct ListManagerFeature: Reducer {
                 .binding, .clearInput, .textChanged:
             return .none
         }
+    }
 
+    private func addNewList(state: inout State, title: String?) -> Effect<Action> {
+        let newPurchase = PurchaseModel.newPurchase(title: title ?? "New item")
+        let newList = PurchaseListFeature.State(id: newPurchase.id,
+                                                notes: IdentifiedArrayOf<NoteFeature.State>(uniqueElements: []),
+                                                title: newPurchase.title)
+
+        state.purchaseListCollection.append(newList)
+        return .run { send in
+            try await dataManager.createDocument(newPurchase)
+            await send(.sortList)
+            await send(.openList(newList))
+        }
     }
 }

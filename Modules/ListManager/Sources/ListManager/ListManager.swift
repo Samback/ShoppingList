@@ -146,9 +146,9 @@ public struct ListManager: View {
                     .send(.contextMenuAction(.mark(state.id)))
             }, label: {
                 HStack {
-                    Text(state.status.title)
+                    Text(state.status.titleInverted)
                     Spacer()
-                    Image(systemName: state.status.imageIcon)
+                    Image(systemName: state.status.imageIconInverted)
                 }
             })
         }

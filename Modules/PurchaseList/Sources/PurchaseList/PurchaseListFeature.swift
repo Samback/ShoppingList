@@ -42,24 +42,24 @@ public struct PurchaseListFeature: Reducer {
         }
 
         public enum Status: Equatable {
-             case markAsDone
-             case undone
+             case done
+             case inProgress
 
-            public var imageIcon: String {
+            public var imageIconInverted: String {
                  switch self {
-                 case .markAsDone:
-                     return "checkmark.circle"
-                 case .undone:
+                 case .done:
                      return "circle"
+                 case .inProgress:
+                     return "checkmark.circle"
                  }
              }
 
-             public var title: String {
+             public var titleInverted: String {
                  switch self {
-                 case .markAsDone:
-                     return "Mark as done"
-                 case .undone:
+                 case .done:
                      return "Undone"
+                 case .inProgress:
+                     return "Mark as done"
                  }
              }
 
@@ -83,8 +83,12 @@ public struct PurchaseListFeature: Reducer {
         }
 
        public var status: Status {
-            let undone = notes.filter { $0.status == .new }
-            return undone.isEmpty ? .undone : .markAsDone
+           guard !notes.isEmpty else {
+               return .inProgress
+           }
+
+            let inProgress = notes.filter { $0.status == .new }
+            return inProgress.isEmpty ? .done : .inProgress
         }
 
     }
