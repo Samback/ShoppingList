@@ -129,18 +129,6 @@ public struct ListManager: View {
                 }
             }
 
-            Button(role: .destructive, action: {
-                viewStore
-                    .send(.contextMenuAction(.delete(state.id)))
-            }, label: {
-                HStack {
-                    Text("Delete")
-                    Spacer()
-                    Image(systemName: "trash")
-                }
-            })
-            Divider()
-
             Button(action: {
                 viewStore
                     .send(.contextMenuAction(.mark(state.id)))
@@ -151,6 +139,20 @@ public struct ListManager: View {
                     Image(systemName: state.status.imageIconInverted)
                 }
             })
+
+            Divider()
+
+            Button(role: .destructive, action: {
+                viewStore
+                    .send(.contextMenuAction(.delete(state.id)))
+            }, label: {
+                HStack {
+                    Text("Delete")
+                    Spacer()
+                    Image(systemName: "trash")
+                }
+            })
+
         }
     }
 }
