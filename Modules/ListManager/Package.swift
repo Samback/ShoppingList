@@ -18,7 +18,8 @@ let package = Package(
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture",
                  from: "1.2.0"),
         .package(path: "../PurchaseList"),
-        .package(path: "../Utils")
+        .package(path: "../Utils"),
+        .package(path: "../Theme")
     ],
 
     targets: [
@@ -30,7 +31,8 @@ let package = Package(
                 .product(name: "ComposableArchitecture",
                          package: "swift-composable-architecture"),
                 "PurchaseList",
-                "Utils"
+                "Utils",
+                "Theme"
             ]),
         .testTarget(
             name: "ListManagerTests",

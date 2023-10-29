@@ -75,7 +75,12 @@ public struct NoteView: View {
                     viewStore.status.image
                         .padding(.trailing, 24)
                 }
+                .frame(maxWidth: .infinity)
                 Spacer()
+            }
+            .contentShape(Rectangle())
+            .onTapGesture {
+                viewStore.$status.wrappedValue.toggle()
             }
 
         })

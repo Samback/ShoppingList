@@ -9,6 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 import PurchaseList
 import Utils
+import Theme
 
 public struct ListManager: View {
     let store: StoreOf<ListManagerFeature>
@@ -28,6 +29,9 @@ public struct ListManager: View {
                     inputView(with: viewStore)
                 }
                 .navigationTitle("My list")
+                .onAppear {
+                    Appearance.apply()
+                }
                 .navigationDestination(store: self.store.scope(state: \.$activePurchaseList,
                                                                action: { .activePurchaseList($0) }),
                                        destination: PurchaseList.init)

@@ -11,6 +11,7 @@ import Note
 import Scanner
 import ComposableAnalytics
 import Analytics
+import Theme
 
 // https://www.hackingwithswift.com/quick-start/swiftui/how-to-add-custom-swipe-action-buttons-to-a-list-row
 // https://www.swiftanytime.com/blog/contextmenu-in-swiftui
@@ -18,6 +19,9 @@ import Analytics
 // https://kristaps.me/blog/swiftui-navigationview/
 
 public struct PurchaseList: View {
+
+    @Environment(\.presentationMode) var presentation
+
     let store: StoreOf<PurchaseListFeature>
 
     public init(store: StoreOf<PurchaseListFeature>) {
@@ -39,13 +43,25 @@ public struct PurchaseList: View {
                 }
                 .onAppear {
                     viewStore.send(.onAppear)
+                    Appearance.apply()
                 }
                 .scrollDismissesKeyboard(.immediately)
                 .navigationTitle(viewStore.title)
-
                 .toolbar(content: {
                     toolbarView(with: viewStore)
                 })
+                .navigationBarBackButtonHidden(true)
+                .toolbar(content: {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button {
+                            self.presentation.wrappedValue.dismiss()
+                        } label: {
+                            Image(systemName: "chevron.left")
+                             .foregroundColor(ColorTheme.live().accent)
+                        }
+                        }
+                })
+
                 .sheet(store: self.store.scope(state: \.$scanPurchaseList,
                                                action: {.scannerAction($0)}),
                        content: ScannerTCA.init)
@@ -61,7 +77,11 @@ public struct PurchaseList: View {
             Button(action: {
                 viewStore.send(.tapOnResizeButton)
             }, label: {
-                viewStore.viewMode.invertedValue.image
+                viewStore.viewMode
+                    .invertedValue
+                    .image
+                    .renderingMode(.original)
+                    .tint(ColorTheme.live().accent)
             })
         }
     }

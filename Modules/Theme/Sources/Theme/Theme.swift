@@ -8,18 +8,26 @@ extension Color {
         let blue = Double((hex & 0xff) >> 0) / 255.0
         self.init(.sRGB, red: red, green: green, blue: blue, opacity: opacity)
     }
+
+    var uiColor: UIColor {
+        return UIColor(self)
+    }
 }
 
 public struct ColorTheme {
 
     public var primary: Color
     public var secondary: Color
+    public var accent: Color
 
    public  static var live: @Sendable () -> Self = {
         return lightColorTheme
     }
 
     private static var lightColorTheme: ColorTheme = .init(primary: Color.init(hex: 0x064F60),
-                                                           secondary: .init(hex: 0x858F94))
+                                                           secondary: .init(hex: 0x858F94),
+                                                           accent: .init(hex: 0x61D384)
+
+    )
 
 }

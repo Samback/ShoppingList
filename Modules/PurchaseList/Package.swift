@@ -18,6 +18,7 @@ let package = Package(
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture",
                  from: "1.2.0"),
         .package(path: "../Note"),
+        .package(path: "../Theme"),
         .package(path: "../Utils"),
         .package(path: "../Models"),
         .package(path: "../Scanner"),
@@ -39,6 +40,7 @@ let package = Package(
                 "Models",
                 "Scanner",
                 "Analytics",
+                "Theme",
                 .product(name: "Dependencies", package: "swift-dependencies"),
                 .product(name: "ComposableAnalytics", package: "swift-composable-analytics")
             ]
