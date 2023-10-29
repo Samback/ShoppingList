@@ -7,51 +7,46 @@
 
 import SwiftUI
 import ComposableArchitecture
+import Theme
 
 extension NoteFeature.Status {
 
     var color: Color {
         switch self {
         case .new:
-            return .black
+            return ColorTheme.live().primary
         case .done:
-            return .green
+            return ColorTheme.live().secondary
         }
     }
 
-    var imageName: String {
+    var image: Image {
         switch self {
         case .new:
-            return "plus"
+            return Image(.todo)
         case .done:
-            return "checkmark"
+            return Image(.done)
         }
     }
 }
 
-struct ActionButtonModifier: ViewModifier {
+struct PrefixTitleModifier: ViewModifier {
+
     let status: NoteFeature.Status
-
     func body(content: Content) -> some View {
-        ZStack {
-            content
-            Circle()
-                .stroke(lineWidth: 3)
-                .padding(10)
-            Image(systemName: status.imageName)
-                .font(.body)
-        }
-        .foregroundColor(status.color)
+        content
+            .foregroundColor(status.color)
+            .font(.system(size: 22, weight: .semibold))
     }
 }
 
-#Preview {
-    HStack {
-        Text(" ")
-            .modifier(ActionButtonModifier(status: .done))
-        Text(" ")
-            .modifier(ActionButtonModifier(status: .new))
+struct SuffixTitleModifier: ViewModifier {
 
+    let status: NoteFeature.Status
+    func body(content: Content) -> some View {
+        content
+            .foregroundColor(status.color)
+            .font(.system(size: 22, weight: .regular))
     }
 }
 
@@ -71,32 +66,19 @@ public struct NoteView: View {
                 Spacer()
                 Spacer()
                 HStack(spacing: 0) {
-                    textView(viewStore.title)
-                        .foregroundStyle(viewStore.status.color)
+                    Text(viewStore.titlePrefix)
+                        .modifier(PrefixTitleModifier(status: viewStore.status))
+                    Text(viewStore.titleSuffix)
+                        .modifier(SuffixTitleModifier(status: viewStore.status))
 
                     Spacer()
-
-                    Button(action: {
-                        viewStore.$status.wrappedValue.toggle()
-                    }, label: {
-                        Image(systemName: viewStore.status.imageName)
-                            .modifier(ActionButtonModifier(status: viewStore.status))
-                    })
-                    .frame(width: 44, height: 44)
-                    .buttonStyle(.plain)
+                    viewStore.status.image
+                        .padding(.trailing, 24)
                 }
-
                 Spacer()
             }
 
         })
-    }
-
-    private func textView(_ text: String) -> some View {
-        HStack(spacing: 0) {
-            Text(String(text.prefix(3))).font(.system(size: 22, weight: .semibold))
-            Text(String(text.dropFirst(3))).font(.system(size: 22, weight: .regular))
-        }
     }
 
 }
@@ -108,7 +90,5 @@ public struct NoteView: View {
             NoteFeature()
         }))
         .frame(height: 52)
-        .background(.red)
     }
-    .background(.blue)
 }

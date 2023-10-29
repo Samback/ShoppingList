@@ -33,6 +33,14 @@ public struct NoteFeature: Reducer {
         @BindingState public var title: String
         @BindingState public var status: Status
 
+        var titlePrefix: String {
+            return String(title.prefix(3))
+        }
+
+        var titleSuffix: String {
+            return String(title.dropFirst(3))
+        }
+
         public static let demo = State(id: UUID(),
                                 title: "Milk",
                                 status: .new)

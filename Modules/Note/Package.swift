@@ -17,8 +17,8 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture",
                  from: "1.2.0"),
-        .package(path: "../Models")
-
+        .package(path: "../Models"),
+        .package(path: "../Theme")
     ],
 
     targets: [
@@ -29,7 +29,8 @@ let package = Package(
             dependencies: [
                 .product(name: "ComposableArchitecture",
                          package: "swift-composable-architecture"),
-            "Models"]
+            "Models",
+            "Theme"]
         ),
         .testTarget(
             name: "NoteTests",
