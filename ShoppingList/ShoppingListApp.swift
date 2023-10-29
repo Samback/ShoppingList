@@ -15,6 +15,7 @@ import FirebaseAnalytics
 import Firebase
 import Analytics
 import ComposableAnalytics
+import Emoji
 
 /*
  SwiftLint configs Xcode 15
@@ -37,7 +38,12 @@ struct ShoppingListApp: App {
 
     var body: some Scene {
         WindowGroup {
-//            DraftList(store: Store(initialState: 
+//            EmojiView(store: Store(initialState: EmojiViewFeature.State(emoji: "",
+//                                                                        emojisPull: []),
+//                                   reducer: {
+//                EmojiViewFeature()
+//            }))
+//            DraftList(store: Store(initialState:
 //                                    DraftListFeature
 //                .State(rawList:
 //                        ["This is a true story about my childhood",

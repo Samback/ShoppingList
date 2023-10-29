@@ -15,6 +15,7 @@
 		343E2B452AA4D25E00F76D2C /* ShoppingListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343E2B442AA4D25E00F76D2C /* ShoppingListTests.swift */; };
 		343E2B4F2AA4D25E00F76D2C /* ShoppingListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343E2B4E2AA4D25E00F76D2C /* ShoppingListUITests.swift */; };
 		343E2B512AA4D25E00F76D2C /* ShoppingListUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343E2B502AA4D25E00F76D2C /* ShoppingListUITestsLaunchTests.swift */; };
+		3448F25E2AED79C300CCE608 /* Emoji in Frameworks */ = {isa = PBXBuildFile; productRef = 3448F25D2AED79C300CCE608 /* Emoji */; };
 		347F52922AD95229003C55A8 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 347F52912AD95229003C55A8 /* ComposableArchitecture */; };
 		349C45DB2AD97DE6003228C5 /* ListManager in Frameworks */ = {isa = PBXBuildFile; productRef = 349C45DA2AD97DE6003228C5 /* ListManager */; };
 		349C45DD2AD97DE6003228C5 /* Models in Frameworks */ = {isa = PBXBuildFile; productRef = 349C45DC2AD97DE6003228C5 /* Models */; };
@@ -54,6 +55,7 @@
 		343E2B4A2AA4D25E00F76D2C /* ShoppingListUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShoppingListUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		343E2B4E2AA4D25E00F76D2C /* ShoppingListUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListUITests.swift; sourceTree = "<group>"; };
 		343E2B502AA4D25E00F76D2C /* ShoppingListUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		3448F25C2AED776200CCE608 /* Emoji */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Emoji; sourceTree = "<group>"; };
 		345A40782ADD78B800CF5B23 /* Scanner */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Scanner; sourceTree = "<group>"; };
 		349D3D112AD95C0E001E1B0E /* Note */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Note; sourceTree = "<group>"; };
 		349D3D122AD95C0E001E1B0E /* ListManager */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ListManager; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				349C45DF2AD97DE6003228C5 /* Note in Frameworks */,
+				3448F25E2AED79C300CCE608 /* Emoji in Frameworks */,
 				349C45E12AD97DE6003228C5 /* PurchaseList in Frameworks */,
 				349C45DD2AD97DE6003228C5 /* Models in Frameworks */,
 				3425F7E02AD95E43002BF8CF /* Gen in Frameworks */,
@@ -175,6 +178,7 @@
 		34EE93BF2AD9548200CC07DD /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				3448F25C2AED776200CCE608 /* Emoji */,
 				34A80DB22AE03A36006176F9 /* Analytics */,
 				345A40782ADD78B800CF5B23 /* Scanner */,
 				349D3D122AD95C0E001E1B0E /* ListManager */,
@@ -213,6 +217,7 @@
 				349C45E02AD97DE6003228C5 /* PurchaseList */,
 				34A80DB62AE04ED6006176F9 /* FirebaseAnalyticsSwift */,
 				34A80DB82AE04ED6006176F9 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				3448F25D2AED79C300CCE608 /* Emoji */,
 			);
 			productName = ShoppingList;
 			productReference = 343E2B302AA4D25C00F76D2C /* ShoppingList.app */;
@@ -729,6 +734,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3425F7DE2AD95E43002BF8CF /* XCRemoteSwiftPackageReference "swift-gen" */;
 			productName = Gen;
+		};
+		3448F25D2AED79C300CCE608 /* Emoji */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Emoji;
 		};
 		347F52912AD95229003C55A8 /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
