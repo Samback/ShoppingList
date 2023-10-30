@@ -31,6 +31,7 @@ public struct PurchaseListFeature: Reducer {
         @PresentationState public var scanPurchaseList: ScannerTCAFeature.State?
         @PresentationState public var draftList: DraftListFeature.State?
         @BindingState public var viewMode: ViewMode = .expand
+        @PresentationState public var actionSheet: ActionSheetState<Action.ContextMenuAction>?
 
         public var purchaseModel: PurchaseModel {
             return  PurchaseModel(id: id,
@@ -129,21 +130,20 @@ public struct PurchaseListFeature: Reducer {
     }
 
     public enum Action: BindableAction, Equatable {
+
         case addNote(String)
         case binding(BindingAction<State>)
         case checkAll
-        case duplicate(UUID)
         case delete(IndexSet)
-        case deleteNote(UUID)
         case draftListAction(PresentationAction<DraftListFeature.Action>)
+        case showActionSheet(UUID)
 
         case delegate(Delegate)
         public enum Delegate: Equatable {
             case update(State)
         }
-
         case onAppear
-        case edit(UUID)
+
         case inputTextAction(MessageInputFeature.Action)
         case notesAction(id: UUID, action: NoteFeature.Action)
         case move(IndexSet, Int)
@@ -154,6 +154,15 @@ public struct PurchaseListFeature: Reducer {
         case tapOnResizeButton
         case uncheckAll
         case update(note: UUID, text: String)
+        case contextMenuAction(ContextMenuAction)
+
+        public enum ContextMenuAction: Equatable {
+            case edit(UUID)
+            case duplicate(UUID)
+            case deleteNote(UUID)
+        }
+
+        case actionSheet(PresentationAction<Action.ContextMenuAction>)
     }
 
     enum CancelID {
@@ -234,33 +243,42 @@ public struct PurchaseListFeature: Reducer {
 
             case .checkAll:
                 return checkAll(state: &state)
-
-            case let .duplicate(id):
-                guard let title = state.notes[id: id]?.title else {
-                    return .none
-                }
-
-                return
-                    .run { send in
-                        try await self.clock.sleep(for: .seconds(0.3))
-                        await send(.addNote(title))
-                    }
-
-            case let .deleteNote(id):
-                state.notes.remove(id: id)
-                return .none
-            case let .edit(id):
-                let text = state.notes[id: id]?.title ?? ""
-                state.inputField = MessageInputFeature.State(inputText: text, mode: .update(id, .purchaseList))
-                return .send(.inputTextAction(.activateTextField))
             case let .update(note: note, text: text):
                 state.notes[id: note]?.title = text
                 return .send(.inputTextAction(.clearInput))
             case .binding:
                 return .none
+
+            case let .contextMenuAction(localAction):
+                return contextMenuActions(state: &state, action: localAction)
+
+            case let .showActionSheet(id):
+                state.actionSheet = ActionSheetState(titleVisibility: .hidden,
+                                                     title: { TextState("")},
+                                                     actions: {
+                    return [ ButtonState(action: .edit(id)) {
+                         TextState("Rename")
+                     },
+                     ButtonState(action: .duplicate(id)) {
+                         TextState("Duplicate")
+                     },
+                     ButtonState(role: .destructive,
+                                 action: .deleteNote(id)) {
+                                     TextState("Delete")
+                     }]
+
+                }, message: nil)
+
+                return .none
+
+            case let .actionSheet(actionSheetAction):
+                print("actionSheetAction: \(actionSheetAction)")
+
+                return .none
             }
 
         }
+        .ifLet(\.$actionSheet, action: /Action.actionSheet)
         .ifLet(\.$scanPurchaseList,
                 action: /Action.scannerAction, destination: {
                     ScannerTCAFeature()
@@ -275,6 +293,30 @@ public struct PurchaseListFeature: Reducer {
             NoteFeature()
         }
 
+    }
+
+    private func contextMenuActions(state: inout State,
+                                    action: Action.ContextMenuAction) -> Effect<Action> {
+        switch action {
+        case let .duplicate(id):
+            guard let title = state.notes[id: id]?.title else {
+                return .none
+            }
+
+            return
+                .run { send in
+                    try await self.clock.sleep(for: .seconds(0.3))
+                    await send(.addNote(title))
+                }
+
+        case let .deleteNote(id):
+            state.notes.remove(id: id)
+            return .none
+        case let .edit(id):
+            let text = state.notes[id: id]?.title ?? ""
+            state.inputField = MessageInputFeature.State(inputText: text, mode: .update(id, .purchaseList))
+            return .send(.inputTextAction(.activateTextField))
+        }
     }
 
     private func inputTextAction(state: inout State,

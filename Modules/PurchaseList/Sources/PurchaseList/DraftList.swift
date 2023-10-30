@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import Theme
 
 public struct DraftList: View {
     let store: StoreOf<DraftListFeature>
@@ -22,19 +23,29 @@ public struct DraftList: View {
                 NavigationStack {
                     VStack {
                         TextEditor(text: viewStore.$inputText)
+                            .foregroundStyle(ColorTheme.live().primary)
+                            .font(.system(size: 22))
+                            .lineSpacing(/*@START_MENU_TOKEN@*/10.0/*@END_MENU_TOKEN@*/)
+                            .scrollIndicators(.hidden)
                     }
                     .padding()
                     .toolbar(content: {
-                        Button(action: {
-                            viewStore.send(.delegate(.cancel))
-                        }, label: {
-                            Text("Cancel")
-                        })
-                        Button(action: {
-                            viewStore.send(.tapOnAddAtShoppingList)
-                        }, label: {
-                            Text("Add to list")
-                        })
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button(action: {
+                                viewStore.send(.delegate(.cancel))
+                            }, label: {
+                                Text("Cancel")
+                                    .navigationTextModifier()
+                            })
+                        }
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button(action: {
+                                viewStore.send(.tapOnAddAtShoppingList)
+                            }, label: {
+                                Text("Add to list")
+                                    .navigationTextModifier()
+                            })
+                        }
                     })
                 }
             }

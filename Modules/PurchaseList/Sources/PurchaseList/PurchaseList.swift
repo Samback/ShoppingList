@@ -65,6 +65,12 @@ public struct PurchaseList: View {
                 .sheet(store: self.store.scope(state: \.$draftList,
                                                action: {.draftListAction($0)}),
                        content: DraftList.init)
+                .actionSheet(
+                  store: self.store.scope(
+                    state: \.$actionSheet,
+                    action: { .actionSheet($0) }
+                  )
+                )
             })
 
     }
@@ -77,7 +83,7 @@ public struct PurchaseList: View {
                 viewStore.viewMode
                     .invertedValue
                     .image
-                    .renderingMode(.original)
+                    .renderingMode(.template)
                     .tint(ColorTheme.live().accent)
             })
         }
@@ -102,20 +108,24 @@ public struct PurchaseList: View {
                                        itemStore.withState { localState in
                                            HStack {
                                                Button(
-                                                role: .destructive,
                                                 action: {
-                                                    viewStore.send(.deleteNote(localState.id))
+                                                    viewStore
+                                                        .send(
+                                                            .contextMenuAction(
+                                                            .deleteNote(localState.id)))
                                                 }, label: {
                                                     HStack {
                                                         Text("Delete")
                                                     }
                                                 })
+                                               .tint(ColorTheme.live().destructive)
 
                                                Button(action: {
-                                                   print("Options")
+                                                   viewStore.send(.showActionSheet(localState.id))
                                                }, label: {
                                                    Text("Options")
                                                })
+                                               .tint(ColorTheme.live().secondary)
 
                                            }
                                        }
@@ -144,7 +154,7 @@ public struct PurchaseList: View {
         Group {
             Button(action: {
                 print("Tap on edit")
-                viewStore.send(.edit(state.id))
+            viewStore.send(.contextMenuAction(.edit(state.id)))
             }, label: {
                 HStack {
                     Text("Rename")
@@ -155,7 +165,7 @@ public struct PurchaseList: View {
 
             Button(action: {
                 print("Tap on duplicate")
-                viewStore.send(.duplicate(state.id))
+                viewStore.send(.contextMenuAction(.duplicate(state.id)))
             }, label: {
                 HStack {
                     Text("Duplicate")
@@ -167,7 +177,7 @@ public struct PurchaseList: View {
             Button(
                 role: .destructive,
                 action: {
-                    viewStore.send(.deleteNote(state.id))
+                    viewStore.send(.contextMenuAction(.deleteNote(state.id)))
                 }, label: {
                     HStack {
                         Text("Delete")

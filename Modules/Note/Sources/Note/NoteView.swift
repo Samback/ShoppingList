@@ -20,12 +20,21 @@ extension NoteFeature.Status {
         }
     }
 
+    var imageColor: Color {
+        switch self {
+        case .new:
+            return ColorTheme.live().secondary
+        case .done:
+            return ColorTheme.live().accent
+        }
+    }
+
     var image: Image {
         switch self {
         case .new:
-            return Image(.todo)
+            return Image(.todo).renderingMode(.template)
         case .done:
-            return Image(.done)
+            return Image(.done).renderingMode(.template)
         }
     }
 }
@@ -72,7 +81,9 @@ public struct NoteView: View {
                         .modifier(SuffixTitleModifier(status: viewStore.status))
 
                     Spacer()
-                    viewStore.status.image
+                    viewStore.status
+                        .image
+                        .foregroundColor(viewStore.status.imageColor)
                         .padding(.trailing, 24)
                 }
                 .frame(maxWidth: .infinity)
