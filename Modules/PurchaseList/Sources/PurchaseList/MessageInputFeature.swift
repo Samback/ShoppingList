@@ -7,6 +7,7 @@
 
 import Foundation
 import ComposableArchitecture
+import SwiftUI
 
 public struct MessageInputFeature: Reducer {
 
@@ -55,12 +56,62 @@ public struct MessageInputFeature: Reducer {
           case inputMessage
         }
 
-        public enum Mode: Equatable, Sendable {
-            case create
-            case update(UUID)
+        public enum Flow: Equatable, Sendable {
+            case lists
+            case purchaseList
         }
 
-        public init(inputText: String = "", mode: Mode = .create) {
+        public enum Mode: Equatable, Sendable {
+            case create(Flow)
+            case update(UUID, Flow)
+
+            var actionButtonImage: Image {
+                switch self {
+                case .create:
+                    return Image(systemName: "plus")
+                case .update:
+                    return Image(.arrowUp)
+                }
+            }
+
+            var leadingOffset: CGFloat {
+                switch self {
+                case .create(.lists), .update(_, .lists):
+                    return 16
+                default:
+                    return 64
+                }
+            }
+
+            var placeholderText: String {
+                switch self {
+                case .create(.lists), .update(_, .lists):
+                    return "My list"
+                default:
+                    return "New item"
+                }
+            }
+        }
+
+        var isScannerEnabled: Bool {
+            switch mode {
+            case .create(.purchaseList), .update(_, .purchaseList):
+                return true
+            default:
+                return false
+            }
+        }
+
+        var isActionButtonEnabled: Bool {
+            switch mode {
+            case .create(.purchaseList), .update(_, .purchaseList):
+                return !inputText.isEmpty
+            default:
+                return true
+            }
+        }
+
+        public init(inputText: String = "", mode: Mode = .create(.lists)) {
             self.inputText = inputText
             self.mode = mode
         }

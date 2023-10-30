@@ -24,9 +24,17 @@ public struct ListManager: View {
             WithViewStore(store,
                           observe: { $0 },
                           content: { viewStore in
-                VStack {
+                ZStack {
                     listView(with: viewStore)
-                    inputView(with: viewStore)
+                        .padding(.bottom, 86)
+                        .ignoresSafeArea(.keyboard)
+
+                    VStack {
+                        Spacer()
+                        inputView(with: viewStore)
+                            .padding(.bottom, -34)
+                            .ignoresSafeArea(.keyboard)
+                    }
                 }
                 .navigationTitle("My list")
                 .onAppear {
@@ -63,7 +71,6 @@ public struct ListManager: View {
                                              .contextMenu {
                                                  contextMenu(with: viewStore, state: state)
                                              }
-
                                      }
                                  }
                                  .onDelete(perform: { indexSet in
@@ -82,11 +89,6 @@ public struct ListManager: View {
     private func inputView(with viewStore: ViewStoreOf<ListManagerFeature>) -> some View {
         MessageInputView(store:
                             self.store.scope(state: \.inputField, action: ListManagerFeature.Action.inputFieldAction))
-        .background(.green)
-        .clipShape(
-            .rect(topLeadingRadius: 2.steps,
-                  topTrailingRadius: 2.steps)
-        )
     }
 
     @ViewBuilder

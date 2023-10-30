@@ -19,6 +19,9 @@ public struct ColorTheme {
     public var primary: Color
     public var secondary: Color
     public var accent: Color
+    public var separator: Color
+    public var white: Color
+    public var black: Color
 
    public  static var live: @Sendable () -> Self = {
         return lightColorTheme
@@ -26,8 +29,10 @@ public struct ColorTheme {
 
     private static var lightColorTheme: ColorTheme = .init(primary: Color.init(hex: 0x064F60),
                                                            secondary: .init(hex: 0x858F94),
-                                                           accent: .init(hex: 0x61D384)
-
+                                                           accent: .init(hex: 0x61D384),
+                                                           separator: .init(hex: 0xE7E8E9),
+                                                           white: .white,
+                                                           black: .black
     )
 
 }

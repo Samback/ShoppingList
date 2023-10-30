@@ -20,8 +20,8 @@ public struct Appearance {
             .foregroundColor: ColorTheme.live().primary.uiColor
         ]
 
-//        UINavigationBar.appearance().tintColor = ColorTheme.live().accent.uiColor
-//        UINavigationBar.appearance().barTintColor = ColorTheme.live().accent.uiColor
+        UIBarButtonItem.appearance().tintColor = ColorTheme.live().accent.uiColor
+
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
     }

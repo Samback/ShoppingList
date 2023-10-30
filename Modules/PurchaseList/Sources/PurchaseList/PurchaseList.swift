@@ -34,10 +34,19 @@ public struct PurchaseList: View {
                           observe: { $0 },
                           content: { viewStore in
                 NavigationStack {
-                    VStack(spacing: 0) {
+                    ZStack {
                         listView(with: viewStore)
+                            .padding(.bottom, 86)
+                            .ignoresSafeArea(.keyboard)
                             .background(.clear)
-                        inputView(with: viewStore)
+                        VStack(spacing: 0) {
+                            Spacer()
+
+                            inputView(with: viewStore)
+                                .padding(.bottom, -34)
+                                .ignoresSafeArea(.keyboard)
+                        }
+                        .background(.clear)
                     }
                     .background(.clear)
                 }
@@ -50,18 +59,6 @@ public struct PurchaseList: View {
                 .toolbar(content: {
                     toolbarView(with: viewStore)
                 })
-                .navigationBarBackButtonHidden(true)
-                .toolbar(content: {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button {
-                            self.presentation.wrappedValue.dismiss()
-                        } label: {
-                            Image(systemName: "chevron.left")
-                             .foregroundColor(ColorTheme.live().accent)
-                        }
-                        }
-                })
-
                 .sheet(store: self.store.scope(state: \.$scanPurchaseList,
                                                action: {.scannerAction($0)}),
                        content: ScannerTCA.init)
@@ -90,11 +87,6 @@ public struct PurchaseList: View {
     private func inputView(with viewStore: ViewStoreOf<PurchaseListFeature>) -> some View {
         MessageInputView(store:
                             self.store.scope(state: \.inputField, action: PurchaseListFeature.Action.inputTextAction))
-        .background(.green)
-        .clipShape(
-            .rect(topLeadingRadius: 2.steps,
-                  topTrailingRadius: 2.steps)
-        )
     }
 
     @ViewBuilder
@@ -135,6 +127,7 @@ public struct PurchaseList: View {
                                    }
                                    .listRowInsets(.init(top: 0, leading: 24, bottom: 0, trailing: 0))
                                    .frame(height: viewStore.viewMode.height)
+
                            }
                            .onDelete { viewStore.send(.delete($0))}
                            .onMove { viewStore.send(.move($0, $1))}
@@ -143,7 +136,6 @@ public struct PurchaseList: View {
         }
         .listStyle(.plain)
         .environment(\.defaultMinListRowHeight, 10)
-
     }
 
     @ViewBuilder

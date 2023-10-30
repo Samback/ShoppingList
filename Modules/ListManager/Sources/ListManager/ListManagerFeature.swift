@@ -194,7 +194,7 @@ public struct ListManagerFeature: Reducer {
         switch action {
         case let .rename(id):
             let title = state.purchaseListCollection[id: id]?.title
-            state.inputField = MessageInputFeature.State(inputText: title ?? "", mode: .update(id))
+            state.inputField = MessageInputFeature.State(inputText: title ?? "", mode: .update(id, .lists))
             return .send(.inputFieldAction(.activateTextField))
 
         case let .delete(id):
@@ -252,15 +252,15 @@ public struct ListManagerFeature: Reducer {
         case let .tapOnActionButton(title, mode):
             switch mode {
             case .create:
-                state.inputField = MessageInputFeature.State(inputText: "", mode: .create)
+                state.inputField = MessageInputFeature.State(inputText: "", mode: .create(.lists))
                 return addNewList(state: &state, title: title)
-            case let .update(id):
+            case let .update(id, flow):
                 state.purchaseListCollection[id: id]?.title = title
                 guard let model = state.purchaseListCollection[id: id] else {
                     return .none
                 }
 
-                state.inputField = MessageInputFeature.State(inputText: "", mode: .create)
+                state.inputField = MessageInputFeature.State(inputText: "", mode: .create(flow))
                 return .run { send in
                     try await dataManager.createDocument(model.purchaseModel)
                     await send(.inputFieldAction(.clearInput))

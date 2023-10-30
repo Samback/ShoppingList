@@ -101,7 +101,9 @@ public struct PurchaseListFeature: Reducer {
         public init(id: UUID,
                     notes: IdentifiedArrayOf<NoteFeature.State>,
                     title: String,
-                    inputText: MessageInputFeature.State = MessageInputFeature.State()) {
+                    inputText: MessageInputFeature.State = MessageInputFeature
+            .State(inputText: "",
+                   mode: .create(.purchaseList))) {
 
             self.id = id
             self.notes = notes
@@ -249,7 +251,7 @@ public struct PurchaseListFeature: Reducer {
                 return .none
             case let .edit(id):
                 let text = state.notes[id: id]?.title ?? ""
-                state.inputField = MessageInputFeature.State(inputText: text, mode: .update(id))
+                state.inputField = MessageInputFeature.State(inputText: text, mode: .update(id, .purchaseList))
                 return .send(.inputTextAction(.activateTextField))
             case let .update(note: note, text: text):
                 state.notes[id: note]?.title = text
@@ -282,9 +284,9 @@ public struct PurchaseListFeature: Reducer {
             switch mode {
             case .create:
                 return Effect<Action>.send(.addNote(text))
-            case let .update(id):
-                state.inputField = MessageInputFeature.State(inputText: "", mode: .create)
-                return Effect<Action>.send(.update(note: id, text: text))
+            case let .update(id, _):
+                state.inputField = MessageInputFeature.State(inputText: "", mode: .create(.purchaseList))
+                return Effect<Action>.send(Action.update(note: id, text: text))
             }
 
         case .tapOnScannerButton:
