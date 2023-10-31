@@ -81,7 +81,6 @@ public struct MessageInputView: View {
             .fill(ColorTheme.live().white)
         )
 
-
     }
 
     private func textField(_ viewStore: ViewStoreOf<MessageInputFeature>) -> some View {
