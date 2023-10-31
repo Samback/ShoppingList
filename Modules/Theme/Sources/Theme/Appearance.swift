@@ -21,7 +21,10 @@ public struct Appearance {
         ]
 
         UIBarButtonItem.appearance().tintColor = ColorTheme.live().accent.uiColor
-        appearance.backButtonAppearance.normal.titleTextAttributes = [.font: UIFont.systemFont(ofSize: 17, weight: .medium)]
+        appearance.backButtonAppearance.normal.titleTextAttributes =
+        [.font: UIFont.systemFont(ofSize: 17, weight: .medium),
+         .foregroundColor: ColorTheme.live().accent.uiColor
+        ]
 
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
