@@ -44,19 +44,22 @@ public struct MessageInputView: View {
                 .padding(.trailing, 16)
 
                 HStack(spacing: 0) {
+
                     if viewStore.isScannerEnabled {
                         scannerButton(viewStore)
-                            .padding(.leading, 24)
-                            .padding(.bottom, 70)
+                            .padding(.leading, 0)
+                            .padding(.bottom, 46)
                     }
 
                     Spacer()
+
                     actionButton(viewStore)
-                        .padding(.trailing, 24)
-                        .padding(.bottom, 70)
+                        .padding(.trailing, 16)
+                        .padding(.bottom, 46)
                 }
                 .background(.clear)
-                .padding(.trailing, 16)
+                .padding(.trailing, 0)
+                .padding(.leading, 0)
             }
             .background {
                 VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
@@ -69,7 +72,7 @@ public struct MessageInputView: View {
     @ViewBuilder
     private func textView(with viewStore: ViewStoreOf<MessageInputFeature>) -> some View {
             textField(viewStore)
-                .padding(.leading, 8)
+                .padding(.leading, 16)
                 .padding(.trailing, 56)
         .frame(minHeight: 56)
         .frame(maxWidth: .infinity)
@@ -77,6 +80,7 @@ public struct MessageInputView: View {
           RoundedRectangle(cornerRadius: 12)
             .fill(ColorTheme.live().white)
         )
+
 
     }
 
@@ -101,6 +105,8 @@ public struct MessageInputView: View {
         },
                label: {
             Image(systemName: "text.viewfinder")
+                .resizable()
+                .frame(width: 24, height: 24)
                 .foregroundColor(ColorTheme.live().accent)
         })
         .background {
@@ -108,6 +114,7 @@ public struct MessageInputView: View {
                 .fill(ColorTheme.live().white)
                 .frame(width: 40, height: 40)
         }
+        .frame(width: 64, height: 64)
 
     }
 
@@ -116,13 +123,16 @@ public struct MessageInputView: View {
             viewStore.send(.tapOnActionButton(viewStore.inputText, viewStore.mode))
         },
                label: {
-            viewStore.mode.actionButtonImage.foregroundColor(ColorTheme.live().white)
+            viewStore.mode.actionButtonImage
+                .frame(width: 22, height: 22)
+                .foregroundColor(ColorTheme.live().white)
         })
         .background {
             RoundedRectangle(cornerRadius: 12)
                 .fill(viewStore.isActionButtonEnabled ? ColorTheme.live().accent : ColorTheme.live().separator)
                 .frame(width: 40, height: 40)
         }
+        .frame(width: 64, height: 64)
 
     }
 

@@ -69,8 +69,10 @@ public struct MessageInputFeature: Reducer {
                 switch self {
                 case .create:
                     return Image(systemName: "plus")
+                        .resizable()
                 case .update:
                     return Image(.arrowUp)
+                        .resizable()
                 }
             }
 
