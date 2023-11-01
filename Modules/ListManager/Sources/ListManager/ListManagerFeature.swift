@@ -136,7 +136,9 @@ public struct ListManagerFeature: Reducer {
                 return inputFieldAction(with: &state, action: localActions)
 
             case .sortList:
-                state.purchaseListCollection.sort { $0.status == .inProgress && $1.status == .done }
+                state.purchaseListCollection.sort { first, second in
+                    first.purchaseModel.status == .inProgress && second.purchaseModel.status == .done
+                }
                 return .send(.saveAccount)
 
             case .saveAccount:
@@ -183,6 +185,8 @@ public struct ListManagerFeature: Reducer {
         case let .presented(.delegate(.update(activeState))):
             state.purchaseListCollection.updateOrAppend(activeState)
             return .none
+        case .dismiss:
+            return .send(.sortList)
         default:
             return .none
         }
@@ -225,7 +229,7 @@ public struct ListManagerFeature: Reducer {
             return Effect<Action>.merge(
                 Effect<Action>
                     .send(.listAction(id: id,
-                                      action: purchaseState.status == .inProgress ? .checkAll : .uncheckAll)),
+                                      action: purchaseState.purchaseModel.status == .inProgress ? .checkAll : .uncheckAll)),
                 Effect<Action>
                     .send(.sortList,
                           animation: Animation.easeInOut(duration: 0.5)))
@@ -253,7 +257,7 @@ public struct ListManagerFeature: Reducer {
             switch mode {
             case .create:
                 state.inputField = MessageInputFeature.State(inputText: "", mode: .create(.lists))
-                return addNewList(state: &state, title: title)
+                return addNewList(state: &state, title: title.isEmpty ? "My list" : title)
             case let .update(id, flow):
                 state.purchaseListCollection[id: id]?.title = title
                 guard let model = state.purchaseListCollection[id: id] else {
@@ -273,9 +277,10 @@ public struct ListManagerFeature: Reducer {
         }
     }
 
-    private func addNewList(state: inout State, title: String?) -> Effect<Action> {
-        let newPurchase = PurchaseModel.newPurchase(title: title ?? "New item")
+    private func addNewList(state: inout State, title: String) -> Effect<Action> {
+        let newPurchase = PurchaseModel.newPurchase(title: title)
         let newList = PurchaseListFeature.State(id: newPurchase.id,
+                                                emojiIcon: EmojisDB.randomEmoji(),
                                                 notes: IdentifiedArrayOf<NoteFeature.State>(uniqueElements: []),
                                                 title: newPurchase.title)
 
