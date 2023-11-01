@@ -105,7 +105,7 @@ public struct ListManager: View {
                                      viewStore.send(.listInteractionAction(.move(indices, newOffset)))
                                  })
                                  .listRowSeparator(.hidden)
-                                 .listRowInsets(.init(top: 8, leading: 16, bottom: 0, trailing: 0))
+                                 .listRowInsets(.init(top: 8, leading: 16, bottom: 1, trailing: 1))
                                  .listSectionSeparator(.hidden, edges: .top)
                                  .background(ColorTheme.live().white)
         }

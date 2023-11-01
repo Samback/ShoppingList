@@ -111,7 +111,8 @@ struct PurchaseListCell: View {
         .background {
             ZStack {
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(ColorTheme.live().separator, lineWidth: 1)
+                    .stroke(ColorTheme.live().separator, lineWidth: 1
+                    )
 
                 RoundedRectangle(cornerRadius: 12)
                     .fill(purchaseModel.status.backgroundColor)
