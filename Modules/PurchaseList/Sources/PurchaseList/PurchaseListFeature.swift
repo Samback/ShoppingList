@@ -14,6 +14,27 @@ import Scanner
 import Analytics
 import ComposableAnalytics
 
+extension PurchaseModel.Status {
+
+    public var imageIconInverted: String {
+         switch self {
+         case .done:
+             return "circle"
+         case .inProgress:
+             return "checkmark.circle"
+         }
+     }
+
+     public var titleInverted: String {
+         switch self {
+         case .done:
+             return "Undone"
+         case .inProgress:
+             return "Mark as done"
+         }
+     }
+ }
+
 public struct PurchaseListFeature: Reducer {
     @Dependency(\.continuousClock) var clock
     @Dependency(\.uuid) var uuid
@@ -24,6 +45,7 @@ public struct PurchaseListFeature: Reducer {
 
     public struct State: Equatable, Identifiable {
         public let id: UUID
+        public var emojiIcon: String
         public var notes: IdentifiedArrayOf<NoteFeature.State> = []
         public var title: String = "Welcome"
 
@@ -35,6 +57,7 @@ public struct PurchaseListFeature: Reducer {
 
         public var purchaseModel: PurchaseModel {
             return  PurchaseModel(id: id,
+                                  emojiIcon: emojiIcon,
                                   notes: notes
                 .elements
                 .map { NoteModel(id: $0.id,
@@ -42,29 +65,6 @@ public struct PurchaseListFeature: Reducer {
                                  isCompleted: $0.status == .done) },
                                   title: title)
         }
-
-        public enum Status: Equatable {
-             case done
-             case inProgress
-
-            public var imageIconInverted: String {
-                 switch self {
-                 case .done:
-                     return "circle"
-                 case .inProgress:
-                     return "checkmark.circle"
-                 }
-             }
-
-             public var titleInverted: String {
-                 switch self {
-                 case .done:
-                     return "Undone"
-                 case .inProgress:
-                     return "Mark as done"
-                 }
-             }
-         }
 
         public enum ViewMode {
             case compact
@@ -100,6 +100,7 @@ public struct PurchaseListFeature: Reducer {
         }
 
         public init(id: UUID,
+                    emojiIcon: String,
                     notes: IdentifiedArrayOf<NoteFeature.State>,
                     title: String,
                     inputText: MessageInputFeature.State = MessageInputFeature
@@ -107,6 +108,7 @@ public struct PurchaseListFeature: Reducer {
                    mode: .create(.purchaseList))) {
 
             self.id = id
+            self.emojiIcon = emojiIcon
             self.notes = notes
             self.title = title
             self.inputField = inputText
@@ -114,17 +116,9 @@ public struct PurchaseListFeature: Reducer {
 
         public static func convert(from model: PurchaseModel) -> Self {
             return .init(id: model.id,
+                         emojiIcon: model.emojiIcon,
                          notes: .init(uniqueElements: model.notes.map(NoteFeature.State.convert(from:))),
                          title: model.title)
-        }
-
-       public var status: Status {
-           guard !notes.isEmpty else {
-               return .inProgress
-           }
-
-            let inProgress = notes.filter { $0.status == .new }
-            return inProgress.isEmpty ? .done : .inProgress
         }
 
     }
@@ -454,7 +448,9 @@ public struct PurchaseListFeature: Reducer {
         .cancellable(id: CancelID.noteCompletion, cancelInFlight: true)
     }
 
-    public static let demo: State = .init(id: UUID(), notes: [
+    public static let demo: State = .init(id: UUID(),
+                                          emojiIcon: EmojisDB.randomEmoji(),
+                                          notes: [
         .demo,
         .init(id: UUID(), title: "Vine", status: .new)
     ], title: "Demo Notes")

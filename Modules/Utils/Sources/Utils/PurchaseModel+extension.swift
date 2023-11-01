@@ -21,11 +21,15 @@ extension PurchaseModel {
 
     static var mock: NonEmptyArray<PurchaseModel> = {
 
-        return NonEmptyArray(PurchaseModel(id: nextUUID(), notes: mockNotes, title: "My shopping list"))
+        return NonEmptyArray(PurchaseModel(id: nextUUID(),
+                                           emojiIcon: EmojisDB.randomEmoji(),
+                                           notes: mockNotes,
+                                           title: "My shopping list"))
     }()
 
     static func fabric(uuid: UUID = nextUUID()) -> PurchaseModel {
         return PurchaseModel(id: uuid,
+                             emojiIcon: EmojisDB.randomEmoji(),
                              notes: mockNotes,
                              title: "My shopping list \(uuid.uuidString.dropLast(10))")
     }
