@@ -26,17 +26,22 @@ public struct ListManager: View {
                           content: { viewStore in
                 ZStack {
                     listView(with: viewStore)
+                        .background(.clear)
+                        .padding(.trailing, 16)
                         .padding(.bottom, 86)
                         .ignoresSafeArea(.keyboard)
 
                     VStack {
                         Spacer()
+
                         inputView(with: viewStore)
                             .padding(.bottom, -34)
                             .ignoresSafeArea(.keyboard)
                     }
+                    .background(.clear)
                 }
                 .navigationTitle("My list")
+                .background(ColorTheme.live().white)
                 .onAppear {
                     Appearance.apply()
                 }
@@ -50,7 +55,7 @@ public struct ListManager: View {
     private func toolBarView(with viewStore: ViewStoreOf<ListManagerFeature>) -> some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
             Button(action: {
-                //                viewStore.send(.addNewList)
+
             }, label: {
                 Image(systemName: "plus")
             })
@@ -64,24 +69,47 @@ public struct ListManager: View {
                 self.store.scope(state: \.purchaseListCollection,
                                  action: ListManagerFeature.Action.listAction(id: action:))) { store in
                                      store.withState { state in
-                                         PurchaseListCell(title: state.title)
+                                         PurchaseListCell(purchaseModel: state.purchaseModel)
                                              .onTapGesture {
                                                  viewStore.send(.openList(state))
+                                             }
+                                             .swipeActions {
+                                                     HStack {
+                                                         Button(
+                                                          action: {
+                                                              viewStore
+                                                                  .send(
+                                                                    .contextMenuAction(.delete(state.id)))
+                                                          }, label: {
+                                                              HStack {
+                                                                  Text("Delete")
+                                                              }
+                                                          })
+                                                         .tint(ColorTheme.live().destructive)
+
+                                                         Button(action: {
+                                                             /* viewStore.send(.showActionSheet(localState.id))
+                                                              */
+                                                         }, label: {
+                                                             Text("Options")
+                                                         })
+                                                         .tint(ColorTheme.live().secondary)
+                                                     }
                                              }
                                              .contextMenu {
                                                  contextMenu(with: viewStore, state: state)
                                              }
                                      }
                                  }
-                                 .onDelete(perform: { indexSet in
-                                     viewStore.send(.listInteractionAction(.delete(indexSet)))
-                                 })
                                  .onMove(perform: { indices, newOffset in
                                      viewStore.send(.listInteractionAction(.move(indices, newOffset)))
                                  })
-
-                                 .listStyle(.plain)
+                                 .listRowSeparator(.hidden)
+                                 .listRowInsets(.init(top: 8, leading: 16, bottom: 0, trailing: 0))
+                                 .listSectionSeparator(.hidden, edges: .top)
+                                 .background(ColorTheme.live().white)
         }
+        .listStyle(.plain)
         .scrollDismissesKeyboard(.immediately)
     }
 
@@ -140,9 +168,9 @@ public struct ListManager: View {
                     .send(.contextMenuAction(.mark(state.id)))
             }, label: {
                 HStack {
-                    Text(state.status.titleInverted)
+                    Text(state.purchaseModel.status.titleInverted)
                     Spacer()
-                    Image(systemName: state.status.imageIconInverted)
+                    Image(systemName: state.purchaseModel.status.imageIconInverted)
                 }
             })
 
