@@ -45,6 +45,8 @@ public struct ListManager: View {
                 .onAppear {
                     Appearance.apply()
                 }
+                .actionSheet(store: self.store.scope(state: \.$actionSheet,
+                                                      action: { .actionSheet($0) }))
                 .navigationDestination(store: self.store.scope(state: \.$activePurchaseList,
                                                                action: { .activePurchaseList($0) }),
                                        destination: PurchaseList.init)
@@ -88,8 +90,7 @@ public struct ListManager: View {
                                                          .tint(ColorTheme.live().destructive)
 
                                                          Button(action: {
-                                                             /* viewStore.send(.showActionSheet(localState.id))
-                                                              */
+                                                             viewStore.send(.showActionSheet(state.id))
                                                          }, label: {
                                                              Text("Options")
                                                          })

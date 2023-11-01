@@ -27,6 +27,7 @@ public struct ListManagerFeature: Reducer {
         var inputField: MessageInputFeature.State
         var purchaseListCollection: IdentifiedArrayOf<PurchaseListFeature.State> = []
         var account: AccountModel = AccountModel(list: [])
+        @PresentationState public var actionSheet: ActionSheetState<Action.ContextMenuAction>?
 
         public init(purchaseListCollection: IdentifiedArrayOf<PurchaseListFeature.State>,
                     inputField: MessageInputFeature.State = MessageInputFeature.State()) {
@@ -45,6 +46,8 @@ public struct ListManagerFeature: Reducer {
         case loadedListResult(TaskResult<[PurchaseModel]>)
         case loadAccountResult(TaskResult<AccountModel>)
         case openList(PurchaseListFeature.State)
+        case showActionSheet(UUID)
+        case actionSheet(PresentationAction<Action.ContextMenuAction>)
         case sortList
         case saveAccount
 
@@ -146,9 +149,42 @@ public struct ListManagerFeature: Reducer {
                 return .run {[localState = state] _ in
                     try await dataManager.saveAccount(localState.account)
                 }
+
+            case let .showActionSheet(id):
+                state.actionSheet = ActionSheetState(title: { TextState("") },
+                                          actions: {
+                                                return [
+                                                    ButtonState(action: .rename(id)) {
+                                                        TextState("Rename")
+                                                    },
+                                                    ButtonState(action: .selectEmoji(id)) {
+                                                        TextState("Select emoji")
+                                                    },
+                                                    ButtonState(action: .duplicate(id)) {
+                                                        TextState("Duplicate")
+                                                    },
+                                                    ButtonState(action: .share(id)) {
+                                                        TextState("Share")
+                                                    },
+                                                    ButtonState(role: .destructive,
+                                                                action: .delete(id)) {
+                                                        TextState("Delete")
+                                                    }
+//                                                    ,
+//
+//                                                    ButtonState(action: { print("dissmiss") }, label: {
+//                                                        TextState("Cancel")
+//                                                    })
+                                                ]
+                }, message: nil)
+                return .none
+            case .actionSheet:
+                return .none
             }
 
         }
+        .ifLet(\.$actionSheet,
+                action: /Action.actionSheet)
         .ifLet(\.$activePurchaseList,
                 action: /Action.activePurchaseList,
                 destination: {
