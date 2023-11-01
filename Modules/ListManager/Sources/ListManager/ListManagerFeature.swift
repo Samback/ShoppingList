@@ -127,7 +127,7 @@ public struct ListManagerFeature: Reducer {
                 if purchaseListState.notes.isEmpty {
                     return .send(.activePurchaseList(.presented(.inputTextAction(.activateTextField))))
                 }
-                return .none
+                return .send(.activePurchaseList(.presented(.inputTextAction(.clearInput))))
 
             case let .activePurchaseList(localActions):
                 return activePurchaseListActions(with: &state, action: localActions)
@@ -186,7 +186,8 @@ public struct ListManagerFeature: Reducer {
             state.purchaseListCollection.updateOrAppend(activeState)
             return .none
         case .dismiss:
-            return .send(.sortList)
+            return
+                .send(.sortList)
         default:
             return .none
         }
