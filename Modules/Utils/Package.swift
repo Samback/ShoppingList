@@ -14,7 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture",
-                 from: "1.2.0"),
+                 from: "1.3.0"),
         .package(path: "../Models"),
         .package(url: "https://github.com/pointfreeco/swift-nonempty.git", from: "0.3.0"),
         .package(url: "https://github.com/pointfreeco/swift-validated", from: "0.2.1"),
