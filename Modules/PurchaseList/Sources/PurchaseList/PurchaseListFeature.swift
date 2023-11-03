@@ -53,7 +53,7 @@ public struct PurchaseListFeature: Reducer {
         @PresentationState public var scanPurchaseList: ScannerTCAFeature.State?
         @PresentationState public var draftList: DraftListFeature.State?
         @BindingState public var viewMode: ViewMode = .expand
-        @PresentationState public var actionSheet: ActionSheetState<Action.ContextMenuAction>?
+        @PresentationState public var confirmationDialog: ConfirmationDialogState<Action.ContextMenuAction>?
 
         public var purchaseModel: PurchaseModel {
             return  PurchaseModel(id: id,
@@ -130,7 +130,7 @@ public struct PurchaseListFeature: Reducer {
         case checkAll
         case delete(IndexSet)
         case draftListAction(PresentationAction<DraftListFeature.Action>)
-        case showActionSheet(UUID)
+        case showConfirmationDialog(UUID)
 
         case delegate(Delegate)
         public enum Delegate: Equatable {
@@ -156,7 +156,7 @@ public struct PurchaseListFeature: Reducer {
             case deleteNote(UUID)
         }
 
-        case actionSheet(PresentationAction<Action.ContextMenuAction>)
+        case confirmationDialog(PresentationAction<Action.ContextMenuAction>)
     }
 
     enum CancelID {
@@ -245,34 +245,29 @@ public struct PurchaseListFeature: Reducer {
 
             case let .contextMenuAction(localAction):
                 return contextMenuActions(state: &state, action: localAction)
-
-            case let .showActionSheet(id):
-                state.actionSheet = ActionSheetState(titleVisibility: .hidden,
-                                                     title: { TextState("")},
-                                                     actions: {
+            case let .showConfirmationDialog(id):
+                state.confirmationDialog = ConfirmationDialogState(title: {
+                    TextState("")
+                }, actions: {
                     return [ ButtonState(action: .edit(id)) {
-                         TextState("Rename")
-                     },
-                     ButtonState(action: .duplicate(id)) {
-                         TextState("Duplicate")
-                     },
-                     ButtonState(role: .destructive,
-                                 action: .deleteNote(id)) {
-                                     TextState("Delete")
-                     }]
-
-                }, message: nil)
-
+                                             TextState("Rename")
+                                         },
+                                         ButtonState(action: .duplicate(id)) {
+                                             TextState("Duplicate")
+                                         },
+                                         ButtonState(role: .destructive,
+                                                     action: .deleteNote(id)) {
+                                                         TextState("Delete")
+                                         }]
+                }
+                )
                 return .none
-
-            case let .actionSheet(actionSheetAction):
-                print("actionSheetAction: \(actionSheetAction)")
-
-                return .none
+            case let .confirmationDialog(localAction):
+                return confirmationDialog(state: &state, action: localAction)
             }
 
         }
-        .ifLet(\.$actionSheet, action: /Action.actionSheet)
+        .ifLet(\.$confirmationDialog, action: /Action.confirmationDialog)
         .ifLet(\.$scanPurchaseList,
                 action: /Action.scannerAction, destination: {
                     ScannerTCAFeature()
@@ -287,6 +282,15 @@ public struct PurchaseListFeature: Reducer {
             NoteFeature()
         }
 
+    }
+
+    private func confirmationDialog(state: inout State, action: PresentationAction<Action.ContextMenuAction>) -> Effect<Action> {
+        switch action {
+        case .dismiss:
+            return .none
+        case let .presented(localAction):
+            return contextMenuActions(state: &state, action: localAction)
+        }
     }
 
     private func contextMenuActions(state: inout State,

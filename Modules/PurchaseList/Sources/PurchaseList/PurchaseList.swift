@@ -65,12 +65,8 @@ public struct PurchaseList: View {
                 .sheet(store: self.store.scope(state: \.$draftList,
                                                action: {.draftListAction($0)}),
                        content: DraftList.init)
-                .actionSheet(
-                  store: self.store.scope(
-                    state: \.$actionSheet,
-                    action: { .actionSheet($0) }
-                  )
-                )
+                .confirmationDialog(store: self.store.scope(state: \.$confirmationDialog,
+                                                            action: { .confirmationDialog($0) }))
             })
 
     }
@@ -121,7 +117,7 @@ public struct PurchaseList: View {
                                                .tint(ColorTheme.live().destructive)
 
                                                Button(action: {
-                                                   viewStore.send(.showActionSheet(localState.id))
+                                                   viewStore.send(.showConfirmationDialog(localState.id))
                                                }, label: {
                                                    Text("Options")
                                                })
