@@ -27,7 +27,7 @@ public struct ListManagerFeature: Reducer {
         var inputField: MessageInputFeature.State
         var purchaseListCollection: IdentifiedArrayOf<PurchaseListFeature.State> = []
         var account: AccountModel = AccountModel(list: [])
-        @PresentationState public var actionSheet: ActionSheetState<Action.ContextMenuAction>?
+        @PresentationState var confirmationDialog: ConfirmationDialogState<Action.ContextMenuAction>?
 
         public init(purchaseListCollection: IdentifiedArrayOf<PurchaseListFeature.State>,
                     inputField: MessageInputFeature.State = MessageInputFeature.State()) {
@@ -46,8 +46,9 @@ public struct ListManagerFeature: Reducer {
         case loadedListResult(TaskResult<[PurchaseModel]>)
         case loadAccountResult(TaskResult<AccountModel>)
         case openList(PurchaseListFeature.State)
-        case showActionSheet(UUID)
-        case actionSheet(PresentationAction<Action.ContextMenuAction>)
+        case showConfirmationDialog(UUID)
+        case confirmationDialog(PresentationAction<ContextMenuAction>)
+
         case sortList
         case saveAccount
 
@@ -150,41 +151,17 @@ public struct ListManagerFeature: Reducer {
                     try await dataManager.saveAccount(localState.account)
                 }
 
-            case let .showActionSheet(id):
-                state.actionSheet = ActionSheetState(title: { TextState("") },
-                                          actions: {
-                                                return [
-                                                    ButtonState(action: .rename(id)) {
-                                                        TextState("Rename")
-                                                    },
-                                                    ButtonState(action: .selectEmoji(id)) {
-                                                        TextState("Select emoji")
-                                                    },
-                                                    ButtonState(action: .duplicate(id)) {
-                                                        TextState("Duplicate")
-                                                    },
-                                                    ButtonState(action: .share(id)) {
-                                                        TextState("Share")
-                                                    },
-                                                    ButtonState(role: .destructive,
-                                                                action: .delete(id)) {
-                                                        TextState("Delete")
-                                                    }
-//                                                    ,
-//
-//                                                    ButtonState(action: { print("dissmiss") }, label: {
-//                                                        TextState("Cancel")
-//                                                    })
-                                                ]
-                }, message: nil)
-                return .none
-            case .actionSheet:
+            case let .showConfirmationDialog(id):
+                return showConfirmationDialog(id: id, state: &state)
+            case let .confirmationDialog(.presented(localAction)):
+                return contextMenuActions(with: &state, action: localAction)
+            case .confirmationDialog:
                 return .none
             }
 
         }
-        .ifLet(\.$actionSheet,
-                action: /Action.actionSheet)
+        .ifLet(\.$confirmationDialog,
+                action: /Action.confirmationDialog)
         .ifLet(\.$activePurchaseList,
                 action: /Action.activePurchaseList,
                 destination: {
@@ -194,6 +171,39 @@ public struct ListManagerFeature: Reducer {
                   action: /Action.listAction) {
             PurchaseListFeature()
         }
+    }
+
+    private func showConfirmationDialog(id: UUID, state: inout State) -> Effect<Action> {
+        guard let model = state.purchaseListCollection[id: id]?.purchaseModel else {
+            return .none
+        }
+        state.confirmationDialog =
+        ConfirmationDialogState(title: { TextState("") },
+                                actions: {
+            return [
+                ButtonState(action: .rename(id)) {
+                    TextState("Rename")
+                },
+                ButtonState(action: .selectEmoji(id)) {
+                    TextState("Select Emoji")
+                },
+                ButtonState(action: .duplicate(id)) {
+                    TextState("Duplicate")
+                },
+                ButtonState(action: .share(id)) {
+                    TextState("Share")
+                },
+                ButtonState(action: .mark(id)) {
+                    TextState(model.status.titleInverted)
+                },
+                ButtonState(role: .destructive,
+                            action: .delete(id)) {
+                                TextState("Delete")
+                            }
+            ]
+        }, message: nil)
+
+        return .none
     }
 
     private func listInteractionActions(with state: inout State,
