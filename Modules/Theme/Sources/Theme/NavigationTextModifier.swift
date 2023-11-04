@@ -9,15 +9,23 @@ import Foundation
 import SwiftUI
 
 public struct NavigationTextModifier: ViewModifier {
+    public let color: Color
+    public let font: Font
     public func body(content: Content) -> some View {
         content
-            .foregroundColor(ColorTheme.live().accent)
-            .font(.system(size: 17, weight: .medium))
+            .foregroundColor(color)
+            .font(font)
     }
 }
 
 public extension View {
-    func navigationTextModifier() -> some View {
-        modifier(NavigationTextModifier())
+    func navigationActionButtonTitleModifier() -> some View {
+        modifier(NavigationTextModifier(color: ColorTheme.live().accent,
+                                        font: .system(size: 17, weight: .medium)))
+    }
+
+    func navigationTitleModifier() -> some View {
+        modifier(NavigationTextModifier(color: ColorTheme.live().primary,
+                                        font: .system(size: 18, weight: .bold)))
     }
 }

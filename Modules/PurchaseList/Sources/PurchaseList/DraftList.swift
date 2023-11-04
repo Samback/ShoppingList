@@ -35,7 +35,7 @@ public struct DraftList: View {
                                 viewStore.send(.delegate(.cancel))
                             }, label: {
                                 Text("Cancel")
-                                    .navigationTextModifier()
+                                    .navigationActionButtonTitleModifier()
                             })
                         }
                         ToolbarItem(placement: .navigationBarTrailing) {
@@ -43,7 +43,7 @@ public struct DraftList: View {
                                 viewStore.send(.tapOnAddAtShoppingList)
                             }, label: {
                                 Text("Add to list")
-                                    .navigationTextModifier()
+                                    .navigationActionButtonTitleModifier()
                             })
                         }
                     })
