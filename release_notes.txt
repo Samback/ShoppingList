@@ -1,0 +1,3 @@
+v.1.0.0
+- Add emojis picker.
+- Enable full functionality of context menu and contnuation dialog.
