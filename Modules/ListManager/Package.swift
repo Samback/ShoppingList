@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "ListManager",
     platforms: [
-        .iOS(.v16)],
+        .iOS(.v17)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
@@ -19,6 +19,7 @@ let package = Package(
                  from: "1.3.0"),
         .package(path: "../PurchaseList"),
         .package(path: "../Utils"),
+        .package(path: "../Emojis"),
         .package(path: "../Theme")
     ],
 
@@ -32,7 +33,8 @@ let package = Package(
                          package: "swift-composable-architecture"),
                 "PurchaseList",
                 "Utils",
-                "Theme"
+                "Theme",
+                "Emojis"
             ]),
         .testTarget(
             name: "ListManagerTests",

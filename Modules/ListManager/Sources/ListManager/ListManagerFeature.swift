@@ -15,6 +15,7 @@ import NonEmpty
 import Analytics
 import ComposableAnalytics
 import SwiftUI
+import Emojis
 
 public struct ListManagerFeature: Reducer {
     @Dependency(\.uuid) var uuid
@@ -24,10 +25,12 @@ public struct ListManagerFeature: Reducer {
 
     public struct State: Equatable {
         @PresentationState public var activePurchaseList: PurchaseListFeature.State?
+        @PresentationState var confirmationDialog: ConfirmationDialogState<Action.ContextMenuAction>?
+        @PresentationState public var emojisSelector: EmojisFeature.State?
+
         var inputField: MessageInputFeature.State
         var purchaseListCollection: IdentifiedArrayOf<PurchaseListFeature.State> = []
         var account: AccountModel = AccountModel(list: [])
-        @PresentationState var confirmationDialog: ConfirmationDialogState<Action.ContextMenuAction>?
 
         public init(purchaseListCollection: IdentifiedArrayOf<PurchaseListFeature.State>,
                     inputField: MessageInputFeature.State = MessageInputFeature.State()) {
@@ -40,6 +43,7 @@ public struct ListManagerFeature: Reducer {
         case initialLoad
         case activePurchaseList(PresentationAction <PurchaseListFeature.Action>)
         case contextMenuAction(ContextMenuAction)
+        case emojisSelectorAction(PresentationAction<EmojisFeature.Action>)
         case inputFieldAction(MessageInputFeature.Action)
         case listAction(id: UUID, action: PurchaseListFeature.Action)
         case listInteractionAction(ListInteractionAction)
@@ -77,14 +81,17 @@ public struct ListManagerFeature: Reducer {
 
         Reduce { state, action in
             switch action {
-            case let .listAction(id, localActions):
+            case let .listAction(id, localAction):
                 return listActions(with: &state,
-                                   id: id, action: localActions)
-            case let .contextMenuAction(localActions):
-                return contextMenuActions(with: &state, action: localActions)
+                                   id: id, action: localAction)
+            case let .contextMenuAction(localAction):
+                return contextMenuActions(with: &state, action: localAction)
 
-            case let .listInteractionAction(localActions):
-                return listInteractionActions(with: &state, action: localActions)
+            case let .emojisSelectorAction(localAction):
+                return emojisSelectorActions(with: &state, action: localAction)
+
+            case let .listInteractionAction(localAction):
+                return listInteractionActions(with: &state, action: localAction)
 
             case .initialLoad:
                 return .run { send in
@@ -160,6 +167,9 @@ public struct ListManagerFeature: Reducer {
             }
 
         }
+        .ifLet(\.$emojisSelector, action: /Action.emojisSelectorAction) {
+            EmojisFeature()
+        }
         .ifLet(\.$confirmationDialog,
                 action: /Action.confirmationDialog)
         .ifLet(\.$activePurchaseList,
@@ -170,6 +180,28 @@ public struct ListManagerFeature: Reducer {
         .forEach(\.purchaseListCollection,
                   action: /Action.listAction) {
             PurchaseListFeature()
+        }
+    }
+
+    private func emojisSelectorActions(with state: inout State,
+                                       action: PresentationAction<EmojisFeature.Action>) -> Effect<Action> {
+        switch action {
+        case let .presented(.emojiSaved(emoji, id)):
+            state.purchaseListCollection[id: id]?.emojiIcon = emoji
+            state.emojisSelector = nil
+
+            guard let model = state.purchaseListCollection[id: id] else {
+                return .none
+            }
+
+            return .run { _ in
+                try await dataManager.createDocument(model.purchaseModel)
+            }
+        case .presented(.cancel):
+            state.emojisSelector = nil
+            return .none
+        default:
+            return .none
         }
     }
 
@@ -185,7 +217,7 @@ public struct ListManagerFeature: Reducer {
                     TextState("Rename")
                 },
                 ButtonState(action: .selectEmoji(id)) {
-                    TextState("Select Emoji")
+                    TextState("Change image")
                 },
                 ButtonState(action: .duplicate(id)) {
                     TextState("Duplicate")
@@ -280,6 +312,11 @@ public struct ListManagerFeature: Reducer {
                 Effect<Action>
                     .send(.sortList,
                           animation: Animation.easeInOut(duration: 0.5)))
+
+        case let .selectEmoji(id):
+            let emoji = state.purchaseListCollection[id: id]?.emojiIcon ?? ""
+            state.emojisSelector = EmojisFeature.State(selectedEmoji: emoji, id: id)
+            return .none
 
         case .share:
             return .none

@@ -10,6 +10,7 @@ import ComposableArchitecture
 import PurchaseList
 import Utils
 import Theme
+import Emojis
 
 public struct ListManager: View {
     let store: StoreOf<ListManagerFeature>
@@ -45,6 +46,9 @@ public struct ListManager: View {
                 .onAppear {
                     Appearance.apply()
                 }
+                .sheet(store: self.store.scope(state: \.$emojisSelector,
+                                               action: { .emojisSelectorAction($0) }),
+                       content: EmojisView.init)
                 .confirmationDialog(store: self.store.scope(state: \.$confirmationDialog,
                                                             action: { .confirmationDialog($0) }))
                 .navigationDestination(store: self.store.scope(state: \.$activePurchaseList,

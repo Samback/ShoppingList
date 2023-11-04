@@ -10,7 +10,15 @@ import ComposableArchitecture
 
 public struct EmojisFeature: Reducer {
 
+    public init() {}
+
     public struct State: Equatable {
+
+        public init(selectedEmoji: String, id: UUID) {
+            self.selectedEmoji = selectedEmoji
+            self.id = id
+        }
+
         @BindingState var selectedEmoji: String
         let id: UUID
     }
@@ -24,13 +32,13 @@ public struct EmojisFeature: Reducer {
     public var body: some ReducerOf<Self> {
         BindingReducer()
 
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .emojiSaved:
                 return .none
             case .binding(\.$selectedEmoji):
                 return .none
-            case .binding(_):
+            case .binding:
                 return .none
             case .cancel:
                 return .none
@@ -39,10 +47,12 @@ public struct EmojisFeature: Reducer {
     }
 }
 
-
 public struct EmojisView: View {
-
     public let store: StoreOf<EmojisFeature>
+
+    public init(store: StoreOf<EmojisFeature>) {
+        self.store = store
+    }
 
     public var body: some View {
         WithViewStore(store, observe: {$0}) { viewStore in
@@ -79,8 +89,6 @@ public struct EmojisView: View {
 
     }
 
-
-
     private func toolbarContent(with viewStore: ViewStoreOf<EmojisFeature>) -> some ToolbarContent {
        return Group {
             ToolbarItem(placement: .topBarLeading) {
@@ -112,7 +120,7 @@ public struct EmojisView: View {
 }
 
 #Preview {
-    VStack{
+    VStack {
         Spacer()
     }
     .background(.blue)
