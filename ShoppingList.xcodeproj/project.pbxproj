@@ -25,6 +25,8 @@
 		34A80DB72AE04ED6006176F9 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 34A80DB62AE04ED6006176F9 /* FirebaseAnalyticsSwift */; };
 		34A80DB92AE04ED6006176F9 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 34A80DB82AE04ED6006176F9 /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		34C54C9F2AF90F6400D6C839 /* Emojis in Resources */ = {isa = PBXBuildFile; fileRef = 34C54C9E2AF90F6400D6C839 /* Emojis */; };
+		34C54CA32AF96CD800D6C839 /* Models in Resources */ = {isa = PBXBuildFile; fileRef = 34C54CA22AF96CD800D6C839 /* Models */; };
+		34C54CA52AF96FDD00D6C839 /* Database in Frameworks */ = {isa = PBXBuildFile; productRef = 34C54CA42AF96FDD00D6C839 /* Database */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,11 +62,12 @@
 		349D3D122AD95C0E001E1B0E /* ListManager */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ListManager; sourceTree = "<group>"; };
 		349D3D132AD95C0E001E1B0E /* PurchaseList */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PurchaseList; sourceTree = "<group>"; };
 		349D3D142AD95C0E001E1B0E /* Utils */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Utils; sourceTree = "<group>"; };
-		349D3D152AD95C0E001E1B0E /* Models */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Models; sourceTree = "<group>"; };
 		34A80DB22AE03A36006176F9 /* Analytics */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Analytics; sourceTree = "<group>"; };
 		34A80DB32AE04A24006176F9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		34C54C9E2AF90F6400D6C839 /* Emojis */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Emojis; sourceTree = "<group>"; };
 		34C54CA02AF911C500D6C839 /* Theme */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Theme; sourceTree = "<group>"; };
+		34C54CA12AF96C6F00D6C839 /* Database */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Database; sourceTree = "<group>"; };
+		34C54CA22AF96CD800D6C839 /* Models */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Models; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +80,7 @@
 				349C45DD2AD97DE6003228C5 /* Models in Frameworks */,
 				3425F7E02AD95E43002BF8CF /* Gen in Frameworks */,
 				34A80DB72AE04ED6006176F9 /* FirebaseAnalyticsSwift in Frameworks */,
+				34C54CA52AF96FDD00D6C839 /* Database in Frameworks */,
 				349D3D102AD95BD5001E1B0E /* Utils in Frameworks */,
 				349C45DB2AD97DE6003228C5 /* ListManager in Frameworks */,
 				34A80DB92AE04ED6006176F9 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
@@ -178,12 +182,13 @@
 		34EE93BF2AD9548200CC07DD /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				34C54CA22AF96CD800D6C839 /* Models */,
+				34C54CA12AF96C6F00D6C839 /* Database */,
 				34C54CA02AF911C500D6C839 /* Theme */,
 				34C54C9E2AF90F6400D6C839 /* Emojis */,
 				34A80DB22AE03A36006176F9 /* Analytics */,
 				345A40782ADD78B800CF5B23 /* Scanner */,
 				349D3D122AD95C0E001E1B0E /* ListManager */,
-				349D3D152AD95C0E001E1B0E /* Models */,
 				349D3D112AD95C0E001E1B0E /* Note */,
 				349D3D132AD95C0E001E1B0E /* PurchaseList */,
 				349D3D142AD95C0E001E1B0E /* Utils */,
@@ -218,6 +223,7 @@
 				349C45E02AD97DE6003228C5 /* PurchaseList */,
 				34A80DB62AE04ED6006176F9 /* FirebaseAnalyticsSwift */,
 				34A80DB82AE04ED6006176F9 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				34C54CA42AF96FDD00D6C839 /* Database */,
 			);
 			productName = ShoppingList;
 			productReference = 343E2B302AA4D25C00F76D2C /* ShoppingList.app */;
@@ -312,6 +318,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34C54CA32AF96CD800D6C839 /* Models in Resources */,
 				343E2B3B2AA4D25E00F76D2C /* Preview Assets.xcassets in Resources */,
 				34C54C9F2AF90F6400D6C839 /* Emojis in Resources */,
 				343E2B382AA4D25E00F76D2C /* Assets.xcassets in Resources */,
@@ -772,6 +779,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 34A80DB52AE04ED5006176F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		34C54CA42AF96FDD00D6C839 /* Database */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Database;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

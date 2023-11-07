@@ -13,6 +13,7 @@ import Note
 import Scanner
 import Analytics
 import ComposableAnalytics
+import Database
 
 extension PurchaseModel.Status {
 
@@ -39,7 +40,7 @@ public struct PurchaseListFeature: Reducer {
     @Dependency(\.continuousClock) var clock
     @Dependency(\.uuid) var uuid
     @Dependency(\.dataManager) var dataManager
-    @Dependency(\.userDefaultsManager) var userDefaultsManager
+    @Dependency(\.swiftData) var swiftData
 
     public init() {}
 
@@ -54,6 +55,7 @@ public struct PurchaseListFeature: Reducer {
         @PresentationState public var draftList: DraftListFeature.State?
         @BindingState public var viewMode: ViewMode = .expand
         @PresentationState public var confirmationDialog: ConfirmationDialogState<Action.ContextMenuAction>?
+        @BindingState public var appConfiguration: AppConfigurationModel!
 
         public var purchaseModel: PurchaseModel {
             return  PurchaseModel(id: id,
@@ -188,7 +190,8 @@ public struct PurchaseListFeature: Reducer {
                 return notesAction()
 
             case .onAppear:
-                state.viewMode = userDefaultsManager.listStateExpanded() ? .expand : .compact
+                state.appConfiguration = try! swiftData.appConfiguration()
+                state.viewMode = state.appConfiguration.isZoomOut ? .expand : .compact
                 return .none
 
             case let .addNote(text):
@@ -229,7 +232,7 @@ public struct PurchaseListFeature: Reducer {
 
             case .tapOnResizeButton:
                 state.viewMode = state.viewMode.invertedValue
-                userDefaultsManager.setListStateExpanded(state.viewMode == .expand)
+                state.appConfiguration.isZoomOut = state.viewMode == .expand
                 return .none
 
             case .uncheckAll:

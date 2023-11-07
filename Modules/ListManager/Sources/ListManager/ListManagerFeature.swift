@@ -16,10 +16,12 @@ import Analytics
 import ComposableAnalytics
 import SwiftUI
 import Emojis
+import Database
 
 public struct ListManagerFeature: Reducer {
     @Dependency(\.uuid) var uuid
     @Dependency(\.dataManager) var dataManager
+    @Dependency(\.swiftData) var swiftData
 
     public init() {}
 
@@ -30,7 +32,7 @@ public struct ListManagerFeature: Reducer {
 
         var inputField: MessageInputFeature.State
         var purchaseListCollection: IdentifiedArrayOf<PurchaseListFeature.State> = []
-        var account: AccountModel = AccountModel(list: [])
+        var purchaseListStore: PurchaseListStoreModel!
 
         public init(purchaseListCollection: IdentifiedArrayOf<PurchaseListFeature.State>,
                     inputField: MessageInputFeature.State = MessageInputFeature.State()) {
@@ -48,7 +50,6 @@ public struct ListManagerFeature: Reducer {
         case listAction(id: UUID, action: PurchaseListFeature.Action)
         case listInteractionAction(ListInteractionAction)
         case loadedListResult(TaskResult<[PurchaseModel]>)
-        case loadAccountResult(TaskResult<AccountModel>)
         case openList(PurchaseListFeature.State)
         case showConfirmationDialog(UUID)
         case confirmationDialog(PresentationAction<ContextMenuAction>)
@@ -94,14 +95,8 @@ public struct ListManagerFeature: Reducer {
                 return listInteractionActions(with: &state, action: localAction)
 
             case .initialLoad:
+                state.purchaseListStore = try! swiftData.purchaseListStore()
                 return .run { send in
-                    await send(
-                        .loadAccountResult(
-                            await TaskResult {
-                                try await dataManager.loadAccount()
-                            }
-                        )
-                    )
 
                     await send(
                         .loadedListResult(
@@ -114,7 +109,7 @@ public struct ListManagerFeature: Reducer {
                 }
 
             case let .loadedListResult(.success(list)):
-                let sortedShoppingLists = state.account.list.compactMap { orderedId in
+                let sortedShoppingLists = state.purchaseListStore.list.compactMap { orderedId in
                     return list.first { $0.id == orderedId }
                 }
 
@@ -123,13 +118,6 @@ public struct ListManagerFeature: Reducer {
                 return .none
 
             case let .loadedListResult(.failure(error)):
-                print(error)
-                return .none
-
-            case let .loadAccountResult(.success(account)):
-                state.account = account
-                return .none
-            case let .loadAccountResult(.failure(error)):
                 print(error)
                 return .none
 
@@ -153,10 +141,8 @@ public struct ListManagerFeature: Reducer {
                 return .send(.saveAccount)
 
             case .saveAccount:
-                state.account.list = state.purchaseListCollection.map(\.id)
-                return .run {[localState = state] _ in
-                    try await dataManager.saveAccount(localState.account)
-                }
+                state.purchaseListStore.list = state.purchaseListCollection.map(\.id)
+                return .none
 
             case let .showConfirmationDialog(id):
                 return showConfirmationDialog(id: id, state: &state)

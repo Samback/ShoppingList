@@ -20,7 +20,8 @@ let package = Package(
         .package(path: "../PurchaseList"),
         .package(path: "../Utils"),
         .package(path: "../Emojis"),
-        .package(path: "../Theme")
+        .package(path: "../Theme"),
+        .package(path: "../Database")
     ],
 
     targets: [
@@ -34,7 +35,8 @@ let package = Package(
                 "PurchaseList",
                 "Utils",
                 "Theme",
-                "Emojis"
+                "Emojis",
+                "Database"
             ]),
         .testTarget(
             name: "ListManagerTests",

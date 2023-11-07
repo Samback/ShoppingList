@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "PurchaseList",
     platforms: [
-        .iOS(.v16)
+        .iOS(.v17)
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
@@ -23,6 +23,7 @@ let package = Package(
         .package(path: "../Models"),
         .package(path: "../Scanner"),
         .package(path: "../Analytics"),
+        .package(path: "../Database"),
         .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.0.0"),
         .package(url: "https://github.com/oliverfoggin/swift-composable-analytics", from: "1.0.0")
     ],
@@ -41,6 +42,7 @@ let package = Package(
                 "Scanner",
                 "Analytics",
                 "Theme",
+                "Database",
                 .product(name: "Dependencies", package: "swift-dependencies"),
                 .product(name: "ComposableAnalytics", package: "swift-composable-analytics")
             ]
