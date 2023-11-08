@@ -38,7 +38,7 @@ public struct Appearance {
         [.font: UIFont.systemFont(ofSize: 17, weight: .medium),
          .foregroundColor: ColorTheme.live().accent.uiColor
         ]
-        
+
         appearance.shadowImage = UIColor.clear.as1ptImage()
 
         UINavigationBar.appearance().standardAppearance = appearance

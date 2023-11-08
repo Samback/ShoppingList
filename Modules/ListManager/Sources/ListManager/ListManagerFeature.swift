@@ -20,6 +20,7 @@ import Emojis
 public struct ListManagerFeature: Reducer {
     @Dependency(\.uuid) var uuid
     @Dependency(\.dataManager) var dataManager
+    @Dependency(\.continuousClock) var clock
 
     public init() {}
 
@@ -264,8 +265,10 @@ public struct ListManagerFeature: Reducer {
             state.purchaseListCollection.updateOrAppend(activeState)
             return .none
         case .dismiss:
-            return
-                .send(.sortList)
+            return .run { send in
+                try await self.clock.sleep(for: .milliseconds(500))
+                await send(.sortList, animation: .interactiveSpring)
+            }
         default:
             return .none
         }
@@ -296,8 +299,8 @@ public struct ListManagerFeature: Reducer {
 
             return .run { send in
                 try await dataManager.createDocument(duplicateState.purchaseModel)
-                await send(.sortList,
-                           animation: Animation.easeInOut(duration: 0.5))
+                try await self.clock.sleep(for: .milliseconds(500))
+                await send(.sortList, animation: .interactiveSpring)
             }
 
         case let .mark(id):
@@ -305,13 +308,13 @@ public struct ListManagerFeature: Reducer {
                 return .none
             }
 
-            return Effect<Action>.merge(
-                Effect<Action>
-                    .send(.listAction(id: id,
-                                      action: purchaseState.purchaseModel.status == .inProgress ? .checkAll : .uncheckAll)),
-                Effect<Action>
-                    .send(.sortList,
-                          animation: Animation.easeInOut(duration: 0.5)))
+            return .run { send in
+                    await send(.listAction(id: id,
+                                      action: purchaseState.purchaseModel.status == .inProgress ? .checkAll : .uncheckAll))
+                try await self.clock.sleep(for: .milliseconds(500))
+                await send(.sortList, animation: .interactiveSpring)
+
+            }
 
         case let .selectEmoji(id):
             let emoji = state.purchaseListCollection[id: id]?.emojiIcon ?? ""
