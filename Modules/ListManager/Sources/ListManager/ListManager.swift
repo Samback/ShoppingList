@@ -115,6 +115,7 @@ public struct ListManager: View {
                                  .background(ColorTheme.live().white)
         }
         .listStyle(.plain)
+        .scrollIndicators(.hidden)
         .scrollDismissesKeyboard(.immediately)
     }
 
