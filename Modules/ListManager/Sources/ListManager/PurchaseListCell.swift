@@ -68,6 +68,15 @@ extension PurchaseModel.Status {
         }
     }
 
+    var borderColor: Color {
+        switch self {
+        case .done:
+            return .clear
+        case .inProgress:
+            return ColorTheme.live().secondary
+        }
+    }
+
 }
 
 struct PurchaseListCell: View {
@@ -111,7 +120,7 @@ struct PurchaseListCell: View {
         .background {
             ZStack {
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(ColorTheme.live().separator, lineWidth: 1
+                    .stroke(purchaseModel.status.borderColor, lineWidth: 1
                     )
 
                 RoundedRectangle(cornerRadius: 12)
