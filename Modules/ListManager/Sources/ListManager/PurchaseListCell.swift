@@ -26,7 +26,7 @@ extension PurchaseModel.Status {
     var emojiOpacity: Double {
         switch self {
         case .done:
-            return 0.6
+            return 1
         case .inProgress:
             return 1
         }
@@ -62,7 +62,7 @@ extension PurchaseModel.Status {
     var backgroundColor: Color {
         switch self {
         case .done:
-            return ColorTheme.live().separator
+            return ColorTheme.live().surface
         case .inProgress:
             return .clear
         }
