@@ -11,8 +11,12 @@ import PurchaseList
 import Utils
 import Theme
 import Emojis
+import SwipeActions
 
 public struct ListManager: View {
+
+    @State var bindingState: SwipeState = .untouched
+
     let store: StoreOf<ListManagerFeature>
 
     public init(store: StoreOf<ListManagerFeature>) {
@@ -28,9 +32,9 @@ public struct ListManager: View {
                 ZStack {
                     listView(with: viewStore)
                         .background(.clear)
-                        .padding(.trailing, 16)
                         .padding(.bottom, 86)
                         .ignoresSafeArea(.keyboard)
+                        .padding(.horizontal, 0)
 
                     VStack {
                         Spacer()
@@ -76,41 +80,67 @@ public struct ListManager: View {
                                  action: ListManagerFeature.Action.listAction(id: action:))) { store in
                                      store.withState { state in
                                          PurchaseListCell(purchaseModel: state.purchaseModel)
+
+                                             .frame(width: UIScreen.main.bounds.size.width - 32, height: 80)
                                              .onTapGesture {
                                                  viewStore.send(.openList(state))
                                              }
-                                             .swipeActions {
-                                                     HStack {
-                                                         Button(
-                                                          action: {
-                                                              viewStore
-                                                                  .send(
-                                                                    .contextMenuAction(.delete(state.id)))
-                                                          }, label: {
-                                                              HStack {
-                                                                  Text("Delete")
-                                                              }
-                                                          })
-                                                         .tint(ColorTheme.live().destructive)
+                                             .addSwipeAction(menu: .swiped,
+                                                             edge: .trailing,
+                                                             state: $bindingState) {
 
-                                                         Button(action: {
-                                                             viewStore.send(.showConfirmationDialog(state.id))
-                                                         }, label: {
-                                                             Text("Options")
-                                                         })
-                                                         .tint(ColorTheme.live().secondary)
-                                                     }
+                                                 Button(action: {
+                                                     viewStore.send(.showConfirmationDialog(state.id))
+                                                 }, label: {
+                                                     Text("Options")
+                                                 })
+                                                 .frame(width: 100, height: 80, alignment: .center)
+                                                 .contentShape(Rectangle())
+                                                 .background(ColorTheme.live().secondary)
+
+                                                 Button(
+                                                    action: {
+                                                        viewStore
+                                                            .send(
+                                                                .contextMenuAction(.delete(state.id)))
+                                                    }, label: {
+                                                        HStack {
+                                                            Text("Delete")
+                                                        }
+                                                    })
+                                                 .frame(width: 100, height: 80, alignment: .center)
+                                                 .contentShape(Rectangle())
+                                                 .background(ColorTheme.live().destructive)
+                                                 .clipShape(
+                                                    .rect(
+                                                        topLeadingRadius: 0,
+                                                        bottomLeadingRadius: 0,
+                                                        bottomTrailingRadius: 12,
+                                                        topTrailingRadius: 12
+                                                    )
+                                                 )
+
+                                                 Rectangle().fill(.white).frame(width: 4.0, height: 80)
                                              }
-                                             .contextMenu {
-                                                 contextMenu(with: viewStore, state: state)
-                                             }
+                                                             .background(HStack {
+                                                                 Spacer()
+                                                                 Rectangle().fill(ColorTheme.live().secondary).frame(width: 160.0, height: 80)
+
+                                                                 Spacer()
+
+                                                             }
+                                                                .background(.clear))
+                                                             .contextMenu {
+                                                                 contextMenu(with: viewStore, state: state)
+                                                             }
                                      }
                                  }
                                  .onMove(perform: { indices, newOffset in
                                      viewStore.send(.listInteractionAction(.move(indices, newOffset)))
                                  })
+                                 .listRowBackground(ColorTheme.live().white)
                                  .listRowSeparator(.hidden)
-                                 .listRowInsets(.init(top: 8, leading: 16, bottom: 1, trailing: 1))
+                                 .listRowInsets(.init(top: 8, leading: 16, bottom: 8, trailing: 16))
                                  .listSectionSeparator(.hidden, edges: .top)
                                  .background(ColorTheme.live().white)
         }
@@ -200,12 +230,12 @@ public struct ListManager: View {
 #Preview {
     ListManager(
         store: Store(initialState: ListManagerFeature.State(purchaseListCollection: []),
-                                                            reducer: {
-                                                                ListManagerFeature()
-                                                            },
-                                                            withDependencies: {
-                                                                $0.dataManager = DataManager.liveValue
-                                                            }
-                                                           )
-        )
+                     reducer: {
+                         ListManagerFeature()
+                     },
+                     withDependencies: {
+                         $0.dataManager = DataManager.liveValue
+                     }
+                    )
+    )
 }
