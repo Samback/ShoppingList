@@ -34,6 +34,7 @@ public struct ListManager: View {
                         .background(.clear)
                         .padding(.bottom, 86)
                         .ignoresSafeArea(.keyboard)
+                        .safeAreaPadding(.top, 8)
                         .padding(.horizontal, 0)
 
                     VStack {
@@ -75,78 +76,82 @@ public struct ListManager: View {
     @ViewBuilder
     private func listView(with viewStore: ViewStoreOf<ListManagerFeature>) -> some View {
         List {
+
             ForEachStore(
-                self.store.scope(state: \.purchaseListCollection,
-                                 action: ListManagerFeature.Action.listAction(id: action:))) { store in
-                                     store.withState { state in
-                                         PurchaseListCell(purchaseModel: state.purchaseModel)
-
-                                             .frame(width: UIScreen.main.bounds.size.width - 32, height: 80)
-                                             .onTapGesture {
-                                                 viewStore.send(.openList(state))
-                                             }
-                                             .addSwipeAction(menu: .swiped,
-                                                             edge: .trailing,
-                                                             state: $bindingState) {
-
-                                                 Button(action: {
-                                                     viewStore.send(.showConfirmationDialog(state.id))
-                                                 }, label: {
-                                                     Text("Options")
-                                                 })
-                                                 .frame(width: 100, height: 80, alignment: .center)
-                                                 .contentShape(Rectangle())
-                                                 .background(ColorTheme.live().secondary)
-
-                                                 Button(
-                                                    action: {
-                                                        viewStore
-                                                            .send(
-                                                                .contextMenuAction(.delete(state.id)))
-                                                    }, label: {
-                                                        HStack {
-                                                            Text("Delete")
-                                                        }
-                                                    })
-                                                 .frame(width: 100, height: 80, alignment: .center)
-                                                 .contentShape(Rectangle())
-                                                 .background(ColorTheme.live().destructive)
-                                                 .clipShape(
-                                                    .rect(
-                                                        topLeadingRadius: 0,
-                                                        bottomLeadingRadius: 0,
-                                                        bottomTrailingRadius: 12,
-                                                        topTrailingRadius: 12
-                                                    )
-                                                 )
-
-                                                 Rectangle().fill(.white).frame(width: 4.0, height: 80)
-                                             }
-                                                             .background(HStack {
-                                                                 Spacer()
-                                                                 Rectangle().fill(ColorTheme.live().secondary).frame(width: 160.0, height: 80)
-
-                                                                 Spacer()
-
-                                                             }
-                                                                .background(.clear))
-                                                             .contextMenu {
-                                                                 contextMenu(with: viewStore, state: state)
-                                                             }
-                                     }
-                                 }
-                                 .onMove(perform: { indices, newOffset in
-                                     viewStore.send(.listInteractionAction(.move(indices, newOffset)))
-                                 })
-                                 .listRowBackground(ColorTheme.live().white)
-                                 .listRowSeparator(.hidden)
-                                 .listRowInsets(.init(top: 8, leading: 16, bottom: 8, trailing: 16))
-                                 .listSectionSeparator(.hidden, edges: .top)
-                                 .background(ColorTheme.live().white)
+                self
+                    .store
+                    .scope(state: \.purchaseListCollection,
+                           action: ListManagerFeature.Action.listAction(id: action:))) { store in
+                               store.withState { state in
+                                   PurchaseListCell(purchaseModel: state.purchaseModel)
+                                       .frame(width: UIScreen.main.bounds.size.width - 32, height: 80)
+                                       .onTapGesture {
+                                           viewStore.send(.openList(state))
+                                       }
+                                       .addSwipeAction(menu: .swiped,
+                                                       edge: .trailing,
+                                                       state: $bindingState) {
+                                           swipeButtons(with: viewStore)
+                                       }
+                                                       .contextMenu {
+                                                           contextMenu(with: viewStore, state: state)
+                                                       }
+                               }
+                           }
+                           .onMove(perform: { indices, newOffset in
+                               viewStore.send(.listInteractionAction(.move(indices, newOffset)))
+                           })
+                           .listRowBackground(ColorTheme.live().white)
+                           .listRowSeparator(.hidden)
+                           .listRowInsets(.init(top: 4, leading: 16, bottom: 4, trailing: 16))
+                           .background(ColorTheme.live().white)
         }
+
         .listStyle(.plain)
         .scrollIndicators(.hidden)
         .scrollDismissesKeyboard(.immediately)
+    }
+
+    @ViewBuilder
+    private func swipeButtons(with viewStore: ViewStoreOf<ListManagerFeature>) -> some View {
+        HStack(spacing: 0) {
+            Button(action: {
+
+            }, label: {
+                Text("Options")
+            })
+            .frame(width: 100, height: 80, alignment: .center)
+            .contentShape(Rectangle())
+            .background(ColorTheme.live().secondary)
+
+            Button(action: {
+
+            }, label: {
+                HStack {
+                    Text("Delete")
+                }
+            })
+            .frame(width: 100, height: 80, alignment: .center)
+            .contentShape(Rectangle())
+            .background(ColorTheme.live().destructive)
+            .clipShape(
+                .rect(
+                    topLeadingRadius: 0,
+                    bottomLeadingRadius: 0,
+                    bottomTrailingRadius: 12,
+                    topTrailingRadius: 12
+                )
+            )
+
+            Rectangle().fill(.white).frame(width: 4.0, height: 80)
+        }
+        .background(HStack {
+            Spacer()
+            Rectangle().fill(ColorTheme.live().secondary).frame(width: 160.0, height: 80)
+
+            Spacer(minLength: 180)
+        }
+            .background(.clear))
     }
 
     @ViewBuilder
