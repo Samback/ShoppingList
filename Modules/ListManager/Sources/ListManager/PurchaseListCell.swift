@@ -64,7 +64,7 @@ extension PurchaseModel.Status {
         case .done:
             return ColorTheme.live().surface
         case .inProgress:
-            return .clear
+            return ColorTheme.live().white
         }
     }
 
