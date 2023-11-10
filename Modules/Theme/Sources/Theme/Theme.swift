@@ -30,7 +30,7 @@ public struct ColorTheme {
     }
 
     private static var lightColorTheme: ColorTheme = .init(primary: Color.init(hex: 0x064F60),
-                                                           secondary: .init(hex: 0x858F94),
+                                                           secondary: .init(hex: 0x9BADB0),
                                                            accent: .init(hex: 0x3DCF6A),
                                                            separator: .init(hex: 0xE7E8E9),
                                                            destructive: .init(hex: 0xFF2D55),

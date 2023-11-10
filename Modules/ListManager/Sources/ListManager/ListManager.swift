@@ -11,11 +11,8 @@ import PurchaseList
 import Utils
 import Theme
 import Emojis
-import SwipeActions
 
 public struct ListManager: View {
-
-    @State var bindingState: SwipeState = .untouched
 
     let store: StoreOf<ListManagerFeature>
 
@@ -76,7 +73,6 @@ public struct ListManager: View {
     @ViewBuilder
     private func listView(with viewStore: ViewStoreOf<ListManagerFeature>) -> some View {
         List {
-
             ForEachStore(
                 self
                     .store
@@ -84,74 +80,52 @@ public struct ListManager: View {
                            action: ListManagerFeature.Action.listAction(id: action:))) { store in
                                store.withState { state in
                                    PurchaseListCell(purchaseModel: state.purchaseModel)
-                                       .frame(width: UIScreen.main.bounds.size.width - 32, height: 80)
                                        .onTapGesture {
                                            viewStore.send(.openList(state))
                                        }
-                                       .addSwipeAction(menu: .swiped,
-                                                       edge: .trailing,
-                                                       state: $bindingState) {
-                                           swipeButtons(with: viewStore)
+                                       .swipeActions(edge: .trailing) {
+                                           swipeButtons(with: viewStore, state: state)
                                        }
-                                                       .contextMenu {
-                                                           contextMenu(with: viewStore, state: state)
-                                                       }
+                                        .contextMenu {
+                                            contextMenu(with: viewStore, state: state)
+                                        }
                                }
                            }
                            .onMove(perform: { indices, newOffset in
                                viewStore.send(.listInteractionAction(.move(indices, newOffset)))
                            })
+                           .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+                           .listRowSeparatorTint(ColorTheme.live().separator)
                            .listRowBackground(ColorTheme.live().white)
-                           .listRowSeparator(.hidden)
-                           .listRowInsets(.init(top: 4, leading: 16, bottom: 4, trailing: 16))
-                           .background(ColorTheme.live().white)
+                           .listSectionSeparator(.hidden, edges: .top)
         }
-
         .listStyle(.plain)
         .scrollIndicators(.hidden)
         .scrollDismissesKeyboard(.immediately)
     }
 
     @ViewBuilder
-    private func swipeButtons(with viewStore: ViewStoreOf<ListManagerFeature>) -> some View {
-        HStack(spacing: 0) {
-            Button(action: {
+    private func swipeButtons(with viewStore: ViewStoreOf<ListManagerFeature>, state: PurchaseListFeature.State) -> some View {
+        HStack {
+            Button(
+                action: {
+                    viewStore
+                        .send(
+                            .contextMenuAction(.delete(state.id)))
+                }, label: {
+                    HStack {
+                        Text("Delete")
+                    }
+                })
+            .tint(ColorTheme.live().destructive)
 
+            Button(action: {
+                viewStore.send(.showConfirmationDialog(state.id))
             }, label: {
                 Text("Options")
             })
-            .frame(width: 100, height: 80, alignment: .center)
-            .contentShape(Rectangle())
-            .background(ColorTheme.live().secondary)
-
-            Button(action: {
-
-            }, label: {
-                HStack {
-                    Text("Delete")
-                }
-            })
-            .frame(width: 100, height: 80, alignment: .center)
-            .contentShape(Rectangle())
-            .background(ColorTheme.live().destructive)
-            .clipShape(
-                .rect(
-                    topLeadingRadius: 0,
-                    bottomLeadingRadius: 0,
-                    bottomTrailingRadius: 12,
-                    topTrailingRadius: 12
-                )
-            )
-
-            Rectangle().fill(.white).frame(width: 4.0, height: 80)
+            .tint(ColorTheme.live().secondary)
         }
-        .background(HStack {
-            Spacer()
-            Rectangle().fill(ColorTheme.live().secondary).frame(width: 160.0, height: 80)
-
-            Spacer(minLength: 180)
-        }
-            .background(.clear))
     }
 
     @ViewBuilder

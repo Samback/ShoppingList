@@ -76,7 +76,6 @@ extension PurchaseModel.Status {
             return ColorTheme.live().secondary
         }
     }
-
 }
 
 struct PurchaseListCell: View {
@@ -94,6 +93,7 @@ struct PurchaseListCell: View {
                 .padding(.leading, 24)
                 .multilineTextAlignment(.leading)
                 .foregroundStyle(purchaseModel.status.titleForeground)
+                .frame(alignment: .leading)
                 .font(.system(size: 22, weight: .medium))
 
             Spacer()
@@ -114,20 +114,9 @@ struct PurchaseListCell: View {
             }
 
         }
+        .frame(maxWidth: .infinity, minHeight: 80)
+        .background(purchaseModel.status.backgroundColor)
         .contentShape(Rectangle())
-        .frame(maxWidth: .infinity)
-        .frame(minHeight: 80)
-        .background {
-            ZStack {
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(purchaseModel.status.borderColor, lineWidth: 1
-                    )
-
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(purchaseModel.status.backgroundColor)
-            }
-            .background(.clear)
-        }
 
     }
 }

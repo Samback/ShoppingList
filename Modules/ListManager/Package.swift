@@ -17,7 +17,6 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture",
                  from: "1.3.0"),
-        .package(url: "https://github.com/c-villain/SwipeActions", from: "0.1.0"),
         .package(path: "../PurchaseList"),
         .package(path: "../Utils"),
         .package(path: "../Emojis"),
@@ -32,8 +31,6 @@ let package = Package(
             dependencies: [
                 .product(name: "ComposableArchitecture",
                          package: "swift-composable-architecture"),
-                .product(name: "SwipeActions",
-                         package: "SwipeActions"),
                 "PurchaseList",
                 "Utils",
                 "Theme",
