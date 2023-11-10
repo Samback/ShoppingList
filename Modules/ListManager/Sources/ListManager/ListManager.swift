@@ -29,9 +29,9 @@ public struct ListManager: View {
                 ZStack {
                     listView(with: viewStore)
                         .background(.clear)
-                        .padding(.bottom, 86)
                         .ignoresSafeArea(.keyboard)
                         .safeAreaPadding(.top, 8)
+                        .safeAreaPadding(.bottom, 86)
                         .padding(.horizontal, 0)
 
                     VStack {

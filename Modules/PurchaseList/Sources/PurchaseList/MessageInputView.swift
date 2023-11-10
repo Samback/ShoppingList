@@ -62,8 +62,21 @@ public struct MessageInputView: View {
                 .padding(.leading, 0)
             }
             .background {
-                VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
-                    .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(ColorTheme.live().surfaceSecondary)
+                    VisualEffectView(effect: UIBlurEffect(style: .light))
+                        .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+                }
+                .clipShape(
+                    .rect(
+                        topLeadingRadius: 10,
+                        bottomLeadingRadius: 0,
+                        bottomTrailingRadius: 0,
+                        topTrailingRadius: 10
+                    )
+                )
+                .background(.clear)
             }
 
         })

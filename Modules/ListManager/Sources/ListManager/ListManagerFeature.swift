@@ -328,8 +328,6 @@ public struct ListManagerFeature: Reducer {
             return .none
         }
 
-        //        case .selectEmoji(_):
-
     }
 
     private func listActions(with state: inout State, id: UUID,
@@ -344,7 +342,7 @@ public struct ListManagerFeature: Reducer {
             switch mode {
             case .create:
                 state.inputField = MessageInputFeature.State(inputText: "", mode: .create(.lists))
-                return addNewList(state: &state, title: title.isEmpty ? "My list" : title)
+                return addNewList(state: &state, title: title.isEmpty ? "New list" : title)
             case let .update(id, flow):
                 state.purchaseListCollection[id: id]?.title = title
                 guard let model = state.purchaseListCollection[id: id] else {

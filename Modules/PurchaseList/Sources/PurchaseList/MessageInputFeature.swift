@@ -88,7 +88,7 @@ public struct MessageInputFeature: Reducer {
             var placeholderText: String {
                 switch self {
                 case .create(.lists), .update(_, .lists):
-                    return "My list"
+                    return "Name your list"
                 default:
                     return "New item"
                 }

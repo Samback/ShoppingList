@@ -36,7 +36,7 @@ public struct PurchaseList: View {
                 NavigationStack {
                     ZStack {
                         listView(with: viewStore)
-                            .padding(.bottom, 86)
+                            .safeAreaPadding(.bottom, 86)
                             .ignoresSafeArea(.keyboard)
                             .background(.clear)
                         VStack(spacing: 0) {
@@ -132,6 +132,7 @@ public struct PurchaseList: View {
                                        }
                                    }
                                    .listRowInsets(.init(top: 0, leading: 24, bottom: 0, trailing: 0))
+                                   .listRowSeparatorTint(ColorTheme.live().separator)
                                    .frame(height: viewStore.viewMode.height)
 
                            }

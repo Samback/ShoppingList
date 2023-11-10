@@ -24,6 +24,8 @@ extension UIColor {
 public struct Appearance {
     public static func apply() {
         let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundEffect = UIBlurEffect(style: .light)
 
         appearance.largeTitleTextAttributes = [
             .foregroundColor: ColorTheme.live().primary.uiColor
@@ -43,5 +45,6 @@ public struct Appearance {
 
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
     }
 }

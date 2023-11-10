@@ -22,6 +22,7 @@ public struct ColorTheme {
     public var separator: Color
     public var destructive: Color
     public var surface: Color
+    public var surfaceSecondary: Color
     public var white: Color
     public var black: Color
 
@@ -35,6 +36,7 @@ public struct ColorTheme {
                                                            separator: .init(hex: 0xE7E8E9),
                                                            destructive: .init(hex: 0xFF2D55),
                                                            surface: .init(hex: 0xF7F8F8),
+                                                           surfaceSecondary: .init(hex: 0x9BADB0).opacity(0.15),
                                                            white: .white,
                                                            black: .black
     )
