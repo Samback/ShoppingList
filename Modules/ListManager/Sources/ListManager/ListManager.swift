@@ -11,6 +11,7 @@ import PurchaseList
 import Utils
 import Theme
 import Emojis
+import SwiftUISplashScreen
 
 public struct ListManager: View {
 
@@ -58,6 +59,12 @@ public struct ListManager: View {
                                        destination: PurchaseList.init)
             })
         }
+        .splashView(timeout: 1) {
+            VStack {
+                SplashScreenView()
+            }
+        }
+
     }
 
     private func toolBarView(with viewStore: ViewStoreOf<ListManagerFeature>) -> some ToolbarContent {

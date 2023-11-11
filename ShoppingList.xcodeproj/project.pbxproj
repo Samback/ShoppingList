@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3408D42C2B001C6F0059C5F5 /* SwiftUISplashScreen in Frameworks */ = {isa = PBXBuildFile; productRef = 3408D42B2B001C6F0059C5F5 /* SwiftUISplashScreen */; };
 		3425F7E02AD95E43002BF8CF /* Gen in Frameworks */ = {isa = PBXBuildFile; productRef = 3425F7DF2AD95E43002BF8CF /* Gen */; };
 		343E2B342AA4D25C00F76D2C /* ShoppingListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343E2B332AA4D25C00F76D2C /* ShoppingListApp.swift */; };
 		343E2B362AA4D25C00F76D2C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343E2B352AA4D25C00F76D2C /* ContentView.swift */; };
@@ -45,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3408D4272B0016BB0059C5F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		343E2B302AA4D25C00F76D2C /* ShoppingList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShoppingList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		343E2B332AA4D25C00F76D2C /* ShoppingListApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListApp.swift; sourceTree = "<group>"; };
 		343E2B352AA4D25C00F76D2C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 				349C45DB2AD97DE6003228C5 /* ListManager in Frameworks */,
 				34A80DB92AE04ED6006176F9 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				347F52922AD95229003C55A8 /* ComposableArchitecture in Frameworks */,
+				3408D42C2B001C6F0059C5F5 /* SwiftUISplashScreen in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +128,7 @@
 		343E2B322AA4D25C00F76D2C /* ShoppingList */ = {
 			isa = PBXGroup;
 			children = (
+				3408D4272B0016BB0059C5F5 /* Info.plist */,
 				34EE93BF2AD9548200CC07DD /* Modules */,
 				343E2B5D2AA4D2B000F76D2C /* App */,
 				343E2B332AA4D25C00F76D2C /* ShoppingListApp.swift */,
@@ -218,6 +222,7 @@
 				349C45E02AD97DE6003228C5 /* PurchaseList */,
 				34A80DB62AE04ED6006176F9 /* FirebaseAnalyticsSwift */,
 				34A80DB82AE04ED6006176F9 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				3408D42B2B001C6F0059C5F5 /* SwiftUISplashScreen */,
 			);
 			productName = ShoppingList;
 			productReference = 343E2B302AA4D25C00F76D2C /* ShoppingList.app */;
@@ -295,6 +300,7 @@
 				347F52902AD95229003C55A8 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				3425F7DE2AD95E43002BF8CF /* XCRemoteSwiftPackageReference "swift-gen" */,
 				34A80DB52AE04ED5006176F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				3408D42A2B001C6F0059C5F5 /* XCRemoteSwiftPackageReference "swiftui-splash-screen" */,
 			);
 			productRefGroup = 343E2B312AA4D25C00F76D2C /* Products */;
 			projectDirPath = "";
@@ -527,6 +533,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ShoppingList/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Pero;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Granting permission for camera access allows you to scan text from a document or any other source and add it to your shopping list.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -563,6 +570,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ShoppingList/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Pero;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Granting permission for camera access allows you to scan text from a document or any other source and add it to your shopping list.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -704,6 +712,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		3408D42A2B001C6F0059C5F5 /* XCRemoteSwiftPackageReference "swiftui-splash-screen" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/globulus/swiftui-splash-screen";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		3425F7DE2AD95E43002BF8CF /* XCRemoteSwiftPackageReference "swift-gen" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-gen.git";
@@ -731,6 +747,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		3408D42B2B001C6F0059C5F5 /* SwiftUISplashScreen */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3408D42A2B001C6F0059C5F5 /* XCRemoteSwiftPackageReference "swiftui-splash-screen" */;
+			productName = SwiftUISplashScreen;
+		};
 		3425F7DF2AD95E43002BF8CF /* Gen */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3425F7DE2AD95E43002BF8CF /* XCRemoteSwiftPackageReference "swift-gen" */;

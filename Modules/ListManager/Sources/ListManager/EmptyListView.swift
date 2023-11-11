@@ -12,7 +12,7 @@ struct EmptyListView: View {
     var body: some View {
         VStack(spacing: 40) {
             Spacer()
-            
+
             Image(.emptylistLight)
             Text(
                 """
