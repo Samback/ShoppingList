@@ -99,6 +99,11 @@ public struct ListManager: View {
                            .listRowBackground(ColorTheme.live().white)
                            .listSectionSeparator(.hidden, edges: .top)
         }
+        .overlay(content: {
+            if viewStore.purchaseListCollection.isEmpty {
+                EmptyListView()
+            }
+        })
         .listStyle(.plain)
         .scrollIndicators(.hidden)
         .scrollDismissesKeyboard(.immediately)
