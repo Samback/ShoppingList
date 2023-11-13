@@ -45,10 +45,12 @@ struct ShoppingListApp: App {
 //                          reducer: {
 //                NoteFeature()
 //            }))
-//            PurchaseList(store: .init(initialState: PurchaseListFeature.demo,
-//                                      reducer: {
-//                PurchaseListFeature()
-//            }))
+//            NavigationStack {
+//                PurchaseList(store: .init(initialState: PurchaseListFeature.demo,
+//                                          reducer: {
+//                    PurchaseListFeature()
+//                }))
+//            }
             //            DraftList(store: Store(initialState:
             //                                    DraftListFeature
             //                .State(rawList:

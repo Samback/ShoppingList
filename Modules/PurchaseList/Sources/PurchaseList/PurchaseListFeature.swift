@@ -13,6 +13,7 @@ import Note
 import Scanner
 import Analytics
 import ComposableAnalytics
+import Theme
 
 extension PurchaseModel.Status {
 
@@ -49,6 +50,8 @@ public struct PurchaseListFeature: Reducer {
         public var notes: IdentifiedArrayOf<NoteFeature.State> = []
         public var title: String = "Welcome"
 
+        var activityView: UIView?
+
         var inputField: MessageInputFeature.State
         @PresentationState public var scanPurchaseList: ScannerTCAFeature.State?
         @PresentationState public var draftList: DraftListFeature.State?
@@ -64,6 +67,11 @@ public struct PurchaseListFeature: Reducer {
                                  title: $0.title,
                                  isCompleted: $0.status == .done) },
                                   title: title)
+        }
+
+        public var counter: CounterView.Counter {
+            return .init(current: purchaseModel.doneNotesCount,
+                         total: purchaseModel.totalNotesCount)
         }
 
         public enum ViewMode {
@@ -149,6 +157,7 @@ public struct PurchaseListFeature: Reducer {
         case uncheckAll
         case update(note: UUID, text: String)
         case contextMenuAction(ContextMenuAction)
+        case updateCounter
 
         public enum ContextMenuAction: Equatable {
             case edit(UUID)
@@ -264,6 +273,9 @@ public struct PurchaseListFeature: Reducer {
                 return .none
             case let .confirmationDialog(localAction):
                 return confirmationDialog(state: &state, action: localAction)
+            case .updateCounter:
+                CounterView.publisher.send(state.counter)
+                return .none
             }
 
         }
@@ -305,11 +317,12 @@ public struct PurchaseListFeature: Reducer {
                 .run { send in
                     try await self.clock.sleep(for: .seconds(0.3))
                     await send(.addNote(title))
+                    await send(.updateCounter)
                 }
 
         case let .deleteNote(id):
             state.notes.remove(id: id)
-            return .none
+            return .send(.updateCounter)
         case let .edit(id):
             let text = state.notes[id: id]?.title ?? ""
             state.inputField = MessageInputFeature.State(inputText: text, mode: .update(id, .purchaseList))
@@ -414,6 +427,7 @@ public struct PurchaseListFeature: Reducer {
         state.notes.insert(contentsOf: notes, at: 0)
         return Effect<Action>
             .merge(
+                .send(.updateCounter),
                 .send(.sortCompletedNotes),
                 .send(.inputTextAction(.clearInput))
             )
@@ -445,6 +459,7 @@ public struct PurchaseListFeature: Reducer {
 
     private func notesAction() -> Effect<Action> {
         return .run { send in
+            await send(.updateCounter)
             try await self.clock.sleep(for: .seconds(0.3))
             await send(.sortCompletedNotes,
                        animation: Animation.easeInOut(duration: 0.5))

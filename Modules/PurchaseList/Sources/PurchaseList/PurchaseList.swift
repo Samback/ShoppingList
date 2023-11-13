@@ -12,6 +12,8 @@ import Scanner
 import ComposableAnalytics
 import Analytics
 import Theme
+import SwiftUIIntrospect
+import UIKit
 
 // https://www.hackingwithswift.com/quick-start/swiftui/how-to-add-custom-swipe-action-buttons-to-a-list-row
 // https://www.swiftanytime.com/blog/contextmenu-in-swiftui
@@ -48,17 +50,49 @@ public struct PurchaseList: View {
                         }
                         .background(.clear)
                     }
+
                     .background(.clear)
                 }
+
                 .onAppear {
-                    viewStore.send(.onAppear)
                     Appearance.apply()
+                    viewStore.send(.onAppear)
                 }
+
                 .scrollDismissesKeyboard(.immediately)
                 .navigationTitle(viewStore.title)
                 .toolbar(content: {
                     toolbarView(with: viewStore)
                 })
+                .introspect(.viewController, on: .iOS(.v17)) { viewController in
+                           print("ViewController \(viewController)")
+
+                    viewController.setupCustomBigTitleRepresentation(counter: viewStore.counter)
+//                    viewStore.send(.updateCounter)
+//                    guard let navigationView = viewController.navigationController?
+//                        .navigationBar
+//                        .subviews[1]
+//                        .subviews[0] else {
+//                        return
+//                    }
+//
+//                    let _counterView = CounterView()
+//
+//                    navigationView
+//                        .addSubview(_counterView)
+//
+//                    _counterView.setValues(counter: 5, total: 10)
+//                    _counterView.layoutIfNeeded()
+//
+//                    navigationView.superview!.layoutIfNeeded()
+//                    print("Working view \(navigationView.superview!.constraints)")
+//
+//                    let trailing = _counterView.leadingAnchor.constraint(equalTo: navigationView.superview!.leadingAnchor, constant: 60)
+//                    trailing.isActive = true
+//
+//                    let center = _counterView.centerYAnchor.constraint(equalTo: navigationView.centerYAnchor)
+//                    center.isActive = true
+                }
                 .sheet(store: self.store.scope(state: \.$scanPurchaseList,
                                                action: {.scannerAction($0)}),
                        content: ScannerTCA.init)

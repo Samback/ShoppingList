@@ -1,5 +1,7 @@
 v.1.0.0
 
+- Add splash screen. 
+- Add empty state.
 - Add UI changes.
 - Add animations
 - Fix colors

@@ -24,6 +24,7 @@ let package = Package(
         .package(path: "../Scanner"),
         .package(path: "../Analytics"),
         .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.0.0"),
+        .package(url: "https://github.com/siteline/swiftui-introspect", from: "1.0.0"),
         .package(url: "https://github.com/oliverfoggin/swift-composable-analytics", from: "1.0.0")
     ],
 
@@ -42,6 +43,7 @@ let package = Package(
                 "Analytics",
                 "Theme",
                 .product(name: "Dependencies", package: "swift-dependencies"),
+                .product(name: "SwiftUIIntrospect", package: "swiftui-introspect"),
                 .product(name: "ComposableAnalytics", package: "swift-composable-analytics")
             ]
 
