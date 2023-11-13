@@ -40,6 +40,7 @@ public extension CounterView {
     }
 
     static var publisher = PassthroughSubject<Counter, Never>()
+
 }
 
 public class CounterView: UIView {

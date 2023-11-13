@@ -41,6 +41,7 @@ public struct PurchaseListFeature: Reducer {
     @Dependency(\.uuid) var uuid
     @Dependency(\.dataManager) var dataManager
     @Dependency(\.userDefaultsManager) var userDefaultsManager
+    @Dependency(\.counterManager) var counterManager
 
     public init() {}
 
@@ -274,7 +275,7 @@ public struct PurchaseListFeature: Reducer {
             case let .confirmationDialog(localAction):
                 return confirmationDialog(state: &state, action: localAction)
             case .updateCounter:
-                CounterView.publisher.send(state.counter)
+                counterManager.updateCounter(state.counter)
                 return .none
             }
 
