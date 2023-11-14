@@ -16,6 +16,7 @@ public struct NavigationTextModifier: ViewModifier {
             .foregroundColor(color)
             .font(font)
     }
+
 }
 
 public extension View {

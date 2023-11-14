@@ -473,6 +473,6 @@ public struct PurchaseListFeature: Reducer {
                                           notes: [
         .demo,
         .init(id: UUID(), title: "Vine", status: .new)
-    ], title: "Demo Notes")
+    ], title: "Demo")
 
 }

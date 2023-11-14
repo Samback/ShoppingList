@@ -47,6 +47,7 @@ struct PrefixTitleModifier: ViewModifier {
             .foregroundColor(status.color)
             .font(.system(size: 22, weight: .semibold))
     }
+
 }
 
 struct SuffixTitleModifier: ViewModifier {

@@ -8,9 +8,12 @@
 import SwiftUI
 import ComposableArchitecture
 import Theme
+import Inject
 
 public struct DraftList: View {
     let store: StoreOf<DraftListFeature>
+
+    @ObserveInjection var inject
 
     public init(store: StoreOf<DraftListFeature>) {
         self.store = store
@@ -49,8 +52,9 @@ public struct DraftList: View {
                     })
                 }
             }
-        }
+        }.enableInjection()
     }
+
 }
 
 #Preview {

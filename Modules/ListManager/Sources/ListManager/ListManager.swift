@@ -12,10 +12,12 @@ import Utils
 import Theme
 import Emojis
 import SwiftUISplashScreen
+import Inject
 
 public struct ListManager: View {
 
     let store: StoreOf<ListManagerFeature>
+    @ObserveInjection var inject
 
     public init(store: StoreOf<ListManagerFeature>) {
         self.store = store
@@ -64,7 +66,7 @@ public struct ListManager: View {
                 SplashScreenView()
             }
         }
-
+        .enableInjection()
     }
 
     private func toolBarView(with viewStore: ViewStoreOf<ListManagerFeature>) -> some ToolbarContent {

@@ -7,8 +7,11 @@
 
 import SwiftUI
 import Theme
+import Inject
 
 struct EmptyListView: View {
+    @ObserveInjection var inject
+    
     var body: some View {
         VStack(spacing: 40) {
             Spacer()
@@ -27,7 +30,9 @@ struct EmptyListView: View {
             Spacer()
             Spacer()
         }
+        .enableInjection()
     }
+
 }
 
 #Preview {

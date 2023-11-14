@@ -7,8 +7,12 @@
 
 import SwiftUI
 import Theme
+import Inject
 
 struct SplashScreenView: View {
+
+    @ObserveInjection var inject
+
     var body: some View {
         VStack(alignment: .center) {
                 Spacer()
@@ -33,6 +37,7 @@ struct SplashScreenView: View {
         .background {
             LinearGradient(gradient: Gradient(colors: [Color(red: 0.24, green: 0.81, blue: 0.42), Color(red: 0.32, green: 0.89, blue: 0.49)]), startPoint: .top, endPoint: .bottom)
         }
+        .enableInjection()
     }
 
 }

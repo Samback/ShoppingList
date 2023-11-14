@@ -9,6 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 import Utils
 import Theme
+import Inject
 
 // https://stackoverflow.com/questions/56610957/is-there-a-method-to-blur-a-background-in-swiftui
 
@@ -20,6 +21,8 @@ struct VisualEffectView: UIViewRepresentable {
 
 public struct MessageInputView: View {
     let store: StoreOf<MessageInputFeature>
+
+    @ObserveInjection var inject
 
     @FocusState var focusedField: MessageInputFeature.State.Field?
 
@@ -80,6 +83,7 @@ public struct MessageInputView: View {
             }
 
         })
+        .enableInjection()
     }
 
     @ViewBuilder

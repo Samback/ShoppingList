@@ -9,6 +9,7 @@ import SwiftUI
 import Theme
 import Models
 import Utils
+import Inject
 
 extension NoteModel {
 
@@ -81,6 +82,7 @@ extension PurchaseModel.Status {
 struct PurchaseListCell: View {
 
     let purchaseModel: PurchaseModel
+    @ObserveInjection var inject
 
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
@@ -117,8 +119,9 @@ struct PurchaseListCell: View {
         .frame(maxWidth: .infinity, minHeight: 80)
         .background(purchaseModel.status.backgroundColor)
         .contentShape(Rectangle())
-
+        .enableInjection()
     }
+
 }
 
 #Preview {
