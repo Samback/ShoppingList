@@ -11,7 +11,7 @@ import Inject
 
 struct EmptyListView: View {
     @ObserveInjection var inject
-    
+
     var body: some View {
         VStack(spacing: 40) {
             Spacer()
