@@ -15,6 +15,8 @@ import Theme
 import SwiftUIIntrospect
 import UIKit
 import Inject
+import Tips
+import TipKit
 
 // https://www.hackingwithswift.com/quick-start/swiftui/how-to-add-custom-swipe-action-buttons-to-a-list-row
 // https://www.swiftanytime.com/blog/contextmenu-in-swiftui
@@ -28,6 +30,7 @@ public struct PurchaseList: View {
     @Environment(\.presentationMode) var presentation
 
     let store: StoreOf<PurchaseListFeature>
+    let dragTip = ChangeOrderTip()
 
     public init(store: StoreOf<PurchaseListFeature>) {
         self.store = store
@@ -109,6 +112,7 @@ public struct PurchaseList: View {
     @ViewBuilder
     private func listView(with viewStore: ViewStoreOf<PurchaseListFeature>) -> some View {
         List {
+            TipView(dragTip)
             ForEachStore(
                 self
                     .store

@@ -46,6 +46,7 @@
 		34DE67992B0252AA00A45E61 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 34DE67982B0252AA00A45E61 /* FirebaseAnalytics */; };
 		34DE679B2B0252AA00A45E61 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 34DE679A2B0252AA00A45E61 /* FirebaseAnalyticsSwift */; };
 		34DE679D2B0252AA00A45E61 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 34DE679C2B0252AA00A45E61 /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		34EAE8242B0664370069D686 /* Tips in Frameworks */ = {isa = PBXBuildFile; productRef = 34EAE8232B0664370069D686 /* Tips */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -148,6 +149,7 @@
 				34A80DB72AE04ED6006176F9 /* FirebaseAnalyticsSwift in Frameworks */,
 				349D3D102AD95BD5001E1B0E /* Utils in Frameworks */,
 				349C45DB2AD97DE6003228C5 /* ListManager in Frameworks */,
+				34EAE8242B0664370069D686 /* Tips in Frameworks */,
 				34A80DB92AE04ED6006176F9 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				347F52922AD95229003C55A8 /* ComposableArchitecture in Frameworks */,
 				3408D42C2B001C6F0059C5F5 /* SwiftUISplashScreen in Frameworks */,
@@ -424,6 +426,7 @@
 				34A80DB62AE04ED6006176F9 /* FirebaseAnalyticsSwift */,
 				34A80DB82AE04ED6006176F9 /* FirebaseAnalyticsWithoutAdIdSupport */,
 				3408D42B2B001C6F0059C5F5 /* SwiftUISplashScreen */,
+				34EAE8232B0664370069D686 /* Tips */,
 			);
 			productName = ShoppingList;
 			productReference = 343E2B302AA4D25C00F76D2C /* ShoppingList.app */;
@@ -1713,6 +1716,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 34A80DB52AE04ED5006176F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		34EAE8232B0664370069D686 /* Tips */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Tips;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -11,6 +11,8 @@ import Theme
 
 public struct ScanTip: Tip {
 
+    public init() {}
+
     public static let counter = Event(id: "scanTip.counter")
 
     public var title: Text {

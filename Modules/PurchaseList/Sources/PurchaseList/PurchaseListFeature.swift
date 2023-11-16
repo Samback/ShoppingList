@@ -14,6 +14,7 @@ import Scanner
 import Analytics
 import ComposableAnalytics
 import Theme
+import Tips
 
 extension PurchaseModel.Status {
 
@@ -426,12 +427,12 @@ public struct PurchaseListFeature: Reducer {
         }
 
         state.notes.insert(contentsOf: notes, at: 0)
-        return Effect<Action>
-            .merge(
-                .send(.updateCounter),
-                .send(.sortCompletedNotes),
-                .send(.inputTextAction(.clearInput))
-            )
+        return .run { send in
+            await ChangeOrderTip.counter.donate()
+            await send(.updateCounter)
+            await send(.sortCompletedNotes)
+            await send(.inputTextAction(.clearInput))
+        }
     }
 
     private func uncheckedAll(state: inout State) -> Effect<Action> {

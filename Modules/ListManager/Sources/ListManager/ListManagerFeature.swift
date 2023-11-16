@@ -16,6 +16,7 @@ import Analytics
 import ComposableAnalytics
 import SwiftUI
 import Emojis
+import Tips
 
 public struct ListManagerFeature: Reducer {
     @Dependency(\.uuid) var uuid
@@ -374,6 +375,7 @@ public struct ListManagerFeature: Reducer {
             try await dataManager.createDocument(newPurchase)
             await send(.sortList)
             await send(.openList(newList))
+            await OrganiseListTip.counter.donate()
         }
     }
 }

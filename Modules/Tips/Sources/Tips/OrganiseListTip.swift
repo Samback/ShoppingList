@@ -6,6 +6,7 @@ public struct OrganiseListTip: Tip {
 
     public static let counter = Event(id: "organiseList.counter")
 
+    public init() {}
     public var title: Text {
         titleView("Organise your list")
     }

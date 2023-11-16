@@ -13,6 +13,8 @@ import Theme
 import Emojis
 import SwiftUISplashScreen
 import Inject
+import Tips
+import TipKit
 
 public struct ListManager: View {
 
@@ -82,6 +84,7 @@ public struct ListManager: View {
     @ViewBuilder
     private func listView(with viewStore: ViewStoreOf<ListManagerFeature>) -> some View {
         List {
+            TipView(OrganiseListTip())
             ForEachStore(
                 self
                     .store

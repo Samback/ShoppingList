@@ -10,6 +10,7 @@ import ComposableArchitecture
 import Utils
 import Theme
 import Inject
+import Tips
 
 // https://stackoverflow.com/questions/56610957/is-there-a-method-to-blur-a-background-in-swiftui
 
@@ -21,6 +22,8 @@ struct VisualEffectView: UIViewRepresentable {
 
 public struct MessageInputView: View {
     let store: StoreOf<MessageInputFeature>
+
+    private let scanTip = ScanTip()
 
     @ObserveInjection var inject
 
@@ -50,8 +53,14 @@ public struct MessageInputView: View {
 
                     if viewStore.isScannerEnabled {
                         scannerButton(viewStore)
+                            .onAppear {
+                                Task {
+                                    await ScanTip.counter.donate()
+                                }
+                            }
                             .padding(.leading, 0)
                             .padding(.bottom, 46)
+                            .popoverTip(scanTip, arrowEdge: .bottom)
                     }
 
                     Spacer()
