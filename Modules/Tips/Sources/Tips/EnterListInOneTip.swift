@@ -11,7 +11,7 @@ import Theme
 
 public struct EnterListInOneTip: Tip {
 
-    public static let counter = Event(id:"enterListInOneTip.counter")
+    public static let counter = Event(id: "enterListInOneTip.counter")
 
     public init() {}
     public var title: Text {
