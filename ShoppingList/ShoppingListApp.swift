@@ -23,6 +23,22 @@ import TipKit
  https://thisdevbrain.com/swiftlint-permission-issue/
  */
 
+public struct ApplicationTipConfiguration {
+
+    /// The `DatastoreLocation` that `Tips` will use when configured. In this example, the Tips data store is located in the app's Application Support Directory.
+    public static var storeLocation: Tips.ConfigurationOption.DatastoreLocation {
+        var url = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+        url = url.appending(path: "tipstore")
+        return .url(url)
+    }
+
+    /// The `DisplayFrequency` used by `Tips`. In this example, `Tip`s will show immediately.
+    public static var displayFrequency: Tips.ConfigurationOption.DisplayFrequency {
+        .daily
+    }
+
+}
+
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil)
@@ -63,21 +79,23 @@ struct ShoppingListApp: App {
     }
 
     init() {
-#if DEBUG
-        /// Optionally, call `Tips.resetDatastore()` before `Tips.configure()` to reset the state of all tips. This will allow tips to re-appear even after they have been dismissed by the user.
-        /// This is for testing only, and should not be enabled in release builds.
-        try? Tips.resetDatastore()
+// #if DEBUG
+//        /// Optionally, call `Tips.resetDatastore()` before `Tips.configure()` to reset the state of all tips. This will allow tips to re-appear even after they have been dismissed by the user.
+//        /// This is for testing only, and should not be enabled in release builds.
+////        try? Tips.resetDatastore()
 //        Tips.showAllTipsForTesting()
-#endif
+// #endif
 
-        try? Tips.configure(
-            [
-                // Reset which tips have been shown and what parameters have been tracked, useful during testing and for this sample project
-                .datastoreLocation(.applicationDefault),
-
-                // When should the tips be presented? If you use .immediate, they'll all be presented whenever a screen with a tip appears.
-                // You can adjust this on per tip level as well
-                    .displayFrequency(.immediate)
-            ])
+//        try? Tips.configure(
+//            [
+//                // Reset which tips have been shown and what parameters have been tracked, useful during testing and for this sample project
+//                .datastoreLocation(.applicationDefault),
+//
+//                // When should the tips be presented? If you use .immediate, they'll all be presented whenever a screen with a tip appears.
+//                // You can adjust this on per tip level as well
+//                    .displayFrequency(.immediate)
+//            ])
+        try? Tips.configure([.datastoreLocation(ApplicationTipConfiguration.storeLocation),
+                             .displayFrequency(ApplicationTipConfiguration.displayFrequency)])
     }
 }

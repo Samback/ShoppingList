@@ -30,7 +30,6 @@ public struct PurchaseList: View {
     @Environment(\.presentationMode) var presentation
 
     let store: StoreOf<PurchaseListFeature>
-    let dragTip = ChangeOrderTip()
 
     public init(store: StoreOf<PurchaseListFeature>) {
         self.store = store
@@ -112,7 +111,7 @@ public struct PurchaseList: View {
     @ViewBuilder
     private func listView(with viewStore: ViewStoreOf<PurchaseListFeature>) -> some View {
         List {
-            TipView(dragTip)
+//            TipView(ChangeOrderTip())
             ForEachStore(
                 self
                     .store

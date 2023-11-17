@@ -48,7 +48,7 @@ public struct ListManager: View {
                     }
                     .background(.clear)
                 }
-                .navigationTitle("My list")
+                .navigationTitle("Pero lists")
                 .background(ColorTheme.live().white)
                 .onAppear {
                     Appearance.apply()
@@ -84,7 +84,7 @@ public struct ListManager: View {
     @ViewBuilder
     private func listView(with viewStore: ViewStoreOf<ListManagerFeature>) -> some View {
         List {
-            TipView(OrganiseListTip())
+//            TipView(OrganiseListTip())
             ForEachStore(
                 self
                     .store

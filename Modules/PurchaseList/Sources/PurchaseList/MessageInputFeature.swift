@@ -90,7 +90,7 @@ public struct MessageInputFeature: Reducer {
                 case .create(.lists), .update(_, .lists):
                     return "Name your list"
                 default:
-                    return "New item"
+                    return "Add new item(s)"
                 }
             }
         }

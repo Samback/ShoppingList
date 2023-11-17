@@ -100,7 +100,7 @@ struct PurchaseListCell: View {
 
             Spacer()
 
-            HStack(alignment: .center, spacing: 4) {
+            HStack(alignment: .center, spacing: 5) {
                 Text(purchaseModel.doneNotesCount.description)
                     .foregroundStyle(purchaseModel.status.doneCounterForeground)
                     .font(.system(size: 22, weight: .medium))
@@ -112,8 +112,12 @@ struct PurchaseListCell: View {
                 Text(purchaseModel.totalNotesCount.description)
                     .foregroundStyle(purchaseModel.status.totalCounterForeground)
                     .font(.system(size: 14, weight: .regular))
-                    .padding(.trailing, 16)
             }
+            .padding(.vertical, 4)
+            .padding(.horizontal, 10)
+            .background(Capsule()
+                .fill(ColorTheme.live().surfaceSecondary))
+            .padding(.trailing, 16)
 
         }
         .frame(maxWidth: .infinity, minHeight: 80)

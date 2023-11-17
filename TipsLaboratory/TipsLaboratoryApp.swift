@@ -22,7 +22,7 @@ struct TipsLaboratoryApp: App {
         /// Optionally, call `Tips.resetDatastore()` before `Tips.configure()` to reset the state of all tips. This will allow tips to re-appear even after they have been dismissed by the user.
         /// This is for testing only, and should not be enabled in release builds.
         try? Tips.resetDatastore()
-//        Tips.showAllTipsForTesting()
+        Tips.showAllTipsForTesting()
 #endif
 
         try? Tips.configure(
