@@ -22,13 +22,11 @@ public struct TipsTestingView: View {
             TipView(ChangeOrderTip())
             TipView(OrganiseListTip())
             TipView(ScanTip())
-            List {
-                ForEach(Self.values, id: \.self) { value in
-                    Text(value.description)
-                }
+            TipView(EnterListInOneTip())
+            Text("using “\(Image(systemName: "return"))” button. Tap the “\(Image(systemName: "plus"))” and get your list.")
+                .padding(.horizontal, 10)
 
-            }
-            VStack(spacing: 20) {
+            VStack(spacing: 10) {
                 Button("Lists tip donate") {
                     Task {
                      await OrganiseListTip.counter.donate()

@@ -1,5 +1,6 @@
 v.1.0.0
 
+- Add tips.
 - Add counter at list.
 - Add splash screen. 
 - Add empty state.
