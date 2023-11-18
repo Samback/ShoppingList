@@ -47,6 +47,12 @@ public struct MessageInputFeature: Reducer {
     }
 
     public struct State: Equatable {
+
+        public init(inputText: String = "", mode: Mode = .create(.lists)) {
+            self.inputText = inputText
+            self.mode = mode
+        }
+
         @BindingState var inputText: String
         let mode: Mode
 
@@ -113,10 +119,6 @@ public struct MessageInputFeature: Reducer {
             }
         }
 
-        public init(inputText: String = "", mode: Mode = .create(.lists)) {
-            self.inputText = inputText
-            self.mode = mode
-        }
     }
 
 }

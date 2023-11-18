@@ -30,7 +30,7 @@ public struct ListManagerFeature: Reducer {
         @PresentationState var confirmationDialog: ConfirmationDialogState<Action.ContextMenuAction>?
         @PresentationState public var emojisSelector: EmojisFeature.State?
 
-        var inputField: MessageInputFeature.State
+        public var inputField: MessageInputFeature.State
         var purchaseListCollection: IdentifiedArrayOf<PurchaseListFeature.State> = []
         var account: AccountModel = AccountModel(list: [])
 
@@ -51,7 +51,7 @@ public struct ListManagerFeature: Reducer {
         case listInteractionAction(ListInteractionAction)
         case loadedListResult(TaskResult<[PurchaseModel]>)
         case loadAccountResult(TaskResult<AccountModel>)
-        case openList(PurchaseListFeature.State)
+        case openList(id: UUID)
         case showConfirmationDialog(UUID)
         case confirmationDialog(PresentationAction<ContextMenuAction>)
 
@@ -135,12 +135,18 @@ public struct ListManagerFeature: Reducer {
                 print(error)
                 return .none
 
-            case let .openList(purchaseListState):
-                state.activePurchaseList = purchaseListState
-                if purchaseListState.notes.isEmpty {
+            case let .openList(uuid):
+                state.purchaseListCollection[id: uuid]?.inputField = MessageInputFeature.State()
+
+                guard let actionState = state.purchaseListCollection[id: uuid] else {
+                    return .none
+                }
+
+                state.activePurchaseList = actionState
+                if actionState.notes.isEmpty {
                     return .send(.activePurchaseList(.presented(.inputTextAction(.activateTextField))))
                 }
-                return .send(.activePurchaseList(.presented(.inputTextAction(.clearInput))))
+                return .none
 
             case let .activePurchaseList(localActions):
                 return activePurchaseListActions(with: &state, action: localActions)
@@ -324,9 +330,6 @@ public struct ListManagerFeature: Reducer {
 
         case .share:
             return .none
-
-        default:
-            return .none
         }
 
     }
@@ -374,8 +377,8 @@ public struct ListManagerFeature: Reducer {
         return .run { send in
             try await dataManager.createDocument(newPurchase)
             await send(.sortList)
-            await send(.openList(newList))
-            await OrganiseListTip.counter.donate()
+            await send(.openList(id: newList.id))
+//            await OrganiseListTip.counter.donate()
         }
     }
 }

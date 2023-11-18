@@ -54,7 +54,7 @@ public struct PurchaseListFeature: Reducer {
 
         var activityView: UIView?
 
-        var inputField: MessageInputFeature.State
+        public var inputField: MessageInputFeature.State
         @PresentationState public var scanPurchaseList: ScannerTCAFeature.State?
         @PresentationState public var draftList: DraftListFeature.State?
         @BindingState public var viewMode: ViewMode = .expand
@@ -428,7 +428,7 @@ public struct PurchaseListFeature: Reducer {
 
         state.notes.insert(contentsOf: notes, at: 0)
         return .run { send in
-            await ChangeOrderTip.counter.donate()
+//            await ChangeOrderTip.counter.donate()
             await send(.updateCounter)
             await send(.sortCompletedNotes)
             await send(.inputTextAction(.clearInput))

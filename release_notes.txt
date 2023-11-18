@@ -1,5 +1,7 @@
 v.1.0.0
 
+- Fix an issue with showing of keyboard.
+- Hide tips. 
 - Add tips.
 - Add counter at list.
 - Add splash screen. 

@@ -93,7 +93,7 @@ public struct ListManager: View {
                                store.withState { state in
                                    PurchaseListCell(purchaseModel: state.purchaseModel)
                                        .onTapGesture {
-                                           viewStore.send(.openList(state))
+                                           viewStore.send(.openList(id: state.id))
                                        }
                                        .swipeActions(edge: .trailing) {
                                            swipeButtons(with: viewStore, state: state)
