@@ -93,7 +93,7 @@ public class CounterView: UIView {
         }.store(in: &subscriptions)
 
         addSubview(backgroundView)
-        backgroundView.backgroundColor = ColorTheme.live().surfaceSecondary.uiColor
+        backgroundView.backgroundColor = ColorTheme.live().surface.uiColor
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
         backgroundView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 

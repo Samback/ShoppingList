@@ -44,6 +44,7 @@ public struct PurchaseList: View {
                 ZStack {
                     listView(with: viewStore)
                         .safeAreaPadding(.bottom, 86)
+                        .safeAreaPadding(.top, 16)
                         .ignoresSafeArea(.keyboard)
                         .background(.clear)
                     VStack(spacing: 0) {
@@ -171,9 +172,9 @@ public struct PurchaseList: View {
             viewStore.send(.contextMenuAction(.edit(state.id)))
             }, label: {
                 HStack {
-                    Text("Rename")
+                    Text("Edit")
                     Spacer()
-                    Image(systemName: "character.cursor.ibeam")
+                    Image(systemName: "pencil")
                 }
             })
 
@@ -183,6 +184,8 @@ public struct PurchaseList: View {
             }, label: {
                 HStack {
                     Text("Duplicate")
+                    Spacer()
+                    Image(systemName: "doc.on.doc")
                 }
             })
 
@@ -195,6 +198,8 @@ public struct PurchaseList: View {
                 }, label: {
                     HStack {
                         Text("Delete")
+                        Spacer()
+                        Image(systemName: "trash")
                     }
                 })
         }

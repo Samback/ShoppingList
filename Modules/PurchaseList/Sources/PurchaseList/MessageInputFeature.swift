@@ -95,7 +95,7 @@ public struct MessageInputFeature: Reducer {
                 switch self {
                 case .create(.lists), .update(_, .lists):
                     return "Name your list"
-                default:
+                case .create(.purchaseList), .update(_, .purchaseList):
                     return "Add new item(s)"
                 }
             }

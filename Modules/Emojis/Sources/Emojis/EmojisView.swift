@@ -78,7 +78,7 @@ public struct EmojisView: View {
                 .font(.system(size: 34))
                 .background {
                     Circle()
-                        .fill(ColorTheme.live().surfaceSecondary)
+                        .fill(ColorTheme.live().surface)
                             .frame(width: 60, height: 60)
                               }
                 .frame(height: 60)

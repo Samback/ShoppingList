@@ -136,7 +136,7 @@ public struct ListManagerFeature: Reducer {
                 return .none
 
             case let .openList(uuid):
-                state.purchaseListCollection[id: uuid]?.inputField = MessageInputFeature.State()
+                state.purchaseListCollection[id: uuid]?.inputField = MessageInputFeature.State(mode: .create(.purchaseList))
 
                 guard let actionState = state.purchaseListCollection[id: uuid] else {
                     return .none

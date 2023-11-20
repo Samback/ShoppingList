@@ -1,5 +1,7 @@
 v.1.0.0
 
+- Fix issue with edit mode.
+- Fix issue with products placeholder.
 - Fix an issue with showing of keyboard.
 - Hide tips. 
 - Add tips.

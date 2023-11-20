@@ -19,7 +19,7 @@ public struct EnterListInOneTip: Tip {
     }
 
     public var message: Text? {
-        Text("Enter as many items as you wish line by line using “\(Image(systemName: "return"))” button. Tap the “\(Image(systemName: "plus"))” and get your list.")
+        Text("Enter as many items as you wish line by line using “Return” button. Tap the “\(Image(systemName: "plus"))” and get your list.")
             .foregroundColor(ColorTheme.live().secondary)
             .font(.system(size: 17))
     }

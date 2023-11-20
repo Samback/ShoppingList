@@ -261,7 +261,7 @@ public struct PurchaseListFeature: Reducer {
                     TextState("")
                 }, actions: {
                     return [ ButtonState(action: .edit(id)) {
-                                             TextState("Rename")
+                                             TextState("Edit")
                                          },
                                          ButtonState(action: .duplicate(id)) {
                                              TextState("Duplicate")
@@ -356,19 +356,9 @@ public struct PurchaseListFeature: Reducer {
     private func draftListActionsAggregator(state: inout State, action: Action) -> Effect<Action> {
         switch action {
         case let .draftListAction(.presented(.delegate(.addNewShoppingNotes(newItems)))):
-            state
-                .notes
-                .append(contentsOf: newItems
-                    .map {
-                        NoteModel(id: uuid(),
-                                  title: $0,
-                                  isCompleted: false)
-                    }
-                    .map(NoteFeature.State.convert(from:))
-                )
-
+            let adoptedString = newItems.joined(separator: "\n")
             state.draftList = nil
-            return .send(.sortCompletedNotes)
+            return .send(.addNote(adoptedString))
 
         case .draftListAction(.presented(.delegate(.cancel))):
             state.draftList = nil

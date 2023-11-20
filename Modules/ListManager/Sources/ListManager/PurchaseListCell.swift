@@ -88,7 +88,12 @@ struct PurchaseListCell: View {
         HStack(alignment: .center, spacing: 0) {
             Text(purchaseModel.emojiIcon)
                 .opacity(purchaseModel.status.emojiOpacity)
-                .font(.largeTitle)
+                .font(.system(size: 28, weight: .medium))
+                .background {
+                    Circle()
+                        .fill(ColorTheme.live().surface)
+                        .frame(width: 48, height: 48)
+                }
                 .padding(.leading, 24)
 
             Text(purchaseModel.title)
@@ -116,7 +121,7 @@ struct PurchaseListCell: View {
             .padding(.vertical, 4)
             .padding(.horizontal, 10)
             .background(Capsule()
-                .fill(ColorTheme.live().surfaceSecondary))
+                .fill(ColorTheme.live().surface))
             .padding(.trailing, 16)
 
         }
