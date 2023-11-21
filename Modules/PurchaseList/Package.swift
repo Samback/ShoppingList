@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "PurchaseList",
     platforms: [
-        .iOS(.v16)
+        .iOS(.v17)
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
@@ -16,13 +16,17 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture",
-                 from: "1.2.0"),
+                 from: "1.3.0"),
         .package(path: "../Note"),
+        .package(path: "../Theme"),
         .package(path: "../Utils"),
         .package(path: "../Models"),
         .package(path: "../Scanner"),
         .package(path: "../Analytics"),
+        .package(path: "../Tips"),
         .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.0.0"),
+        .package(url: "https://github.com/siteline/swiftui-introspect", from: "1.0.0"),
+        .package(url: "https://github.com/krzysztofzablocki/Inject.git", from: "1.0.5"),
         .package(url: "https://github.com/oliverfoggin/swift-composable-analytics", from: "1.0.0")
     ],
 
@@ -39,8 +43,12 @@ let package = Package(
                 "Models",
                 "Scanner",
                 "Analytics",
+                "Tips",
+                "Theme",
                 .product(name: "Dependencies", package: "swift-dependencies"),
-                .product(name: "ComposableAnalytics", package: "swift-composable-analytics")
+                .product(name: "SwiftUIIntrospect", package: "swiftui-introspect"),
+                .product(name: "ComposableAnalytics", package: "swift-composable-analytics"),
+                .product(name: "Inject", package: "Inject")
             ]
 
         ),

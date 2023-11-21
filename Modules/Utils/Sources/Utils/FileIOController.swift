@@ -9,8 +9,13 @@ import Foundation
 import Models
 
 struct FileIOController {
-    private let nestedFolderName = "ShoppingList"
+//    private let nestedFolderName = "ShoppingList"
     private var manager = FileManager.default
+    private let nestedFolderName: String
+
+    init(nestedFolderName: String) {
+        self.nestedFolderName = nestedFolderName
+    }
 
     func write<T: Encodable>(
         _ object: T,

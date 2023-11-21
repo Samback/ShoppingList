@@ -7,8 +7,11 @@
 
 import Foundation
 import ComposableArchitecture
+import SwiftUI
 
 public struct MessageInputFeature: Reducer {
+
+    public init() {}
 
     public enum Action: BindableAction, Equatable, Sendable {
         case binding(BindingAction<State>)
@@ -33,7 +36,6 @@ public struct MessageInputFeature: Reducer {
                 return .none
             case .clearInput:
                 state.inputText = ""
-                state.focusedField = nil
                 return .none
             case .tapOnScannerButton:
                 return .none
@@ -45,24 +47,78 @@ public struct MessageInputFeature: Reducer {
     }
 
     public struct State: Equatable {
+
+        public init(inputText: String = "", mode: Mode = .create(.lists)) {
+            self.inputText = inputText
+            self.mode = mode
+        }
+
         @BindingState var inputText: String
         let mode: Mode
 
         @BindingState var focusedField: Field?
 
-        enum Field: String, Hashable {
+        public enum Field: String, Hashable {
           case inputMessage
         }
 
-        public enum Mode: Equatable, Sendable {
-            case create
-            case update(UUID)
+        public enum Flow: Equatable, Sendable {
+            case lists
+            case purchaseList
         }
 
-        public init(inputText: String = "", mode: Mode = .create) {
-            self.inputText = inputText
-            self.mode = mode
+        public enum Mode: Equatable, Sendable {
+            case create(Flow)
+            case update(UUID, Flow)
+
+            var actionButtonImage: Image {
+                switch self {
+                case .create:
+                    return Image(systemName: "plus")
+                        .resizable()
+                case .update:
+                    return Image(.arrowUp)
+                        .resizable()
+                }
+            }
+
+            var leadingOffset: CGFloat {
+                switch self {
+                case .create(.lists), .update(_, .lists):
+                    return 16
+                default:
+                    return 64
+                }
+            }
+
+            var placeholderText: String {
+                switch self {
+                case .create(.lists), .update(_, .lists):
+                    return "Name your list"
+                case .create(.purchaseList), .update(_, .purchaseList):
+                    return "Add new item(s)"
+                }
+            }
         }
+
+        var isScannerEnabled: Bool {
+            switch mode {
+            case .create(.purchaseList), .update(_, .purchaseList):
+                return true
+            default:
+                return false
+            }
+        }
+
+        var isActionButtonEnabled: Bool {
+            switch mode {
+            case .create(.purchaseList), .update(_, .purchaseList):
+                return !inputText.isEmpty
+            default:
+                return true
+            }
+        }
+
     }
 
 }

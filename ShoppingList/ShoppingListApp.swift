@@ -15,11 +15,29 @@ import FirebaseAnalytics
 import Firebase
 import Analytics
 import ComposableAnalytics
-
+import Note
+import Tips
+import TipKit
 /*
  SwiftLint configs Xcode 15
  https://thisdevbrain.com/swiftlint-permission-issue/
  */
+
+public struct ApplicationTipConfiguration {
+
+    /// The `DatastoreLocation` that `Tips` will use when configured. In this example, the Tips data store is located in the app's Application Support Directory.
+    public static var storeLocation: Tips.ConfigurationOption.DatastoreLocation {
+        var url = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+        url = url.appending(path: "tipstore")
+        return .url(url)
+    }
+
+    /// The `DisplayFrequency` used by `Tips`. In this example, `Tip`s will show immediately.
+    public static var displayFrequency: Tips.ConfigurationOption.DisplayFrequency {
+        .daily
+    }
+
+}
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
@@ -37,33 +55,47 @@ struct ShoppingListApp: App {
 
     var body: some Scene {
         WindowGroup {
-//            DraftList(store: Store(initialState: 
-//                                    DraftListFeature
-//                .State(rawList:
-//                        ["This is a true story about my childhood",
-//                         "Milk",
-//                         "Bread"]),
-//                                   reducer: {
-//                DraftListFeature()
-//            }))
+
             ListManager(
                 store: Store(initialState: ListManagerFeature.State(purchaseListCollection: []),
                              reducer: {
                                  ListManagerFeature()
                                      .dependency(\.analyticsClient,
                                                   AnalyticsClient.merge(
-                                                         .consoleLogger,
-                                                         .firebaseClient))
+                                                    .consoleLogger,
+                                                    .firebaseClient))
                                      ._printChanges()
                              },
                              withDependencies: {
-                                 $0.dataManager = DataManager.fileSystem
+                                 $0.dataManager = DataManager.liveValue
                              }
                             )
             )
             .onAppear {
                 Firebase.Analytics.logEvent("ThisISATest", parameters: ["title": "AppDelegate"])
             }
+
         }
+    }
+
+    init() {
+// #if DEBUG
+//        /// Optionally, call `Tips.resetDatastore()` before `Tips.configure()` to reset the state of all tips. This will allow tips to re-appear even after they have been dismissed by the user.
+//        /// This is for testing only, and should not be enabled in release builds.
+////        try? Tips.resetDatastore()
+//        Tips.showAllTipsForTesting()
+// #endif
+
+//        try? Tips.configure(
+//            [
+//                // Reset which tips have been shown and what parameters have been tracked, useful during testing and for this sample project
+//                .datastoreLocation(.applicationDefault),
+//
+//                // When should the tips be presented? If you use .immediate, they'll all be presented whenever a screen with a tip appears.
+//                // You can adjust this on per tip level as well
+//                    .displayFrequency(.immediate)
+//            ])
+        try? Tips.configure([.datastoreLocation(ApplicationTipConfiguration.storeLocation),
+                             .displayFrequency(ApplicationTipConfiguration.displayFrequency)])
     }
 }

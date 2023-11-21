@@ -6,34 +6,140 @@
 //
 
 import SwiftUI
-import UIKit
+import Theme
+import Models
+import Utils
+import Inject
+
+extension NoteModel {
+
+    static var demoNotesList: [NoteModel] {
+        return [
+            NoteModel(id: UUID(), title: "Milk", isCompleted: true),
+            NoteModel(id: UUID(), title: "Bread", isCompleted: true),
+            NoteModel(id: UUID(), title: "Water", isCompleted: false),
+            NoteModel(id: UUID(), title: "Beer", isCompleted: false)
+        ]
+    }
+}
+
+extension PurchaseModel.Status {
+    var emojiOpacity: Double {
+        switch self {
+        case .done:
+            return 1
+        case .inProgress:
+            return 1
+        }
+    }
+
+    var titleForeground: Color {
+        switch self {
+        case .done:
+            return ColorTheme.live().secondary
+        case .inProgress:
+            return ColorTheme.live().primary
+        }
+    }
+
+    var doneCounterForeground: Color {
+        switch self {
+        case .done:
+            return ColorTheme.live().secondary
+        case .inProgress:
+            return ColorTheme.live().accent
+        }
+    }
+
+    var totalCounterForeground: Color {
+        switch self {
+        case .done:
+            return ColorTheme.live().secondary
+        case .inProgress:
+            return ColorTheme.live().secondary
+        }
+    }
+
+    var backgroundColor: Color {
+        switch self {
+        case .done:
+            return ColorTheme.live().surface
+        case .inProgress:
+            return ColorTheme.live().white
+        }
+    }
+
+    var borderColor: Color {
+        switch self {
+        case .done:
+            return .clear
+        case .inProgress:
+            return ColorTheme.live().secondary
+        }
+    }
+}
 
 struct PurchaseListCell: View {
 
-    let title: String
+    let purchaseModel: PurchaseModel
+    @ObserveInjection var inject
 
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color.white)
-                .shadow(radius: 5)
-            VStack(alignment: .leading) {
-                Text(title)
-                    .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-                    .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: .leading)
-                    .padding(.horizontal, 20)
-            }.frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
-        }
-        .frame(maxWidth: .infinity)
+        HStack(alignment: .center, spacing: 0) {
+            Text(purchaseModel.emojiIcon)
+                .opacity(purchaseModel.status.emojiOpacity)
+                .font(.system(size: 28, weight: .medium))
+                .background {
+                    Circle()
+                        .fill(ColorTheme.live().surface)
+                        .frame(width: 48, height: 48)
+                }
+                .padding(.leading, 24)
 
+            Text(purchaseModel.title)
+                .padding(.leading, 24)
+                .multilineTextAlignment(.leading)
+                .foregroundStyle(purchaseModel.status.titleForeground)
+                .frame(alignment: .leading)
+                .font(.system(size: 22, weight: .medium))
+
+            Spacer()
+
+            HStack(alignment: .center, spacing: 5) {
+                Text(purchaseModel.doneNotesCount.description)
+                    .foregroundStyle(purchaseModel.status.doneCounterForeground)
+                    .font(.system(size: 22, weight: .medium))
+
+                Text("/")
+                    .foregroundStyle(purchaseModel.status.totalCounterForeground)
+                    .font(.system(size: 14, weight: .regular))
+
+                Text(purchaseModel.totalNotesCount.description)
+                    .foregroundStyle(purchaseModel.status.totalCounterForeground)
+                    .font(.system(size: 14, weight: .regular))
+            }
+            .padding(.vertical, 4)
+            .padding(.horizontal, 10)
+            .background(Capsule()
+                .fill(ColorTheme.live().surface))
+            .padding(.trailing, 16)
+
+        }
+        .frame(maxWidth: .infinity, minHeight: 80)
+        .background(purchaseModel.status.backgroundColor)
+        .contentShape(Rectangle())
+        .enableInjection()
     }
+
 }
 
 #Preview {
     VStack(alignment: .leading) {
-            PurchaseListCell(title: "Name")
-            .frame(height: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/)
+        PurchaseListCell(purchaseModel: PurchaseModel(id: UUID(),
+                                                      emojiIcon: EmojisDB.randomEmoji(),
+                                                      notes: NoteModel.demoNotesList,
+                                                      title: "Lidl"))
     }
-    .padding()
-    .background(.green)
+    .frame(maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+    .background(.black)
 }

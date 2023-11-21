@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "ListManager",
     platforms: [
-        .iOS(.v16)],
+        .iOS(.v17)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
@@ -16,9 +16,12 @@ let package = Package(
 
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture",
-                 from: "1.2.0"),
+                 from: "1.3.0"),
         .package(path: "../PurchaseList"),
-        .package(path: "../Utils")
+        .package(path: "../Utils"),
+        .package(path: "../Emojis"),
+        .package(path: "../Theme"),
+        .package(url: "https://github.com/globulus/swiftui-splash-screen", from: "1.0.0")
     ],
 
     targets: [
@@ -29,8 +32,12 @@ let package = Package(
             dependencies: [
                 .product(name: "ComposableArchitecture",
                          package: "swift-composable-architecture"),
+                .product(name: "SwiftUISplashScreen",
+                         package: "swiftui-splash-screen"),
                 "PurchaseList",
-                "Utils"
+                "Utils",
+                "Theme",
+                "Emojis"
             ]),
         .testTarget(
             name: "ListManagerTests",

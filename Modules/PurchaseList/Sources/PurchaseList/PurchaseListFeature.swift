@@ -13,63 +13,161 @@ import Note
 import Scanner
 import Analytics
 import ComposableAnalytics
+import Theme
+import Tips
+
+extension PurchaseModel.Status {
+
+    public var imageIconInverted: String {
+         switch self {
+         case .done:
+             return "circle"
+         case .inProgress:
+             return "checkmark.circle"
+         }
+     }
+
+     public var titleInverted: String {
+         switch self {
+         case .done:
+             return "Undone"
+         case .inProgress:
+             return "Mark as done"
+         }
+     }
+ }
 
 public struct PurchaseListFeature: Reducer {
     @Dependency(\.continuousClock) var clock
     @Dependency(\.uuid) var uuid
     @Dependency(\.dataManager) var dataManager
+    @Dependency(\.userDefaultsManager) var userDefaultsManager
+    @Dependency(\.counterManager) var counterManager
 
     public init() {}
 
     public struct State: Equatable, Identifiable {
         public let id: UUID
+        public var emojiIcon: String
         public var notes: IdentifiedArrayOf<NoteFeature.State> = []
         public var title: String = "Welcome"
-        var inputText: MessageInputFeature.State
+
+        var activityView: UIView?
+
+        public var inputField: MessageInputFeature.State
         @PresentationState public var scanPurchaseList: ScannerTCAFeature.State?
         @PresentationState public var draftList: DraftListFeature.State?
+        @BindingState public var viewMode: ViewMode = .expand
+        @PresentationState public var confirmationDialog: ConfirmationDialogState<Action.ContextMenuAction>?
+
+        public var purchaseModel: PurchaseModel {
+            return  PurchaseModel(id: id,
+                                  emojiIcon: emojiIcon,
+                                  notes: notes
+                .elements
+                .map { NoteModel(id: $0.id,
+                                 title: $0.title,
+                                 isCompleted: $0.status == .done) },
+                                  title: title)
+        }
+
+        public var counter: CounterView.Counter {
+            return .init(current: purchaseModel.doneNotesCount,
+                         total: purchaseModel.totalNotesCount)
+        }
+
+        public enum ViewMode {
+            case compact
+            case expand
+
+            var invertedValue: Self {
+                switch self {
+                case .compact:
+                    return .expand
+                case .expand:
+                    return .compact
+                }
+            }
+
+            var image: Image {
+                switch self {
+                case .compact:
+                    return Image(.compact)
+                case .expand:
+                    return Image(.expand)
+                }
+            }
+
+            var height: CGFloat {
+                switch self {
+                case .compact:
+                    return 52
+                case .expand:
+                    return 68
+                }
+
+            }
+        }
 
         public init(id: UUID,
+                    emojiIcon: String,
                     notes: IdentifiedArrayOf<NoteFeature.State>,
                     title: String,
-                    inputText: MessageInputFeature.State = MessageInputFeature.State()) {
+                    inputText: MessageInputFeature.State = MessageInputFeature
+            .State(inputText: "",
+                   mode: .create(.purchaseList))) {
 
             self.id = id
+            self.emojiIcon = emojiIcon
             self.notes = notes
             self.title = title
-            self.inputText = inputText
+            self.inputField = inputText
         }
 
         public static func convert(from model: PurchaseModel) -> Self {
             return .init(id: model.id,
+                         emojiIcon: model.emojiIcon,
                          notes: .init(uniqueElements: model.notes.map(NoteFeature.State.convert(from:))),
                          title: model.title)
         }
+
     }
 
     public enum Action: BindableAction, Equatable {
+
         case addNote(String)
         case binding(BindingAction<State>)
         case checkAll
-        case duplicate(UUID)
         case delete(IndexSet)
-        case deleteNote(UUID)
         case draftListAction(PresentationAction<DraftListFeature.Action>)
+        case showConfirmationDialog(UUID)
 
         case delegate(Delegate)
         public enum Delegate: Equatable {
             case update(State)
         }
+        case onAppear
 
-        case edit(UUID)
         case inputTextAction(MessageInputFeature.Action)
         case notesAction(id: UUID, action: NoteFeature.Action)
         case move(IndexSet, Int)
         case scannerAction(PresentationAction<ScannerTCAFeature.Action>)
         case sortCompletedNotes
         case saveUpdatesAtList
+
+        case tapOnResizeButton
         case uncheckAll
         case update(note: UUID, text: String)
+        case contextMenuAction(ContextMenuAction)
+        case updateCounter
+
+        public enum ContextMenuAction: Equatable {
+            case edit(UUID)
+            case duplicate(UUID)
+            case deleteNote(UUID)
+        }
+
+        case confirmationDialog(PresentationAction<Action.ContextMenuAction>)
     }
 
     enum CancelID {
@@ -89,7 +187,7 @@ public struct PurchaseListFeature: Reducer {
             }
         }
 
-        Scope(state: \.inputText,
+        Scope(state: \.inputField,
               action: /Action.inputTextAction) {
             MessageInputFeature()
         }
@@ -97,17 +195,19 @@ public struct PurchaseListFeature: Reducer {
         Reduce { state, action in
 
             switch action {
-            case .binding:
-                return .none
             case .notesAction(id: _, action: .binding(\.$status)):
                 return notesAction()
+
+            case .onAppear:
+                state.viewMode = userDefaultsManager.listStateExpanded() ? .expand : .compact
+                return .none
 
             case let .addNote(text):
                 return addNewNote(with: text, state: &state)
 
             case let .delete(index):
                 state.notes.remove(atOffsets: index)
-                return .none
+                return saveUpdates(state: &state)
 
             case let .move(source, destination):
                 state.notes.move(fromOffsets: source, toOffset: destination)
@@ -123,8 +223,8 @@ public struct PurchaseListFeature: Reducer {
             case .notesAction:
                 return .none
 
-            case .inputTextAction:
-                return inputTextAction(state: &state, action: action)
+            case let .inputTextAction(value):
+                return inputTextAction(state: &state, action: value)
 
             case .saveUpdatesAtList:
                 return saveUpdates(state: &state)
@@ -138,34 +238,50 @@ public struct PurchaseListFeature: Reducer {
             case .draftListAction:
                 return draftListActionsAggregator(state: &state, action: action)
 
+            case .tapOnResizeButton:
+                state.viewMode = state.viewMode.invertedValue
+                userDefaultsManager.setListStateExpanded(state.viewMode == .expand)
+                return .none
+
             case .uncheckAll:
                 return uncheckedAll(state: &state)
+
             case .checkAll:
                 return checkAll(state: &state)
-            case let .duplicate(id):
-                guard let title = state.notes[id: id]?.title else {
-                    return .none
-                }
-
-                return
-                    .run { send in
-                        try await self.clock.sleep(for: .seconds(0.3))
-                        await send(.addNote(title))
-                    }
-
-            case let .deleteNote(id):
-                state.notes.remove(id: id)
-                return .none
-            case let .edit(id):
-                let text = state.notes[id: id]?.title ?? ""
-                state.inputText = MessageInputFeature.State(inputText: text, mode: .update(id))
-                return .send(.inputTextAction(.activateTextField))
             case let .update(note: note, text: text):
                 state.notes[id: note]?.title = text
                 return .send(.inputTextAction(.clearInput))
+            case .binding:
+                return .none
+
+            case let .contextMenuAction(localAction):
+                return contextMenuActions(state: &state, action: localAction)
+            case let .showConfirmationDialog(id):
+                state.confirmationDialog = ConfirmationDialogState(title: {
+                    TextState("")
+                }, actions: {
+                    return [ ButtonState(action: .edit(id)) {
+                                             TextState("Edit")
+                                         },
+                                         ButtonState(action: .duplicate(id)) {
+                                             TextState("Duplicate")
+                                         },
+                                         ButtonState(role: .destructive,
+                                                     action: .deleteNote(id)) {
+                                                         TextState("Delete")
+                                         }]
+                }
+                )
+                return .none
+            case let .confirmationDialog(localAction):
+                return confirmationDialog(state: &state, action: localAction)
+            case .updateCounter:
+                counterManager.updateCounter(state.counter)
+                return .none
             }
 
         }
+        .ifLet(\.$confirmationDialog, action: /Action.confirmationDialog)
         .ifLet(\.$scanPurchaseList,
                 action: /Action.scannerAction, destination: {
                     ScannerTCAFeature()
@@ -182,17 +298,56 @@ public struct PurchaseListFeature: Reducer {
 
     }
 
-    private func inputTextAction(state: inout State, action: Action) -> Effect<Action> {
+    private func confirmationDialog(state: inout State, action: PresentationAction<Action.ContextMenuAction>) -> Effect<Action> {
         switch action {
-        case let .inputTextAction(.tapOnActionButton(text, mode)):
+        case .dismiss:
+            return .none
+        case let .presented(localAction):
+            return contextMenuActions(state: &state, action: localAction)
+        }
+    }
+
+    private func contextMenuActions(state: inout State,
+                                    action: Action.ContextMenuAction) -> Effect<Action> {
+        switch action {
+        case let .duplicate(id):
+            guard let title = state.notes[id: id]?.title else {
+                return .none
+            }
+
+            return
+                .run { send in
+                    try await self.clock.sleep(for: .seconds(0.3))
+                    await send(.addNote(title))
+                    await send(.updateCounter)
+                }
+
+        case let .deleteNote(id):
+            state.notes.remove(id: id)
+            return .run { send in
+                await send(.updateCounter)
+                await send(.saveUpdatesAtList)
+            }
+        case let .edit(id):
+            let text = state.notes[id: id]?.title ?? ""
+            state.inputField = MessageInputFeature.State(inputText: text, mode: .update(id, .purchaseList))
+            return .send(.inputTextAction(.activateTextField))
+        }
+    }
+
+    private func inputTextAction(state: inout State,
+                                 action: MessageInputFeature.Action) -> Effect<Action> {
+        switch action {
+        case let .tapOnActionButton(text, mode):
             switch mode {
             case .create:
                 return Effect<Action>.send(.addNote(text))
-            case let .update(id):
-                return Effect<Action>.send(.update(note: id, text: text))
+            case let .update(id, _):
+                state.inputField = MessageInputFeature.State(inputText: "", mode: .create(.purchaseList))
+                return Effect<Action>.send(Action.update(note: id, text: text))
             }
 
-        case .inputTextAction(.tapOnScannerButton):
+        case .tapOnScannerButton:
             state.scanPurchaseList = ScannerTCAFeature.State()
             return .none
 
@@ -204,20 +359,9 @@ public struct PurchaseListFeature: Reducer {
     private func draftListActionsAggregator(state: inout State, action: Action) -> Effect<Action> {
         switch action {
         case let .draftListAction(.presented(.delegate(.addNewShoppingNotes(newItems)))):
-            state
-                .notes
-                .append(contentsOf: newItems
-                    .map {
-                        NoteModel(id: uuid(),
-                                  title: $0,
-                                  subtitle: nil,
-                                  isCompleted: false)
-                    }
-                    .map(NoteFeature.State.convert(from:))
-                )
-
+            let adoptedString = newItems.joined(separator: "\n")
             state.draftList = nil
-            return .send(.sortCompletedNotes)
+            return .send(.addNote(adoptedString))
 
         case .draftListAction(.presented(.delegate(.cancel))):
             state.draftList = nil
@@ -249,13 +393,7 @@ public struct PurchaseListFeature: Reducer {
     }
 
     private func saveUpdates(state: inout State) -> Effect<Action> {
-        let notes = state.notes.map { NoteModel(id: $0.id,
-                                                title: $0.title,
-                                                subtitle: $0.subTitle,
-                                                isCompleted: $0.status == .done) }
-        let model = PurchaseModel(id: state.id,
-                                  notes: notes,
-                                  title: state.title)
+        let model = state.purchaseModel
 
         return Effect<Action>.merge(
             Effect<Action>.run { _ in
@@ -278,17 +416,16 @@ public struct PurchaseListFeature: Reducer {
             .compactMap {
             NoteFeature.State(id: uuid(),
                                         title: $0,
-                                        subTitle: nil,
                                         status: .new)
         }
 
         state.notes.insert(contentsOf: notes, at: 0)
-
-        return Effect<Action>
-            .merge(
-                .send(.sortCompletedNotes),
-                .send(.inputTextAction(.clearInput))
-            )
+        return .run { send in
+//            await ChangeOrderTip.counter.donate()
+            await send(.updateCounter)
+            await send(.sortCompletedNotes)
+            await send(.inputTextAction(.clearInput))
+        }
     }
 
     private func uncheckedAll(state: inout State) -> Effect<Action> {
@@ -317,6 +454,7 @@ public struct PurchaseListFeature: Reducer {
 
     private func notesAction() -> Effect<Action> {
         return .run { send in
+            await send(.updateCounter)
             try await self.clock.sleep(for: .seconds(0.3))
             await send(.sortCompletedNotes,
                        animation: Animation.easeInOut(duration: 0.5))
@@ -324,8 +462,11 @@ public struct PurchaseListFeature: Reducer {
         .cancellable(id: CancelID.noteCompletion, cancelInFlight: true)
     }
 
-    public static let demo: State = .init(id: UUID(), notes: [
-        .demo
-    ], title: "Demo Notes")
+    public static let demo: State = .init(id: UUID(),
+                                          emojiIcon: EmojisDB.randomEmoji(),
+                                          notes: [
+        .demo,
+        .init(id: UUID(), title: "Vine", status: .new)
+    ], title: "Demo")
 
 }

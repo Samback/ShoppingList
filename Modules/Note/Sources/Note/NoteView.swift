@@ -7,51 +7,56 @@
 
 import SwiftUI
 import ComposableArchitecture
+import Theme
 
 extension NoteFeature.Status {
 
     var color: Color {
         switch self {
         case .new:
-            return .black
+            return ColorTheme.live().primary
         case .done:
-            return .green
+            return ColorTheme.live().secondary
         }
     }
 
-    var imageName: String {
+    var imageColor: Color {
         switch self {
         case .new:
-            return "plus"
+            return ColorTheme.live().secondary
         case .done:
-            return "checkmark"
+            return ColorTheme.live().accent
+        }
+    }
+
+    var image: Image {
+        switch self {
+        case .new:
+            return Image(.todo).renderingMode(.template)
+        case .done:
+            return Image(.done).renderingMode(.template)
         }
     }
 }
 
-struct ActionButtonModifier: ViewModifier {
+struct PrefixTitleModifier: ViewModifier {
+
     let status: NoteFeature.Status
-
     func body(content: Content) -> some View {
-        ZStack {
-            content
-            Circle()
-                .stroke(lineWidth: 3)
-                .padding(10)
-            Image(systemName: status.imageName)
-                .font(.body)
-        }
-        .foregroundColor(status.color)
+        content
+            .foregroundColor(status.color)
+            .font(.system(size: 22, weight: .semibold))
     }
+
 }
 
-#Preview {
-    HStack {
-        Text(" ")
-            .modifier(ActionButtonModifier(status: .done))
-        Text(" ")
-            .modifier(ActionButtonModifier(status: .new))
+struct SuffixTitleModifier: ViewModifier {
 
+    let status: NoteFeature.Status
+    func body(content: Content) -> some View {
+        content
+            .foregroundColor(status.color)
+            .font(.system(size: 22, weight: .regular))
     }
 }
 
@@ -66,41 +71,41 @@ public struct NoteView: View {
         WithViewStore(self.store,
                       observe: { $0 },
                       content: { viewStore in
-            HStack(spacing: 0) {
-                Button(action: {
-                    viewStore.$status.wrappedValue.toggle()
-                }, label: {
-                    Image(systemName: viewStore.status.imageName)
-                        .modifier(ActionButtonModifier(status: viewStore.status))
-                })
-                .frame(width: 44, height: 44)
-                .buttonStyle(.plain)
 
-                VStack(alignment: .leading, spacing: 0) {
-                    textView(viewStore.title)
-                        .foregroundStyle(viewStore.status.color)
-                    if !(viewStore.subTitle?.isEmpty ?? true) {
-                        Text(viewStore.subTitle ?? "")
-                            .foregroundStyle(viewStore.status.color.opacity(0.5))
-                    }
+            VStack(spacing: 0) {
+                Spacer()
+                Spacer()
+                HStack(spacing: 0) {
+                    Text(viewStore.titlePrefix)
+                        .modifier(PrefixTitleModifier(status: viewStore.status))
+                    Text(viewStore.titleSuffix)
+                        .modifier(SuffixTitleModifier(status: viewStore.status))
+
+                    Spacer()
+                    viewStore.status
+                        .image
+                        .foregroundColor(viewStore.status.imageColor)
+                        .padding(.trailing, 24)
                 }
-                .padding(.leading, 10)
+                .frame(maxWidth: .infinity)
+                Spacer()
             }
-        })
-    }
+            .contentShape(Rectangle())
+            .onTapGesture {
+                viewStore.$status.wrappedValue.toggle()
+            }
 
-    private func textView(_ text: String) -> some View {
-        HStack(spacing: 0) {
-            Text(String(text.prefix(3))).font(.system(size: 22, weight: .semibold))
-            Text(String(text.dropFirst(3))).font(.system(size: 22, weight: .regular))
-        }
+        })
     }
 
 }
 
 #Preview {
-    NoteView(store: StoreOf<NoteFeature>(initialState: .demo,
-                                         reducer: {
-        NoteFeature()
-    }))
+    VStack {
+        NoteView(store: StoreOf<NoteFeature>(initialState: .demo,
+                                             reducer: {
+            NoteFeature()
+        }))
+        .frame(height: 52)
+    }
 }
