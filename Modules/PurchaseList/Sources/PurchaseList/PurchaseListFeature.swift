@@ -207,7 +207,7 @@ public struct PurchaseListFeature: Reducer {
 
             case let .delete(index):
                 state.notes.remove(atOffsets: index)
-                return .none
+                return saveUpdates(state: &state)
 
             case let .move(source, destination):
                 state.notes.move(fromOffsets: source, toOffset: destination)
@@ -324,7 +324,10 @@ public struct PurchaseListFeature: Reducer {
 
         case let .deleteNote(id):
             state.notes.remove(id: id)
-            return .send(.updateCounter)
+            return .run { send in
+                await send(.updateCounter)
+                await send(.saveUpdatesAtList)
+            }
         case let .edit(id):
             let text = state.notes[id: id]?.title ?? ""
             state.inputField = MessageInputFeature.State(inputText: text, mode: .update(id, .purchaseList))
