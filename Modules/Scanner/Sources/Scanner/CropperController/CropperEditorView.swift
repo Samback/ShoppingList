@@ -11,15 +11,18 @@ import Combine
 import ZImageCropper
 import SnapKit
 
-class CropperEditorView: UIView {
+final class CropperEditorView: UIView {
 
+    private let workingArea = UIView()
     private var cornerViews = [CornerView]()
-    private var cancellable = Set<AnyCancellable>()
+
     private var shapeLayer = CAShapeLayer()
     private let imageView = UIImageView()
-    private let workingArea = UIView()
+
     private let shadowArea = UIView()
     private let shadowLayer = CAShapeLayer()
+
+    private var cancellable = Set<AnyCancellable>()
 
     public func attachImage(_ image: UIImage) {
         imageView.image = image

@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 
-class CropperViewController: UIViewController {
+final class CropperViewController: UIViewController {
 
-    static func instantiate(with image: UIImage) -> CropperViewController {
+    static func makeViewController(with image: UIImage) -> CropperViewController {
         let viewController = CropperViewController(nibName: nil, bundle: nil)
         viewController.cropperImage.attachImage(image)
         return viewController
@@ -21,11 +21,13 @@ class CropperViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         setupUI()
     }
 
     private func setupUI() {
         view.addSubview(cropperImage)
+
         cropperImage.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -33,6 +35,7 @@ class CropperViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
         cropperImage.redrawFrame()
     }
 

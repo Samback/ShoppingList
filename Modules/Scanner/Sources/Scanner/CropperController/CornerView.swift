@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import Combine
 
-class CornerView: UIView {
+final class CornerView: UIView {
 
     let subject = PassthroughSubject<String, Never>()
     let coordinateObserver = CurrentValueSubject<CGPoint, Never>(.zero)
@@ -14,21 +14,23 @@ class CornerView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        coordinateObserver.value = frame.origin
-        attachedGesture()
-        addCircle()
-        addSubscriber()
+        initialSetup()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        
+
+        initialSetup()
+    }
+
+    private func initialSetup() {
         attachedGesture()
         addCircle()
         addSubscriber()
     }
 
     private func addSubscriber() {
+        coordinateObserver.value = frame.origin
         coordinateObserver
             .debounce(for: .seconds(0.1), scheduler: DispatchQueue.main)
             .sink { [weak self] point in
@@ -41,11 +43,11 @@ class CornerView: UIView {
 
     private func addCircle() {
         addSubview(circleView)
+
         circleView.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.width.height.equalTo(radius * 2)
         }
-
 
         circleView.layer.cornerRadius = radius
         circleView.layer.borderWidth = 2
@@ -54,6 +56,7 @@ class CornerView: UIView {
 
     private func attachedGesture() {
         isUserInteractionEnabled = true
+
         gesture = UIPanGestureRecognizer(target: self, action: #selector(handler(gesture:)))
         gesture.maximumNumberOfTouches = 1
         addGestureRecognizer(gesture)
@@ -65,6 +68,7 @@ class CornerView: UIView {
         let draggedView = gesture.view
         draggedView?.center = location
         coordinateObserver.send(location)
+
         UIView.animate(withDuration: 0.2) {
             self.transform = CGAffineTransform(scaleX: 2, y: 2)
         }
