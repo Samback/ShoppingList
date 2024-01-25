@@ -9,7 +9,8 @@ import UIKit
 
 extension UIView {
 
-    static func spacer(size: CGFloat = .greatestFiniteMagnitude, for layout: NSLayoutConstraint.Axis = .horizontal) -> UIView {
+    static func spacer(size: CGFloat = .greatestFiniteMagnitude,
+                       for layout: NSLayoutConstraint.Axis = .horizontal) -> UIView {
         let spacer = UIView()
         // maximum width constraint
         let spacerWidthConstraint = spacer.widthAnchor.constraint(equalToConstant: size) // or some very high constant

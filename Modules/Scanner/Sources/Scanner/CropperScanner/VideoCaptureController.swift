@@ -15,8 +15,7 @@ protocol VideoCaptureControllerDelegate {
     func capturedImage(_ image: UIImage)
 }
 
-class VideoCaptureController: UIViewController {
-
+extension VideoCaptureController {
     enum TorchState {
         case enabled
         case disabled
@@ -49,6 +48,20 @@ class VideoCaptureController: UIViewController {
 
         }
     }
+}
+
+
+extension VideoCaptureController {
+    static func instantiate(with delegate: VideoCaptureControllerDelegate?) -> VideoCaptureController {
+        let viewController = VideoCaptureController(nibName: nil, bundle: nil)
+        viewController.view.backgroundColor = .white
+        viewController.delegate = delegate
+        return viewController
+    }
+}
+
+
+final class VideoCaptureController: UIViewController {
 
     var delegate: VideoCaptureControllerDelegate?
 
@@ -56,12 +69,6 @@ class VideoCaptureController: UIViewController {
     private let photoOutput = AVCapturePhotoOutput()
     private let torchButton = UIButton()
 
-    static func instantiate(with delegate: VideoCaptureControllerDelegate?) -> VideoCaptureController {
-        let viewController = VideoCaptureController(nibName: nil, bundle: nil)
-        viewController.view.backgroundColor = .white
-        viewController.delegate = delegate
-        return viewController
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -125,7 +132,9 @@ class VideoCaptureController: UIViewController {
                                      delegate: self)
         }
     }
+}
 
+extension VideoCaptureController {
     private func openCamera() {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized: // the user has already authorized to access the camera.
@@ -176,11 +185,11 @@ class VideoCaptureController: UIViewController {
             }
 
             let cameraLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-            cameraLayer.frame = self.view.frame
-            cameraLayer.videoGravity = .resizeAspectFill
+            cameraLayer.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - 80)
+//            self.view.frame
+            cameraLayer.videoGravity = .resize
             self.view.layer.addSublayer(cameraLayer)
 
-            captureSession.startRunning()
             DispatchQueue.global(qos: .background).async {
                 captureSession.startRunning()
             }
@@ -188,8 +197,6 @@ class VideoCaptureController: UIViewController {
         }
     }
 }
-
-
 
 
 extension VideoCaptureController: AVCapturePhotoCaptureDelegate {
