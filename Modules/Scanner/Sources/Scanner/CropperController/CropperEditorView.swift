@@ -151,7 +151,6 @@ final class CropperEditorView: UIView {
 
     }
 
-
     func redrawFrame() {
         let points = updateCorners()
         drawFrame(orderedPoints: points)
@@ -188,8 +187,6 @@ final class CropperEditorView: UIView {
     }
 }
 
-
-
 #Preview {
     let corner = CropperEditorView(frame: CGRect(x: 0,
                                                  y: 0,
@@ -203,4 +200,3 @@ final class CropperEditorView: UIView {
 
     return view
 }
-

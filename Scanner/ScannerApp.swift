@@ -12,7 +12,7 @@ import ComposableArchitecture
 @main
 struct ScannerApp: App {
     var body: some Scene {
-        WindowGroup { 
+        WindowGroup {
             TestView()
         }
     }

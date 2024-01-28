@@ -76,12 +76,10 @@ public struct PurchaseList: View {
                 viewController.setupCustomBigTitleRepresentation(counter: viewStore.counter)
 
             }
+
             .sheet(store: self.store.scope(state: \.$scanPurchaseList,
                                            action: {.scannerAction($0)}),
-                   content: ScannerTCA.init)
-            .sheet(store: self.store.scope(state: \.$draftList,
-                                           action: {.draftListAction($0)}),
-                   content: DraftList.init)
+                   content: ScannerView.init)
             .confirmationDialog(store: self.store.scope(state: \.$confirmationDialog,
                                                         action: { .confirmationDialog($0) }))
             .enableInjection()

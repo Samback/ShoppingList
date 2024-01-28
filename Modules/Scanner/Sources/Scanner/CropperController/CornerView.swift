@@ -33,7 +33,7 @@ final class CornerView: UIView {
         coordinateObserver.value = frame.origin
         coordinateObserver
             .debounce(for: .seconds(0.1), scheduler: DispatchQueue.main)
-            .sink { [weak self] point in
+            .sink { [weak self] _ in
                 UIView.animate(withDuration: 0.2) {
                     self?.transform = CGAffineTransform(scaleX: 1, y: 1)
                 }
@@ -61,7 +61,6 @@ final class CornerView: UIView {
         gesture.maximumNumberOfTouches = 1
         addGestureRecognizer(gesture)
     }
-
 
     @objc func handler(gesture: UIPanGestureRecognizer) {
         let location = gesture.location(in: superview)

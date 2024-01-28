@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 
-
 final class CropperViewController: UIViewController {
 
     static func makeViewController(with image: UIImage) -> CropperViewController {

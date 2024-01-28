@@ -55,8 +55,7 @@ public struct PurchaseListFeature: Reducer {
         var activityView: UIView?
 
         public var inputField: MessageInputFeature.State
-        @PresentationState public var scanPurchaseList: ScannerTCAFeature.State?
-        @PresentationState public var draftList: DraftListFeature.State?
+        @PresentationState public var scanPurchaseList: ScannerFeature.State?
         @BindingState public var viewMode: ViewMode = .expand
         @PresentationState public var confirmationDialog: ConfirmationDialogState<Action.ContextMenuAction>?
 
@@ -139,7 +138,6 @@ public struct PurchaseListFeature: Reducer {
         case binding(BindingAction<State>)
         case checkAll
         case delete(IndexSet)
-        case draftListAction(PresentationAction<DraftListFeature.Action>)
         case showConfirmationDialog(UUID)
 
         case delegate(Delegate)
@@ -151,7 +149,7 @@ public struct PurchaseListFeature: Reducer {
         case inputTextAction(MessageInputFeature.Action)
         case notesAction(id: UUID, action: NoteFeature.Action)
         case move(IndexSet, Int)
-        case scannerAction(PresentationAction<ScannerTCAFeature.Action>)
+        case scannerAction(PresentationAction<ScannerFeature.Action>)
         case sortCompletedNotes
         case saveUpdatesAtList
 
@@ -235,9 +233,6 @@ public struct PurchaseListFeature: Reducer {
             case .scannerAction:
                 return scannerActionsAggregator(state: &state, action: action)
 
-            case .draftListAction:
-                return draftListActionsAggregator(state: &state, action: action)
-
             case .tapOnResizeButton:
                 state.viewMode = state.viewMode.invertedValue
                 userDefaultsManager.setListStateExpanded(state.viewMode == .expand)
@@ -284,12 +279,7 @@ public struct PurchaseListFeature: Reducer {
         .ifLet(\.$confirmationDialog, action: /Action.confirmationDialog)
         .ifLet(\.$scanPurchaseList,
                 action: /Action.scannerAction, destination: {
-                    ScannerTCAFeature()
-        })
-        .ifLet(\.$draftList,
-                action: /Action.draftListAction,
-                destination: {
-                    DraftListFeature()
+                    ScannerFeature()
         })
         .forEach(\.notes,
                   action: /Action.notesAction) {
@@ -348,23 +338,7 @@ public struct PurchaseListFeature: Reducer {
             }
 
         case .tapOnScannerButton:
-            state.scanPurchaseList = ScannerTCAFeature.State()
-            return .none
-
-        default:
-            return .none
-        }
-    }
-
-    private func draftListActionsAggregator(state: inout State, action: Action) -> Effect<Action> {
-        switch action {
-        case let .draftListAction(.presented(.delegate(.addNewShoppingNotes(newItems)))):
-            let adoptedString = newItems.joined(separator: "\n")
-            state.draftList = nil
-            return .send(.addNote(adoptedString))
-
-        case .draftListAction(.presented(.delegate(.cancel))):
-            state.draftList = nil
+            state.scanPurchaseList = ScannerFeature.State()
             return .none
 
         default:
@@ -374,22 +348,16 @@ public struct PurchaseListFeature: Reducer {
 
     private func scannerActionsAggregator(state: inout State, action: Action) -> Effect<Action> {
         switch action {
-        case let .scannerAction(.presented(.delegate(.texts(.success(texts))))):
+        case .scannerAction(.presented(.binding(\ScannerFeature.State.$texts))):
+            let adoptedString = state.scanPurchaseList?.texts.joined(separator: "\n") ?? ""
             state.scanPurchaseList = nil
-            let sanitized = TextSanitizer.sanitize(texts)
-            state.draftList = DraftListFeature
-                .State(rawList: sanitized)
-            return .none
-        case .scannerAction(.presented(.delegate(.canceled))):
-            state.scanPurchaseList = nil
-            return .none
-        case .scannerAction(.presented(.delegate(.closed))):
+            return .send(.addNote(adoptedString))
+        case .scannerAction(.presented(.binding(\ScannerFeature.State.$isPresented))):
             state.scanPurchaseList = nil
             return .none
         default:
             return .none
         }
-
     }
 
     private func saveUpdates(state: inout State) -> Effect<Action> {

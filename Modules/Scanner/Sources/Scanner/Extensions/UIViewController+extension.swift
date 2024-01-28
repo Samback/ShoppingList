@@ -21,7 +21,7 @@ public extension UIViewController {
         addChild(childController)
 
         containerView.addSubview(childController.view)
-        
+
         switch sizing {
         case .equalToSuperviewWithInsets(let inset):
             childController

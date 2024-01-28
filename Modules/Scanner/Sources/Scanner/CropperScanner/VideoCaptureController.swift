@@ -50,7 +50,6 @@ extension VideoCaptureController {
     }
 }
 
-
 extension VideoCaptureController {
     static func instantiate(with delegate: VideoCaptureControllerDelegate?) -> VideoCaptureController {
         let viewController = VideoCaptureController(nibName: nil, bundle: nil)
@@ -60,7 +59,6 @@ extension VideoCaptureController {
     }
 }
 
-
 final class VideoCaptureController: UIViewController {
 
     var delegate: VideoCaptureControllerDelegate?
@@ -68,7 +66,6 @@ final class VideoCaptureController: UIViewController {
     private var torchState: TorchState = .disabled
     private let photoOutput = AVCapturePhotoOutput()
     private let torchButton = UIButton()
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,7 +97,6 @@ final class VideoCaptureController: UIViewController {
                 torchButton.setImage(self.torchState.image, for: .normal)
             }), for: .touchUpInside)
     }
-
 
     private func attachTakePhoto() {
         let takeAPhotoButton = UIButton()
@@ -197,7 +193,6 @@ extension VideoCaptureController {
         }
     }
 }
-
 
 extension VideoCaptureController: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput,

@@ -32,7 +32,7 @@ final class BottomViewController: UIViewController {
 
     fileprivate lazy var retakeButton: UIButton = {
         return makeButton(title: "Retake",
-                          alignment: .left,
+                          alignment: .center,
                           action:
                             UIAction { [weak self] _ in
             self?.delegate?.didTapRetake()}
@@ -65,7 +65,6 @@ final class BottomViewController: UIViewController {
         return button
     }
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -84,7 +83,6 @@ final class BottomViewController: UIViewController {
             make.top.equalToSuperview().offset(8)
         }
     }
-
 
     func setupFlow(_ flow: ScannerFlowController.FlowState) {
 
@@ -109,7 +107,6 @@ final class BottomViewController: UIViewController {
     }
 
 }
-
 
 extension BottomViewController {
     static func instantiate(delegate: BottomViewControllerDelegate) -> BottomViewController {

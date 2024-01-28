@@ -52,7 +52,7 @@ extension Collection where Element == CGPoint {
 }
 
 extension CGPoint {
-    
+
     func theta(anchor: CGPoint) -> Float {
       let dx = Float(x - anchor.x)
       let dy = Float(y - anchor.y)

@@ -41,7 +41,7 @@ public struct ScannerFlowView: UIViewControllerRepresentable {
 
         public func textsRecognised(_ texts: [String]) {
             parent.texts = texts
-            parent.isPresented = false
+            print("Parent texts \(parent.texts)")
         }
     }
 

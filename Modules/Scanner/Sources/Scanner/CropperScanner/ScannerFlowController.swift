@@ -47,7 +47,7 @@ final public class ScannerFlowController: UIViewController {
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupUI()
         activateFlow(.capture)
     }
@@ -66,7 +66,6 @@ final public class ScannerFlowController: UIViewController {
             make.height.equalTo(77)
             make.top.equalTo(topControllerContainer.snp.bottom)
         }
-
 
         attachChildViewController(childController: bottomViewController,
                                   containerView: bottomControllerContainer,

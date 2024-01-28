@@ -62,7 +62,7 @@ final class TextListViewController: UIViewController {
             let texts = await textRecognise()
             let sanitizedTexts = textSanitize(texts)
             let text = sanitizedTexts.joined(separator: "\n")
-            
+
             await MainActor.run {
                 self.textView.text = text
             }

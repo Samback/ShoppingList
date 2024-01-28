@@ -1,5 +1,5 @@
 //: A UIKit based Playground for presenting user interface
-  
+
 import UIKit
 import PlaygroundSupport
 
@@ -47,10 +47,7 @@ func grahamScan(points: [CGPoint]) -> [CGPoint] {
     return hull
 }
 
-
-
-
-class MyViewController : UIViewController {
+class MyViewController: UIViewController {
     override func loadView() {
         let view = UIView()
         view.backgroundColor = .white
@@ -59,10 +56,9 @@ class MyViewController : UIViewController {
         label.frame = CGRect(x: 150, y: 200, width: 200, height: 20)
         label.text = "Hello World!"
         label.textColor = .black
-        
+
         view.addSubview(label)
         self.view = view
-
 
         // Example usage
         let points: [CGPoint] = [
@@ -71,9 +67,8 @@ class MyViewController : UIViewController {
             CGPoint(x: 3, y: 3),
             CGPoint(x: 5, y: 3),
             CGPoint(x: 5, y: 1),
-            CGPoint(x: 4, y: 2),
+            CGPoint(x: 4, y: 2)
         ].map {CGPoint(x: $0.x * 50, y: $0.y * 50)}
-
 
         let convexHull = grahamScan(points: points)
         print("Convex Hull:", convexHull)
