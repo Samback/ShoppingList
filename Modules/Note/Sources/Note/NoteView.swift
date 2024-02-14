@@ -79,7 +79,8 @@ public struct NoteView: View {
                         .modifier(SuffixTitleModifier(status: store.status))
 
                     Spacer()
-                    store.status
+                    store
+                        .status
                         .image
                         .foregroundColor(store.status.imageColor)
                         .padding(.trailing, 24)

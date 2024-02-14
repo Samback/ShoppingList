@@ -48,6 +48,7 @@ public struct MessageInputFeature {
         }
     }
 
+    @ObservableState
     public struct State: Equatable {
 
         public init(inputText: String = "", mode: Mode = .create(.lists)) {
@@ -55,10 +56,10 @@ public struct MessageInputFeature {
             self.mode = mode
         }
 
-        @BindingState var inputText: String
+        var inputText: String
         let mode: Mode
 
-        @BindingState var focusedField: Field?
+        var focusedField: Field?
 
         public enum Field: String, Hashable {
           case inputMessage
