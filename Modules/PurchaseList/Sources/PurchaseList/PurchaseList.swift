@@ -78,10 +78,10 @@ public struct PurchaseList: View {
             }
 
             .sheet(store: self.store.scope(state: \.$scanPurchaseList,
-                                           action: {.scannerAction($0)}),
+                                           action: \.scannerAction),
                    content: ScannerView.init)
             .confirmationDialog(store: self.store.scope(state: \.$confirmationDialog,
-                                                        action: { .confirmationDialog($0) }))
+                                                        action: \.confirmationDialog))
             .enableInjection()
         })
 
@@ -104,7 +104,7 @@ public struct PurchaseList: View {
     @ViewBuilder
     private func inputView(with viewStore: ViewStoreOf<PurchaseListFeature>) -> some View {
         MessageInputView(store:
-                            self.store.scope(state: \.inputField, action: PurchaseListFeature.Action.inputTextAction))
+                            self.store.scope(state: \.inputField, action: \.inputTextAction))
     }
 
     @ViewBuilder

@@ -54,12 +54,12 @@ public struct ListManager: View {
                     Appearance.apply()
                 }
                 .sheet(store: self.store.scope(state: \.$emojisSelector,
-                                               action: { .emojisSelectorAction($0) }),
+                                               action: \.emojisSelectorAction),
                        content: EmojisView.init)
                 .confirmationDialog(store: self.store.scope(state: \.$confirmationDialog,
-                                                            action: { .confirmationDialog($0) }))
+                                                            action: \.confirmationDialog))
                 .navigationDestination(store: self.store.scope(state: \.$activePurchaseList,
-                                                               action: { .activePurchaseList($0) }),
+                                                               action: \.activePurchaseList),
                                        destination: PurchaseList.init)
             })
         }
@@ -148,7 +148,7 @@ public struct ListManager: View {
     @ViewBuilder
     private func inputView(with viewStore: ViewStoreOf<ListManagerFeature>) -> some View {
         MessageInputView(store:
-                            self.store.scope(state: \.inputField, action: ListManagerFeature.Action.inputFieldAction))
+                            self.store.scope(state: \.inputField, action: \.inputFieldAction))
     }
 
     @ViewBuilder
