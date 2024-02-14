@@ -195,7 +195,7 @@ public struct PurchaseListFeature {
         Reduce { state, action in
 
             switch action {
-            case .noteActions(.element(id: _, action: .binding(\.$status))):
+            case .noteActions(.element(id: _, action: .binding(\.status))):
                 return notesAction()
 
             case .onAppear:

@@ -29,10 +29,11 @@ public struct NoteFeature {
 
     }
 
+    @ObservableState
     public struct State: Equatable, Identifiable {
         public let id: UUID
-        @BindingState public var title: String
-        @BindingState public var status: Status
+        public var title: String
+        public var status: Status
 
         var titlePrefix: String {
             return String(title.prefix(3))
@@ -51,7 +52,7 @@ public struct NoteFeature {
                     status: Status) {
             self.id = id
             self.title = title
-            self._status = BindingState(wrappedValue: status)
+            self.status = status
         }
 
         public static func convert(from model: NoteModel) -> Self {

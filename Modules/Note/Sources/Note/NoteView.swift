@@ -61,30 +61,27 @@ struct SuffixTitleModifier: ViewModifier {
 }
 
 public struct NoteView: View {
-    let store: StoreOf<NoteFeature>
+    @Bindable var store: StoreOf<NoteFeature>
 
     public init(store: StoreOf<NoteFeature>) {
         self.store = store
     }
 
     public var body: some View {
-        WithViewStore(self.store,
-                      observe: { $0 },
-                      content: { viewStore in
 
             VStack(spacing: 0) {
                 Spacer()
                 Spacer()
                 HStack(spacing: 0) {
-                    Text(viewStore.titlePrefix)
-                        .modifier(PrefixTitleModifier(status: viewStore.status))
-                    Text(viewStore.titleSuffix)
-                        .modifier(SuffixTitleModifier(status: viewStore.status))
+                    Text(store.titlePrefix)
+                        .modifier(PrefixTitleModifier(status: store.status))
+                    Text(store.titleSuffix)
+                        .modifier(SuffixTitleModifier(status: store.status))
 
                     Spacer()
-                    viewStore.status
+                    store.status
                         .image
-                        .foregroundColor(viewStore.status.imageColor)
+                        .foregroundColor(store.status.imageColor)
                         .padding(.trailing, 24)
                 }
                 .frame(maxWidth: .infinity)
@@ -92,10 +89,8 @@ public struct NoteView: View {
             }
             .contentShape(Rectangle())
             .onTapGesture {
-                viewStore.$status.wrappedValue.toggle()
+                store.status.toggle()
             }
-
-        })
     }
 
 }
