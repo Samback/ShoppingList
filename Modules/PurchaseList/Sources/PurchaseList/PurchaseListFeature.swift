@@ -47,6 +47,7 @@ public struct PurchaseListFeature {
 
     public init() {}
 
+    @ObservableState
     public struct State: Equatable, Identifiable {
         public let id: UUID
         public var emojiIcon: String
@@ -54,12 +55,12 @@ public struct PurchaseListFeature {
         public var title: String = "Welcome"
 
         var activityView: UIView?
+        public var viewMode: ViewMode = .expand
 
         public var inputField: MessageInputFeature.State
-        @PresentationState public var scanPurchaseList: ScannerFeature.State?
-        @BindingState public var viewMode: ViewMode = .expand
-        @PresentationState public var confirmationDialog: ConfirmationDialogState<Action.ContextMenuAction>?
-
+        @Presents public var scanPurchaseList: ScannerFeature.State?
+        @Presents public var confirmationDialog: ConfirmationDialogState<Action.ContextMenuAction>?
+       
         public var purchaseModel: PurchaseModel {
             return  PurchaseModel(id: id,
                                   emojiIcon: emojiIcon,
