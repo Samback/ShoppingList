@@ -9,7 +9,8 @@ import Foundation
 import ComposableArchitecture
 import Models
 
-public struct NoteFeature: Reducer {
+@Reducer
+public struct NoteFeature {
 
     public init() {}
 
@@ -60,6 +61,7 @@ public struct NoteFeature: Reducer {
         }
     }
 
+    @CasePathable
     public enum Action: BindableAction, Equatable, Sendable {
         case binding(BindingAction<State>)
     }

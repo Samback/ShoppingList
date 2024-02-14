@@ -8,7 +8,8 @@
 import SwiftUI
 import ComposableArchitecture
 
-public struct ScannerFeature: Reducer {
+@Reducer
+public struct ScannerFeature {
 
     public init() {}
     public struct State: Equatable {
@@ -19,6 +20,7 @@ public struct ScannerFeature: Reducer {
         @BindingState public var texts: [String] = []
     }
 
+    @CasePathable
     public enum Action: Equatable, BindableAction {
         case binding(BindingAction<State>)
     }

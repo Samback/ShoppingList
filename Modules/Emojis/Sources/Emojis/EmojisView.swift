@@ -8,7 +8,8 @@ import Theme
 import MCEmojiPicker
 import ComposableArchitecture
 
-public struct EmojisFeature: Reducer {
+@Reducer
+public struct EmojisFeature {
 
     public init() {}
 
@@ -23,6 +24,7 @@ public struct EmojisFeature: Reducer {
         let id: UUID
     }
 
+    @CasePathable
     public enum Action: Equatable, BindableAction {
         case binding(BindingAction<State>)
         case emojiSaved(String, UUID)

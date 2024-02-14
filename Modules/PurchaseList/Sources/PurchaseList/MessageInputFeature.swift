@@ -9,10 +9,12 @@ import Foundation
 import ComposableArchitecture
 import SwiftUI
 
-public struct MessageInputFeature: Reducer {
+@Reducer
+public struct MessageInputFeature {
 
     public init() {}
 
+    @CasePathable
     public enum Action: BindableAction, Equatable, Sendable {
         case binding(BindingAction<State>)
         case tapOnActionButton(String, State.Mode)

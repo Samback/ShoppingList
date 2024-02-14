@@ -89,7 +89,7 @@ public struct ListManager: View {
                 self
                     .store
                     .scope(state: \.purchaseListCollection,
-                           action: ListManagerFeature.Action.listAction(id: action:))) { store in
+                           action: \.listActions)) { store in
                                store.withState { state in
                                    PurchaseListCell(purchaseModel: state.purchaseModel)
                                        .onTapGesture {

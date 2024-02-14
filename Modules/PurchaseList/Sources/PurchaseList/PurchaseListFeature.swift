@@ -37,7 +37,8 @@ extension PurchaseModel.Status {
      }
  }
 
-public struct PurchaseListFeature: Reducer {
+@Reducer
+public struct PurchaseListFeature {
     @Dependency(\.continuousClock) var clock
     @Dependency(\.uuid) var uuid
     @Dependency(\.dataManager) var dataManager
@@ -132,6 +133,7 @@ public struct PurchaseListFeature: Reducer {
 
     }
 
+    @CasePathable
     public enum Action: BindableAction, Equatable {
 
         case addNote(String)
@@ -147,7 +149,7 @@ public struct PurchaseListFeature: Reducer {
         case onAppear
 
         case inputTextAction(MessageInputFeature.Action)
-        case notesAction(id: UUID, action: NoteFeature.Action)
+        case noteActions(IdentifiedActionOf<NoteFeature>)
         case move(IndexSet, Int)
         case scannerAction(PresentationAction<ScannerFeature.Action>)
         case sortCompletedNotes
@@ -186,14 +188,14 @@ public struct PurchaseListFeature: Reducer {
         }
 
         Scope(state: \.inputField,
-              action: /Action.inputTextAction) {
+              action: \.inputTextAction) {
             MessageInputFeature()
         }
 
         Reduce { state, action in
 
             switch action {
-            case .notesAction(id: _, action: .binding(\.$status)):
+            case .noteActions(.element(id: _, action: .binding(\.$status))):
                 return notesAction()
 
             case .onAppear:
@@ -218,7 +220,7 @@ public struct PurchaseListFeature: Reducer {
                 state.notes.sort { $0.status == .new && $1.status == .done }
                 return saveUpdates(state: &state)
 
-            case .notesAction:
+            case .noteActions:
                 return .none
 
             case let .inputTextAction(value):
@@ -276,13 +278,13 @@ public struct PurchaseListFeature: Reducer {
             }
 
         }
-        .ifLet(\.$confirmationDialog, action: /Action.confirmationDialog)
+        .ifLet(\.$confirmationDialog, action: \.confirmationDialog)
         .ifLet(\.$scanPurchaseList,
-                action: /Action.scannerAction, destination: {
+                action: \.scannerAction, destination: {
                     ScannerFeature()
         })
         .forEach(\.notes,
-                  action: /Action.notesAction) {
+                  action: \.noteActions) {
             NoteFeature()
         }
 

@@ -115,7 +115,7 @@ public struct PurchaseList: View {
                 self
                     .store
                     .scope(state: \.notes,
-                           action: PurchaseListFeature.Action.notesAction(id:action:))) { itemStore in
+                           action: \.noteActions)) { itemStore in
                                NoteView(store: itemStore)
                                    .swipeActions {
                                        itemStore.withState { localState in

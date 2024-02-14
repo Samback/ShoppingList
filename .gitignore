@@ -97,3 +97,5 @@ fastlane/Appfile
 fastlane/Fastfile
 Modules/Playground/MyPlayground.playground/Contents.swift
 Modules/Playground/MyPlayground.playground/contents.xcplayground
+ShoppingList.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+ShoppingList.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
