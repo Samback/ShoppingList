@@ -107,11 +107,12 @@ public struct PurchaseList: View {
     private func listView() -> some View {
         List {
             //            TipView(ChangeOrderTip())
-            ForEachStore(
+            ForEach(
                 self
                     .store
                     .scope(state: \.notes,
-                           action: \.noteActions)) { itemStore in
+                           action: \.noteActions),
+                id: \.state.id) { itemStore in
                                NoteView(store: itemStore)
                                    .swipeActions {
                                        itemStore.withState { localState in
