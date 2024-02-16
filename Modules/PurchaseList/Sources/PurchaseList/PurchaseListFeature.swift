@@ -351,11 +351,11 @@ public struct PurchaseListFeature {
 
     private func scannerActionsAggregator(state: inout State, action: Action) -> Effect<Action> {
         switch action {
-        case .scannerAction(.presented(.binding(\ScannerFeature.State.$texts))):
+        case .scannerAction(.presented(.binding(\.texts))):
             let adoptedString = state.scanPurchaseList?.texts.joined(separator: "\n") ?? ""
             state.scanPurchaseList = nil
             return .send(.addNote(adoptedString))
-        case .scannerAction(.presented(.binding(\ScannerFeature.State.$isPresented))):
+        case .scannerAction(.presented(.binding(\.isPresented))):
             state.scanPurchaseList = nil
             return .none
         default:

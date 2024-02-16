@@ -12,12 +12,13 @@ import ComposableArchitecture
 public struct ScannerFeature {
 
     public init() {}
+    @ObservableState
     public struct State: Equatable {
 
         public init() {}
 
-        @BindingState public var isPresented: Bool = true
-        @BindingState public var texts: [String] = []
+        public var isPresented: Bool = true
+        public var texts: [String] = []
     }
 
     @CasePathable
@@ -30,9 +31,9 @@ public struct ScannerFeature {
 
         Reduce { state, action in
             switch action {
-            case .binding(\.$isPresented):
+            case .binding(\.isPresented):
                 print("Hide and sick \(state.isPresented)")
-            case .binding(\.$texts):
+            case .binding(\.texts):
                 print("Texts \(state.texts)")
             default:
                 break
@@ -45,24 +46,19 @@ public struct ScannerFeature {
 
 public struct ScannerView: View {
 
-    let store: StoreOf<ScannerFeature>
+    @Bindable var store: StoreOf<ScannerFeature>
 
     public init(store: StoreOf<ScannerFeature>) {
         self.store = store
     }
 
     public var body: some View {
-        WithViewStore(store,
-                      observe: { $0 },
-                      content: { viewStore in
             VStack {
-                ScannerFlowView(isPresented: viewStore.$isPresented,
-                                texts: viewStore.$texts)
+                ScannerFlowView(isPresented: $store.isPresented,
+                                texts: $store.texts)
                 .ignoresSafeArea(.container)
             }
             .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
-        })
-
     }
 }
 
