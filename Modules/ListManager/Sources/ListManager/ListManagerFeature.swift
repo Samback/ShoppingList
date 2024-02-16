@@ -26,10 +26,11 @@ public struct ListManagerFeature {
 
     public init() {}
 
+    @ObservableState
     public struct State: Equatable {
-        @PresentationState public var activePurchaseList: PurchaseListFeature.State?
-        @PresentationState var confirmationDialog: ConfirmationDialogState<Action.ContextMenuAction>?
-        @PresentationState public var emojisSelector: EmojisFeature.State?
+        @Presents public var activePurchaseList: PurchaseListFeature.State?
+        @Presents var confirmationDialog: ConfirmationDialogState<Action.ContextMenuAction>?
+        @Presents public var emojisSelector: EmojisFeature.State?
 
         public var inputField: MessageInputFeature.State
         var purchaseListCollection: IdentifiedArrayOf<PurchaseListFeature.State> = []
@@ -164,7 +165,9 @@ public struct ListManagerFeature {
 
             case .saveAccount:
                 state.account.list = state.purchaseListCollection.map(\.id)
-                return .run {[localState = state] _ in
+                let localState = state
+                //                 return .run {[localState = state] _ in
+                return .run { _ in
                     try await dataManager.saveAccount(localState.account)
                 }
 
