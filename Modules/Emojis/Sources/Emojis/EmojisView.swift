@@ -62,8 +62,9 @@ public struct EmojisView: View {
                 VStack(spacing: 0) {
                     emojiView($store.selectedEmoji.wrappedValue)
                     EmojiViewControllerRepresentable(selectedEmoji: $store.selectedEmoji)
+                        .background(ColorTheme.live().surface_1)
                 }
-                .background(ColorTheme.live().white)
+                .background(ColorTheme.live().surface_1)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     toolbarContent()
@@ -79,7 +80,7 @@ public struct EmojisView: View {
                 .font(.system(size: 34))
                 .background {
                     Circle()
-                        .fill(ColorTheme.live().surface)
+                        .fill(ColorTheme.live().surface_2)
                             .frame(width: 60, height: 60)
                               }
                 .frame(height: 60)

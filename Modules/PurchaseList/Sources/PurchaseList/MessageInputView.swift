@@ -14,19 +14,14 @@ import Tips
 
 // https://stackoverflow.com/questions/56610957/is-there-a-method-to-blur-a-background-in-swiftui
 
-struct VisualEffectView: UIViewRepresentable {
-    var effect: UIVisualEffect?
-    func makeUIView(context: UIViewRepresentableContext<Self>) -> UIVisualEffectView { UIVisualEffectView() }
-    func updateUIView(_ uiView: UIVisualEffectView, context: UIViewRepresentableContext<Self>) { uiView.effect = effect }
-}
-
 public struct MessageInputView: View {
     @Bindable var store: StoreOf<MessageInputFeature>
+    @Environment(\.colorScheme) var colorScheme
 
 //    private let scanTip = ScanTip()
 
     @ObserveInjection var inject
-
+    @State var id: UUID = UUID()
     @FocusState var focusedField: MessageInputFeature.State.Field?
 
     public init(store: StoreOf<MessageInputFeature>, focusedField: MessageInputFeature.State.Field? = nil) {
@@ -34,6 +29,7 @@ public struct MessageInputView: View {
         self.focusedField = focusedField
     }
     public var body: some View {
+
             ZStack(alignment: .bottom) {
 
                 HStack(spacing: 0) {
@@ -71,12 +67,11 @@ public struct MessageInputView: View {
                 .padding(.leading, 0)
             }
             .background {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(ColorTheme.live().surfaceSecondary)
-                    VisualEffectView(effect: UIBlurEffect(style: .light))
-                        .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-                }
+                VisualEffect(colorTint: ColorTheme.live().surface_3,
+                             colorTintAlpha: 0.2,
+                             blurRadius: 16,
+                             scale: 1)
+                .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
                 .clipShape(
                     .rect(
                         topLeadingRadius: 10,
@@ -99,7 +94,7 @@ public struct MessageInputView: View {
         .frame(maxWidth: .infinity)
         .background(
           RoundedRectangle(cornerRadius: 12)
-            .fill(ColorTheme.live().white)
+            .fill(ColorTheme.live().surface_1)
         )
 
     }
@@ -130,7 +125,7 @@ public struct MessageInputView: View {
         })
         .background {
             Circle()
-                .fill(ColorTheme.live().white)
+                .fill(ColorTheme.live().surface_1)
                 .frame(width: 40, height: 40)
         }
         .frame(width: 64, height: 64)
@@ -144,11 +139,11 @@ public struct MessageInputView: View {
                label: {
             store.mode.actionButtonImage
                 .frame(width: 22, height: 22)
-                .foregroundColor(ColorTheme.live().white)
+                .foregroundColor(ColorTheme.live().surface_1)
         })
         .background {
             RoundedRectangle(cornerRadius: 12)
-                .fill(store.isActionButtonEnabled ? ColorTheme.live().accent : ColorTheme.live().separator)
+                .fill(store.isActionButtonEnabled ? ColorTheme.live().accent : ColorTheme.live().surface_5)
                 .frame(width: 40, height: 40)
         }
         .frame(width: 64, height: 64)

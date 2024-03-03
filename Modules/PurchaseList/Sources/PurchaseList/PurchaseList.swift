@@ -69,6 +69,7 @@ public struct PurchaseList: View {
             print("ViewController \(viewController)")
             
             viewController.setupCustomBigTitleRepresentation(counter: store.counter)
+            viewController.setupBlurView()
             
         }
         
@@ -114,6 +115,7 @@ public struct PurchaseList: View {
                            action: \.noteActions),
                 id: \.state.id) { itemStore in
                                NoteView(store: itemStore)
+                        .background(ColorTheme.live().surface_1)
                                    .swipeActions {
                                        itemStore.withState { localState in
                                            HStack {
@@ -144,17 +146,20 @@ public struct PurchaseList: View {
                                            contextMenuItems(item: state)
                                        }
                                    }
+                                  
                                    .listRowInsets(.init(top: 0, leading: 24, bottom: 0, trailing: 0))
                                    .listRowSeparatorTint(ColorTheme.live().separator)
+                                   .listRowBackground(ColorTheme.live().surface_1)
                                    .frame(height: store.viewMode.height)
+                                  
                                
                            }
                            .onDelete { store.send(.delete($0))}
                            .onMove { store.send(.move($0, $1))}
                            .listSectionSeparator(.hidden, edges: .top)
-            
         }
         .listStyle(.plain)
+        .background(ColorTheme.live().surface_1)
         .environment(\.defaultMinListRowHeight, 10)
     }
     

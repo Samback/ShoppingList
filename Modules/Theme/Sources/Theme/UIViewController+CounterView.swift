@@ -11,8 +11,19 @@ import UIKit
 private var counterViewKey: UInt8 = 0
 private var titleViewKey: UInt8 = 1
 private var containerViewKey: UInt8 = 2
+private var backgroundBlureViewKey: UInt8 = 3
 
 public extension UIViewController {
+    var backgroundBlureView: VisualEffectView? {
+        get {
+            return objc_getAssociatedObject(self, &backgroundBlureViewKey) as? VisualEffectView
+        }
+        set(newValue) {
+            objc_setAssociatedObject(self, &backgroundBlureViewKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    
     var counterView: CounterView? {
         get {
             return objc_getAssociatedObject(self, &counterViewKey) as? CounterView
@@ -38,6 +49,41 @@ public extension UIViewController {
         set(newValue) {
             objc_setAssociatedObject(self, &containerViewKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
+    }
+    
+    func setupBlurView() {
+        guard let navigationBar = navigationController?.navigationBar.subviews[0] else {
+            return
+        }
+        
+        if (navigationController?.navigationBar.subviews[0].subviews.count)! > 1 {
+            return
+        }
+        let _backgroundBlureView = VisualEffectView()
+        _backgroundBlureView.colorTint = ColorTheme.live().surface_4.uiColor
+        _backgroundBlureView.colorTintAlpha = 0.2
+        _backgroundBlureView.blurRadius = 16
+        _backgroundBlureView.scale = 1
+        
+        backgroundBlureView = _backgroundBlureView
+        _backgroundBlureView.translatesAutoresizingMaskIntoConstraints = false
+        _backgroundBlureView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        _backgroundBlureView.frame = navigationBar.bounds
+//        navigationBar.addSubview(_backgroundBlureView)
+        navigationBar.insertSubview(_backgroundBlureView, at: 0)
+        _backgroundBlureView.layoutIfNeeded()
+        print("=================")
+        print("views \( navigationBar.subviews)")
+        print("=================")
+        
+        navigationBar.subviews.forEach {
+            if $0 is VisualEffectView {
+                
+            } else {
+                $0.isHidden = true
+            }
+        }
+
     }
 
     func setupCustomBigTitleRepresentation(counter: CounterView.Counter) {
@@ -77,7 +123,7 @@ public extension UIViewController {
 
     func createContainerView() -> UIView {
         let _containerView = UIView()
-        _containerView.backgroundColor = ColorTheme.live().white.uiColor
+        _containerView.backgroundColor = .clear//ColorTheme.live().surface_1.uiColor
         return _containerView
     }
 

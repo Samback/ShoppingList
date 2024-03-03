@@ -15,9 +15,10 @@ import SwiftUISplashScreen
 import Inject
 import Tips
 import TipKit
+import SwiftUIIntrospect
+import UIKit
 
 public struct ListManager: View {
-
     @Bindable var store: StoreOf<ListManagerFeature>
     @ObserveInjection var inject
 
@@ -45,10 +46,14 @@ public struct ListManager: View {
                     .background(.clear)
                 }
                 .navigationTitle("Pero lists")
-                .background(ColorTheme.live().white)
+                .background(ColorTheme.live().surface_1)
                 .onAppear {
-                    
                     Appearance.apply()
+                }
+                .introspect(.viewController, on: .iOS(.v17)) { viewController in
+                    print("viewController: \(viewController)")
+                    print("nav: \(viewController.navigationController)")
+                    viewController.setupBlurView()
                 }
                 .sheet(item: $store.scope(state: \.emojisSelector,
                                                action: \.emojisSelectorAction),
@@ -59,6 +64,7 @@ public struct ListManager: View {
                                                                action: \.activePurchaseList),
                                        destination: PurchaseList.init)
         }
+        
         .task {
             store.send(.initialLoad)
         }
@@ -68,6 +74,8 @@ public struct ListManager: View {
                 
             }
         }
+        
+        
         .enableInjection()
     }
 
@@ -97,7 +105,7 @@ public struct ListManager: View {
                            })
                            .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                            .listRowSeparatorTint(ColorTheme.live().separator)
-                           .listRowBackground(ColorTheme.live().white)
+                           .listRowBackground(ColorTheme.live().surface_1)
                            .listSectionSeparator(.hidden, edges: .top)
         }
         .overlay(content: {

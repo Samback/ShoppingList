@@ -19,7 +19,7 @@ import Emojis
 import Tips
 
 @Reducer
-public struct ListManagerFeature {
+public struct ListManagerFeature {    
     @Dependency(\.uuid) var uuid
     @Dependency(\.dataManager) var dataManager
     @Dependency(\.continuousClock) var clock

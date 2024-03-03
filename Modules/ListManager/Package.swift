@@ -21,7 +21,7 @@ let package = Package(
         .package(path: "../Utils"),
         .package(path: "../Emojis"),
         .package(path: "../Theme"),
-        .package(url: "https://github.com/globulus/swiftui-splash-screen", from: "1.0.0")
+        .package(url: "https://github.com/globulus/swiftui-splash-screen", from: "1.0.0")       
     ],
 
     targets: [

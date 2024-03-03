@@ -48,7 +48,7 @@ final class TextListViewController: UIViewController {
     }
 
     private func setupUI() {
-        view.backgroundColor = ColorTheme.live().white.uiColor
+        view.backgroundColor = ColorTheme.live().surface_1.uiColor
 
         view.addSubview(textView)
         textView.snp.makeConstraints { make in

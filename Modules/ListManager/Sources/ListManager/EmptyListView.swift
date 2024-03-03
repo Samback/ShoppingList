@@ -11,12 +11,13 @@ import Inject
 
 struct EmptyListView: View {
     @ObserveInjection var inject
+    @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
         VStack(spacing: 36) {
             Spacer()
 
-            Image(.emptylistLight)
+            Image(colorScheme == .light ? .emptylistLight : .emptylistDark)
             Text(
                 """
                 Tap “+” button below

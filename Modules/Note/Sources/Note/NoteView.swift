@@ -88,6 +88,7 @@ public struct NoteView: View {
                 .frame(maxWidth: .infinity)
                 Spacer()
             }
+                                   .background(ColorTheme.live().surface_1)
             .contentShape(Rectangle())
             .onTapGesture {
                 store.status.toggle()

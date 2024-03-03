@@ -8,12 +8,14 @@
 import Foundation
 import ComposableArchitecture
 import SwiftUI
+import Theme
 
 @Reducer
 public struct MessageInputFeature {
 
     public init() {}
-
+    
+    
     @CasePathable
     public enum Action: BindableAction, Equatable, Sendable {
         case binding(BindingAction<State>)
@@ -51,11 +53,13 @@ public struct MessageInputFeature {
     @ObservableState
     public struct State: Equatable {
 
-        public init(inputText: String = "", mode: Mode = .create(.lists)) {
+        public init(inputText: String = "",
+                    mode: Mode = .create(.lists)) {
+            
             self.inputText = inputText
             self.mode = mode
         }
-
+        
         var inputText: String
         let mode: Mode
 
@@ -80,7 +84,7 @@ public struct MessageInputFeature {
                     return Image(systemName: "plus")
                         .resizable()
                 case .update:
-                    return Image(.arrowUp)
+                    return Image(systemName:"checkmark")
                         .resizable()
                 }
             }

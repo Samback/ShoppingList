@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import SnapKit
+import Theme
 
 protocol BottomViewControllerDelegate {
     func didTapCancel()
@@ -62,6 +63,7 @@ final class BottomViewController: UIViewController {
         button.setTitle(title, for: .normal)
         button.contentHorizontalAlignment = alignment
         button.addAction(action, for: .touchUpInside)
+        button.setTitleColor(ColorTheme.live().accent.uiColor, for: .normal)
         return button
     }
 
