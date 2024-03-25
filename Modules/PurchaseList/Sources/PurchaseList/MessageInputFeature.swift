@@ -8,11 +8,15 @@
 import Foundation
 import ComposableArchitecture
 import SwiftUI
+import Theme
 
-public struct MessageInputFeature: Reducer {
+@Reducer
+public struct MessageInputFeature {
 
     public init() {}
-
+    
+    
+    @CasePathable
     public enum Action: BindableAction, Equatable, Sendable {
         case binding(BindingAction<State>)
         case tapOnActionButton(String, State.Mode)
@@ -46,17 +50,20 @@ public struct MessageInputFeature: Reducer {
         }
     }
 
+    @ObservableState
     public struct State: Equatable {
 
-        public init(inputText: String = "", mode: Mode = .create(.lists)) {
+        public init(inputText: String = "",
+                    mode: Mode = .create(.lists)) {
+            
             self.inputText = inputText
             self.mode = mode
         }
-
-        @BindingState var inputText: String
+        
+        var inputText: String
         let mode: Mode
 
-        @BindingState var focusedField: Field?
+        var focusedField: Field?
 
         public enum Field: String, Hashable {
           case inputMessage
@@ -77,7 +84,7 @@ public struct MessageInputFeature: Reducer {
                     return Image(systemName: "plus")
                         .resizable()
                 case .update:
-                    return Image(.arrowUp)
+                    return Image(systemName:"checkmark")
                         .resizable()
                 }
             }

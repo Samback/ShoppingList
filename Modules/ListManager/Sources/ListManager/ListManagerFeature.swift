@@ -18,17 +18,19 @@ import SwiftUI
 import Emojis
 import Tips
 
-public struct ListManagerFeature: Reducer {
+@Reducer
+public struct ListManagerFeature {    
     @Dependency(\.uuid) var uuid
     @Dependency(\.dataManager) var dataManager
     @Dependency(\.continuousClock) var clock
 
     public init() {}
 
+    @ObservableState
     public struct State: Equatable {
-        @PresentationState public var activePurchaseList: PurchaseListFeature.State?
-        @PresentationState var confirmationDialog: ConfirmationDialogState<Action.ContextMenuAction>?
-        @PresentationState public var emojisSelector: EmojisFeature.State?
+        @Presents public var activePurchaseList: PurchaseListFeature.State?
+        @Presents var confirmationDialog: ConfirmationDialogState<Action.ContextMenuAction>?
+        @Presents public var emojisSelector: EmojisFeature.State?
 
         public var inputField: MessageInputFeature.State
         var purchaseListCollection: IdentifiedArrayOf<PurchaseListFeature.State> = []
@@ -41,13 +43,14 @@ public struct ListManagerFeature: Reducer {
         }
     }
 
+    @CasePathable
     public enum Action {
         case initialLoad
         case activePurchaseList(PresentationAction <PurchaseListFeature.Action>)
         case contextMenuAction(ContextMenuAction)
         case emojisSelectorAction(PresentationAction<EmojisFeature.Action>)
         case inputFieldAction(MessageInputFeature.Action)
-        case listAction(id: UUID, action: PurchaseListFeature.Action)
+        case listActions(IdentifiedActionOf<PurchaseListFeature>)
         case listInteractionAction(ListInteractionAction)
         case loadedListResult(TaskResult<[PurchaseModel]>)
         case loadAccountResult(TaskResult<AccountModel>)
@@ -77,13 +80,13 @@ public struct ListManagerFeature: Reducer {
     public var body: some ReducerOf<Self> {
 
         Scope(state: \.inputField,
-              action: /Action.inputFieldAction) {
+              action: \.inputFieldAction) {
             MessageInputFeature()
         }
 
         Reduce { state, action in
             switch action {
-            case let .listAction(id, localAction):
+            case let .listActions(.element(id: id, action: localAction)):
                 return listActions(with: &state,
                                    id: id, action: localAction)
             case let .contextMenuAction(localAction):
@@ -162,7 +165,9 @@ public struct ListManagerFeature: Reducer {
 
             case .saveAccount:
                 state.account.list = state.purchaseListCollection.map(\.id)
-                return .run {[localState = state] _ in
+                let localState = state
+                //                 return .run {[localState = state] _ in
+                return .run { _ in
                     try await dataManager.saveAccount(localState.account)
                 }
 
@@ -175,18 +180,18 @@ public struct ListManagerFeature: Reducer {
             }
 
         }
-        .ifLet(\.$emojisSelector, action: /Action.emojisSelectorAction) {
+        .ifLet(\.$emojisSelector, action: \.emojisSelectorAction) {
             EmojisFeature()
         }
         .ifLet(\.$confirmationDialog,
-                action: /Action.confirmationDialog)
+                action: \.confirmationDialog)
         .ifLet(\.$activePurchaseList,
-                action: /Action.activePurchaseList,
+                action: \.activePurchaseList,
                 destination: {
             PurchaseListFeature()
         })
         .forEach(\.purchaseListCollection,
-                  action: /Action.listAction) {
+                  action: \.listActions) {
             PurchaseListFeature()
         }
     }
@@ -316,8 +321,8 @@ public struct ListManagerFeature: Reducer {
             }
 
             return .run { send in
-                    await send(.listAction(id: id,
-                                      action: purchaseState.purchaseModel.status == .inProgress ? .checkAll : .uncheckAll))
+                await send(.listActions(.element(id: id,
+                                      action: purchaseState.purchaseModel.status == .inProgress ? .checkAll : .uncheckAll)))
                 try await self.clock.sleep(for: .milliseconds(500))
                 await send(.sortList, animation: .interactiveSpring)
 

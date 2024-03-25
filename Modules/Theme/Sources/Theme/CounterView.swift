@@ -93,7 +93,7 @@ public class CounterView: UIView {
         }.store(in: &subscriptions)
 
         addSubview(backgroundView)
-        backgroundView.backgroundColor = ColorTheme.live().surface.uiColor
+        backgroundView.backgroundColor = ColorTheme.live().surface_2.uiColor
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
         backgroundView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
@@ -120,7 +120,8 @@ public class CounterView: UIView {
 
         layer.cornerRadius = defaultHeight / 2.0
         layer.masksToBounds = true
-        backgroundColor = ColorTheme.live().white.uiColor
+        backgroundColor = ColorTheme.live().surface_1.uiColor
+        
     }
 
     private func setValues(counter: Int, total: Int) {

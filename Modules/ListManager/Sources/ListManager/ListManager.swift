@@ -15,24 +15,21 @@ import SwiftUISplashScreen
 import Inject
 import Tips
 import TipKit
+import SwiftUIIntrospect
+import UIKit
 
 public struct ListManager: View {
-
-    let store: StoreOf<ListManagerFeature>
+    @Bindable var store: StoreOf<ListManagerFeature>
     @ObserveInjection var inject
 
     public init(store: StoreOf<ListManagerFeature>) {
         self.store = store
-        store.send(.initialLoad)
     }
 
     public var body: some View {
         NavigationStack {
-            WithViewStore(store,
-                          observe: { $0 },
-                          content: { viewStore in
                 ZStack {
-                    listView(with: viewStore)
+                    listView()
                         .background(.clear)
                         .ignoresSafeArea(.keyboard)
                         .safeAreaPadding(.top, 8)
@@ -42,77 +39,75 @@ public struct ListManager: View {
                     VStack {
                         Spacer()
 
-                        inputView(with: viewStore)
+                        inputView()
                             .padding(.bottom, -34)
                             .ignoresSafeArea(.keyboard)
                     }
                     .background(.clear)
                 }
                 .navigationTitle("Pero lists")
-                .background(ColorTheme.live().white)
+                .background(ColorTheme.live().surface_1)
                 .onAppear {
                     Appearance.apply()
                 }
-                .sheet(store: self.store.scope(state: \.$emojisSelector,
-                                               action: { .emojisSelectorAction($0) }),
+                .introspect(.viewController, on: .iOS(.v17)) { viewController in
+                    viewController.setupBlurView()
+                }
+                .sheet(item: $store.scope(state: \.emojisSelector,
+                                               action: \.emojisSelectorAction),
                        content: EmojisView.init)
-                .confirmationDialog(store: self.store.scope(state: \.$confirmationDialog,
-                                                            action: { .confirmationDialog($0) }))
-                .navigationDestination(store: self.store.scope(state: \.$activePurchaseList,
-                                                               action: { .activePurchaseList($0) }),
+                .confirmationDialog($store.scope(state: \.confirmationDialog,
+                                                            action: \.confirmationDialog))
+                .navigationDestination(item: $store.scope(state: \.activePurchaseList,
+                                                               action: \.activePurchaseList),
                                        destination: PurchaseList.init)
-            })
+        }
+        
+        .task {
+            store.send(.initialLoad)
         }
         .splashView(timeout: 1) {
             VStack {
                 SplashScreenView()
+                
             }
         }
+        
+        
         .enableInjection()
     }
 
-    private func toolBarView(with viewStore: ViewStoreOf<ListManagerFeature>) -> some ToolbarContent {
-        ToolbarItem(placement: .navigationBarTrailing) {
-            Button(action: {
-
-            }, label: {
-                Image(systemName: "plus")
-            })
-        }
-    }
 
     @ViewBuilder
-    private func listView(with viewStore: ViewStoreOf<ListManagerFeature>) -> some View {
+    private func listView() -> some View {
         List {
 //            TipView(OrganiseListTip())
-            ForEachStore(
+            ForEach(
                 self
                     .store
                     .scope(state: \.purchaseListCollection,
-                           action: ListManagerFeature.Action.listAction(id: action:))) { store in
-                               store.withState { state in
-                                   PurchaseListCell(purchaseModel: state.purchaseModel)
-                                       .onTapGesture {
-                                           viewStore.send(.openList(id: state.id))
-                                       }
-                                       .swipeActions(edge: .trailing) {
-                                           swipeButtons(with: viewStore, state: state)
-                                       }
-                                        .contextMenu {
-                                            contextMenu(with: viewStore, state: state)
-                                        }
-                               }
+                           action: \.listActions)) { localStore in
+                               PurchaseListCell(purchaseModel: localStore.state.purchaseModel)
+                                   .onTapGesture {
+                                       store.send(.openList(id: localStore.state.id))
+                                   }
+                                   .swipeActions(edge: .trailing) {
+                                       swipeButtons(state: localStore.state)
+                                   }
+                                   .contextMenu {
+                                       contextMenu(state: localStore.state)
+                                   }
                            }
                            .onMove(perform: { indices, newOffset in
-                               viewStore.send(.listInteractionAction(.move(indices, newOffset)))
+                               store.send(.listInteractionAction(.move(indices, newOffset)))
                            })
                            .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                            .listRowSeparatorTint(ColorTheme.live().separator)
-                           .listRowBackground(ColorTheme.live().white)
+                           .listRowBackground(ColorTheme.live().surface_1)
                            .listSectionSeparator(.hidden, edges: .top)
         }
         .overlay(content: {
-            if viewStore.purchaseListCollection.isEmpty {
+            if store.purchaseListCollection.isEmpty {
                 EmptyListView()
             }
         })
@@ -122,11 +117,11 @@ public struct ListManager: View {
     }
 
     @ViewBuilder
-    private func swipeButtons(with viewStore: ViewStoreOf<ListManagerFeature>, state: PurchaseListFeature.State) -> some View {
+    private func swipeButtons(state: PurchaseListFeature.State) -> some View {
         HStack {
             Button(
                 action: {
-                    viewStore
+                    store
                         .send(
                             .contextMenuAction(.delete(state.id)))
                 }, label: {
@@ -137,7 +132,7 @@ public struct ListManager: View {
             .tint(ColorTheme.live().destructive)
 
             Button(action: {
-                viewStore.send(.showConfirmationDialog(state.id))
+                store.send(.showConfirmationDialog(state.id))
             }, label: {
                 Text("Options")
             })
@@ -146,17 +141,17 @@ public struct ListManager: View {
     }
 
     @ViewBuilder
-    private func inputView(with viewStore: ViewStoreOf<ListManagerFeature>) -> some View {
+    private func inputView() -> some View {
         MessageInputView(store:
-                            self.store.scope(state: \.inputField, action: ListManagerFeature.Action.inputFieldAction))
+                            self.store.scope(state: \.inputField, action: \.inputFieldAction))
     }
 
     @ViewBuilder
-    private func contextMenu(with viewStore: ViewStoreOf<ListManagerFeature>, state: PurchaseListFeature.State) -> some View {
+    private func contextMenu(state: PurchaseListFeature.State) -> some View {
         VStack {
 
             Button(action: {
-                viewStore.send(.contextMenuAction(.rename(state.id)))
+                store.send(.contextMenuAction(.rename(state.id)))
             }, label: {
                 HStack {
                     Text("Rename")
@@ -166,7 +161,7 @@ public struct ListManager: View {
             })
 
             Button(action: {
-                viewStore
+                store
                     .send(.contextMenuAction(.selectEmoji(state.id)))
             }, label: {
                 HStack {
@@ -177,7 +172,7 @@ public struct ListManager: View {
             })
 
             Button(action: {
-                viewStore
+                store
                     .send(.contextMenuAction(.duplicate(state.id)))
             }, label: {
                 HStack {
@@ -196,7 +191,7 @@ public struct ListManager: View {
             }
 
             Button(action: {
-                viewStore
+                store
                     .send(.contextMenuAction(.mark(state.id)))
             }, label: {
                 HStack {
@@ -209,7 +204,7 @@ public struct ListManager: View {
             Divider()
 
             Button(role: .destructive, action: {
-                viewStore
+                store
                     .send(.contextMenuAction(.delete(state.id)))
             }, label: {
                 HStack {

@@ -1,91 +1,71 @@
+//
+//  SwiftUIView.swift
+//
+//
+//  Created by Max Tymchii on 26.01.2024.
+//
+
 import SwiftUI
-import VisionKit
-import Combine
+import ComposableArchitecture
 
-// https://medium.com/@mobile_44538/how-to-create-text-recognition-with-vision-framework-in-swift-459779bf3586
-// https://www.appcoda.com/swiftui-text-recognition/
+@Reducer
+public struct ScannerFeature {
 
-private struct ScannerViewActionKey: EnvironmentKey {
-  static let defaultValue = PassthroughSubject<ScannerView.Action, Never>()
-}
+    public init() {}
+    @ObservableState
+    public struct State: Equatable {
 
-// 2. Extend the environment with our property
-extension EnvironmentValues {
-  var scannerViewAction: PassthroughSubject<ScannerView.Action, Never> {
-    get { self[ScannerViewActionKey.self] }
-    set { self[ScannerViewActionKey.self] = newValue }
-  }
-}
+        public init() {}
 
-public struct ScannerView: UIViewControllerRepresentable {
-
-    public enum Action: Equatable {
-        case cancel
-        case result([UIImage])
-        case error
+        public var isPresented: Bool = true
+        public var texts: [String] = []
     }
 
-    @Environment(\.scannerViewAction) var actionPublisher: PassthroughSubject<ScannerView.Action, Never>
-
-    public func makeUIViewController(context: Context) -> some UIViewController {
-        let viewController = VNDocumentCameraViewController()
-
-        viewController.delegate = context.coordinator
-
-        return viewController
+    @CasePathable
+    public enum Action: Equatable, BindableAction {
+        case binding(BindingAction<State>)
     }
 
-    public func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+    public var body: some ReducerOf<Self> {
+        BindingReducer()
 
-    }
-
-    public func makeCoordinator() -> Coordinator {
-        Coordinator(scannerView: self)
-    }
-
-    public class Coordinator: NSObject {
-        var scannerView: ScannerView
-
-        init(scannerView: ScannerView) {
-            self.scannerView = scannerView
+        Reduce { state, action in
+            switch action {
+            case .binding(\.isPresented):
+                print("Hide and sick \(state.isPresented)")
+            case .binding(\.texts):
+                print("Texts \(state.texts)")
+            default:
+                break
+            }
+            return .none
         }
     }
 
 }
 
-extension ScannerView.Coordinator: VNDocumentCameraViewControllerDelegate {
-    public func documentCameraViewController(_ controller: VNDocumentCameraViewController,
-                                             didFinishWith scan: VNDocumentCameraScan) {
+public struct ScannerView: View {
 
-        scannerView
-            .actionPublisher
-            .send(
-                .result(
-                    (0..<scan.pageCount).compactMap(scan.imageOfPage)
-                )
-                )
+    @Bindable var store: StoreOf<ScannerFeature>
 
+    public init(store: StoreOf<ScannerFeature>) {
+        self.store = store
     }
 
-    public func documentCameraViewControllerDidCancel(_ controller: VNDocumentCameraViewController) {
-        print("documentCameraViewControllerDidCancel")
-        scannerView
-            .actionPublisher
-            .send(
-                .cancel)
+    public var body: some View {
+            VStack {
+                ScannerFlowView(isPresented: $store.isPresented,
+                                texts: $store.texts)
+                .ignoresSafeArea(.container)
+            }
+            .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
     }
-
-    public func documentCameraViewController(_ controller: VNDocumentCameraViewController,
-                                             didFailWithError error: Error) {
-        print("didFailWithError")
-        scannerView
-            .actionPublisher
-            .send(
-                .error)
-    }
-
 }
 
 #Preview {
-    UIHostingController(rootView: ScannerView())
+    ScannerView(store:
+            .init(initialState: ScannerFeature.State(),
+                  reducer: { ScannerFeature() }
+                 )
+    )
 }

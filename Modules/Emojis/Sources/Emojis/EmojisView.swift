@@ -8,10 +8,12 @@ import Theme
 import MCEmojiPicker
 import ComposableArchitecture
 
-public struct EmojisFeature: Reducer {
+@Reducer
+public struct EmojisFeature {
 
     public init() {}
 
+    @ObservableState
     public struct State: Equatable {
 
         public init(selectedEmoji: String, id: UUID) {
@@ -19,10 +21,11 @@ public struct EmojisFeature: Reducer {
             self.id = id
         }
 
-        @BindingState var selectedEmoji: String
+        var selectedEmoji: String
         let id: UUID
     }
 
+    @CasePathable
     public enum Action: Equatable, BindableAction {
         case binding(BindingAction<State>)
         case emojiSaved(String, UUID)
@@ -36,7 +39,7 @@ public struct EmojisFeature: Reducer {
             switch action {
             case .emojiSaved:
                 return .none
-            case .binding(\.$selectedEmoji):
+            case .binding(\.selectedEmoji):
                 return .none
             case .binding:
                 return .none
@@ -48,26 +51,25 @@ public struct EmojisFeature: Reducer {
 }
 
 public struct EmojisView: View {
-    public let store: StoreOf<EmojisFeature>
+    @Bindable public var store: StoreOf<EmojisFeature>
 
     public init(store: StoreOf<EmojisFeature>) {
         self.store = store
     }
 
     public var body: some View {
-        WithViewStore(store, observe: {$0}) { viewStore in
             NavigationStack {
                 VStack(spacing: 0) {
-                    emojiView(viewStore.$selectedEmoji.wrappedValue)
-                    EmojiViewControllerRepresentable(selectedEmoji: viewStore.$selectedEmoji)
+                    emojiView($store.selectedEmoji.wrappedValue)
+                    EmojiViewControllerRepresentable(selectedEmoji: $store.selectedEmoji)
+                        .background(ColorTheme.live().surface_1)
                 }
-                .background(ColorTheme.live().white)
+                .background(ColorTheme.live().surface_1)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
-                    toolbarContent(with: viewStore)
+                    toolbarContent()
                 }
             }
-        }
 
     }
 
@@ -78,7 +80,7 @@ public struct EmojisView: View {
                 .font(.system(size: 34))
                 .background {
                     Circle()
-                        .fill(ColorTheme.live().surface)
+                        .fill(ColorTheme.live().surface_2)
                             .frame(width: 60, height: 60)
                               }
                 .frame(height: 60)
@@ -88,11 +90,11 @@ public struct EmojisView: View {
 
     }
 
-    private func toolbarContent(with viewStore: ViewStoreOf<EmojisFeature>) -> some ToolbarContent {
+    private func toolbarContent() -> some ToolbarContent {
        return Group {
             ToolbarItem(placement: .topBarLeading) {
                 Button(action: {
-                    viewStore.send(.cancel)
+                    store.send(.cancel)
                 }, label: {
                     Text("Cancel")
                         .navigationActionButtonTitleModifier()
@@ -102,7 +104,7 @@ public struct EmojisView: View {
 
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: {
-                    viewStore.send(.emojiSaved(viewStore.selectedEmoji, viewStore.id))
+                    store.send(.emojiSaved(store.selectedEmoji, store.id))
                 }, label: {
                     Text("Save")
                         .navigationActionButtonTitleModifier()

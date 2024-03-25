@@ -24,77 +24,71 @@ import TipKit
 // https://kristaps.me/blog/swiftui-navigationview/
 
 public struct PurchaseList: View {
-
+    
     @ObserveInjection var inject
-
+    
     @Environment(\.presentationMode) var presentation
-
-    let store: StoreOf<PurchaseListFeature>
-
+    
+    @Bindable var store: StoreOf<PurchaseListFeature>
+    
     public init(store: StoreOf<PurchaseListFeature>) {
         self.store = store
     }
-
+    
     public var body: some View {
-
-        WithViewStore(store,
-                      observe: { $0 },
-                      content: { viewStore in
-            NavigationStack {
-                ZStack {
-                    listView(with: viewStore)
-                        .safeAreaPadding(.bottom, 86)
-                        .safeAreaPadding(.top, 16)
-                        .ignoresSafeArea(.keyboard)
-                        .background(.clear)
-                    VStack(spacing: 0) {
-                        Spacer()
-
-                        inputView(with: viewStore)
-                            .padding(.bottom, -34)
-                            .ignoresSafeArea(.keyboard)
-                    }
+        
+        NavigationStack {
+            ZStack {
+                listView()
+                    .safeAreaPadding(.bottom, 86)
+                    .safeAreaPadding(.top, 16)
+                    .ignoresSafeArea(.keyboard)
                     .background(.clear)
+                VStack(spacing: 0) {
+                    Spacer()
+                    
+                    inputView()
+                        .padding(.bottom, -34)
+                        .ignoresSafeArea(.keyboard)
                 }
-
                 .background(.clear)
             }
-
-            .onAppear {
-                Appearance.apply()
-                viewStore.send(.onAppear)
-            }
-            .scrollDismissesKeyboard(.immediately)
-            .navigationTitle(viewStore.title)
-            .toolbar(content: {
-                toolbarView(with: viewStore)
-            })
-
-            .introspect(.viewController, on: .iOS(.v17)) { viewController in
-                print("ViewController \(viewController)")
-
-                viewController.setupCustomBigTitleRepresentation(counter: viewStore.counter)
-
-            }
-            .sheet(store: self.store.scope(state: \.$scanPurchaseList,
-                                           action: {.scannerAction($0)}),
-                   content: ScannerTCA.init)
-            .sheet(store: self.store.scope(state: \.$draftList,
-                                           action: {.draftListAction($0)}),
-                   content: DraftList.init)
-            .confirmationDialog(store: self.store.scope(state: \.$confirmationDialog,
-                                                        action: { .confirmationDialog($0) }))
-            .enableInjection()
-        })
-
+            
+            .background(.clear)
+        }
+        
+        .onAppear {
+            Appearance.apply()
+            store.send(.onAppear)
+        }
+        .scrollDismissesKeyboard(.immediately)
+        .navigationTitle(store.title)
+        .toolbar(content: toolbarView)
+        
+        .introspect(.viewController, on: .iOS(.v17)) { viewController in
+            print("ViewController \(viewController)")
+            
+            viewController.setupCustomBigTitleRepresentation(counter: store.counter)
+            viewController.setupBlurView()
+            
+        }
+        
+        .sheet(store: self.store.scope(state: \.$scanPurchaseList,
+                                       action: \.scannerAction),
+               content: ScannerView.init)
+        .confirmationDialog(store: self.store.scope(state: \.$confirmationDialog,
+                                                    action: \.confirmationDialog))
+        .enableInjection()
     }
-
-    private func toolbarView(with viewStore: ViewStoreOf<PurchaseListFeature>) -> some ToolbarContent {
+    
+    private func toolbarView() -> some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             Button(action: {
-                viewStore.send(.tapOnResizeButton)
+                store
+                    .send(.tapOnResizeButton)
             }, label: {
-                viewStore.viewMode
+                store
+                    .viewMode
                     .invertedValue
                     .image
                     .renderingMode(.template)
@@ -102,41 +96,44 @@ public struct PurchaseList: View {
             })
         }
     }
-
+    
     @ViewBuilder
-    private func inputView(with viewStore: ViewStoreOf<PurchaseListFeature>) -> some View {
+    private func inputView() -> some View {
         MessageInputView(store:
-                            self.store.scope(state: \.inputField, action: PurchaseListFeature.Action.inputTextAction))
+                            self.store.scope(state: \.inputField,
+                                             action: \.inputTextAction))
     }
-
+    
     @ViewBuilder
-    private func listView(with viewStore: ViewStoreOf<PurchaseListFeature>) -> some View {
+    private func listView() -> some View {
         List {
-//            TipView(ChangeOrderTip())
-            ForEachStore(
+            //            TipView(ChangeOrderTip())
+            ForEach(
                 self
                     .store
                     .scope(state: \.notes,
-                           action: PurchaseListFeature.Action.notesAction(id:action:))) { itemStore in
+                           action: \.noteActions),
+                id: \.state.id) { itemStore in
                                NoteView(store: itemStore)
+                        .background(ColorTheme.live().surface_1)
                                    .swipeActions {
                                        itemStore.withState { localState in
                                            HStack {
                                                Button(
                                                 action: {
-                                                    viewStore
+                                                    store
                                                         .send(
                                                             .contextMenuAction(
-                                                            .deleteNote(localState.id)))
+                                                                .deleteNote(localState.id)))
                                                 }, label: {
                                                     HStack {
                                                         Text("Delete")
                                                     }
                                                 })
                                                .tint(ColorTheme.live().destructive)
-
+                                               
                                                Button(action: {
-                                                   viewStore.send(.showConfirmationDialog(localState.id))
+                                                   store.send(.showConfirmationDialog(localState.id))
                                                }, label: {
                                                    Text("Options")
                                                })
@@ -146,30 +143,32 @@ public struct PurchaseList: View {
                                    }
                                    .contextMenu {
                                        itemStore.withState { state in
-                                           contextMenuItems(with: viewStore, item: state)
+                                           contextMenuItems(item: state)
                                        }
                                    }
+                                  
                                    .listRowInsets(.init(top: 0, leading: 24, bottom: 0, trailing: 0))
                                    .listRowSeparatorTint(ColorTheme.live().separator)
-                                   .frame(height: viewStore.viewMode.height)
-
+                                   .listRowBackground(ColorTheme.live().surface_1)
+                                   .frame(height: store.viewMode.height)
+                                  
+                               
                            }
-                           .onDelete { viewStore.send(.delete($0))}
-                           .onMove { viewStore.send(.move($0, $1))}
+                           .onDelete { store.send(.delete($0))}
+                           .onMove { store.send(.move($0, $1))}
                            .listSectionSeparator(.hidden, edges: .top)
-
         }
         .listStyle(.plain)
+        .background(ColorTheme.live().surface_1)
         .environment(\.defaultMinListRowHeight, 10)
     }
-
+    
     @ViewBuilder
-    private func contextMenuItems(with viewStore: ViewStoreOf<PurchaseListFeature>,
-                                  item state: NoteFeature.State) -> some View {
+    private func contextMenuItems(item state: NoteFeature.State) -> some View {
         Group {
             Button(action: {
                 print("Tap on edit")
-            viewStore.send(.contextMenuAction(.edit(state.id)))
+                store.send(.contextMenuAction(.edit(state.id)))
             }, label: {
                 HStack {
                     Text("Edit")
@@ -177,10 +176,10 @@ public struct PurchaseList: View {
                     Image(systemName: "pencil")
                 }
             })
-
+            
             Button(action: {
                 print("Tap on duplicate")
-                viewStore.send(.contextMenuAction(.duplicate(state.id)))
+                store.send(.contextMenuAction(.duplicate(state.id)))
             }, label: {
                 HStack {
                     Text("Duplicate")
@@ -188,13 +187,13 @@ public struct PurchaseList: View {
                     Image(systemName: "doc.on.doc")
                 }
             })
-
+            
             Divider()
-
+            
             Button(
                 role: .destructive,
                 action: {
-                    viewStore.send(.contextMenuAction(.deleteNote(state.id)))
+                    store.send(.contextMenuAction(.deleteNote(state.id)))
                 }, label: {
                     HStack {
                         Text("Delete")

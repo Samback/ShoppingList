@@ -63,9 +63,9 @@ extension PurchaseModel.Status {
     var backgroundColor: Color {
         switch self {
         case .done:
-            return ColorTheme.live().surface
+            return ColorTheme.live().surface_1
         case .inProgress:
-            return ColorTheme.live().white
+            return ColorTheme.live().surface_1
         }
     }
 
@@ -91,7 +91,7 @@ struct PurchaseListCell: View {
                 .font(.system(size: 28, weight: .medium))
                 .background {
                     Circle()
-                        .fill(ColorTheme.live().surface)
+                        .fill(ColorTheme.live().surface_2)
                         .frame(width: 48, height: 48)
                 }
                 .padding(.leading, 24)
@@ -121,7 +121,7 @@ struct PurchaseListCell: View {
             .padding(.vertical, 4)
             .padding(.horizontal, 10)
             .background(Capsule()
-                .fill(ColorTheme.live().surface))
+                .fill(ColorTheme.live().surface_2))
             .padding(.trailing, 16)
 
         }
@@ -143,3 +143,5 @@ struct PurchaseListCell: View {
     .frame(maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
     .background(.black)
 }
+
+
