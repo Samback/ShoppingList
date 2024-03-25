@@ -54,8 +54,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 @main
 struct ShoppingListApp: App {
-   
-    @AppStorage("isDarkMode") var isDarkMode: Bool = false
+    @Dependency(\.userDefaultsManager) var userDefaultsManager
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
@@ -70,7 +69,7 @@ struct ShoppingListApp: App {
                                                   AnalyticsClient.merge(
                                                     .consoleLogger,
                                                     .firebaseClient))
-                                     ._printChanges()
+//                                     ._printChanges()
                              },
                              withDependencies: {
                                  $0.dataManager = DataManager.liveValue
@@ -79,17 +78,22 @@ struct ShoppingListApp: App {
             )
             .onAppear {
                 Firebase.Analytics.logEvent("ThisISATest", parameters: ["title": "AppDelegate"])
+            }
+            .task {
                 setupAppIcon()
-                
             }
         }
     }
     
-    private func setupAppIcon() {
-        let userInterfaceStyle = UITraitCollection.current.userInterfaceStyle
-        presetAppIcon(for: userInterfaceStyle)
-        
-        ColorManager.shared.$currentColorScheme.sink { userInterfaceStyle in
+    private func setupAppIcon() {        
+        ColorManager
+            .shared
+            .$currentColorScheme
+            .receive(on: DispatchQueue.main)
+            .throttle(for: .seconds(1),
+                      scheduler: DispatchQueue.main,
+                      latest: true)
+            .sink { userInterfaceStyle in
             presetAppIcon(for: userInterfaceStyle)
         }
         .store(in: &ColorManager.shared.cancellables)
@@ -100,24 +104,31 @@ struct ShoppingListApp: App {
         
         var title = "AppIcon"
         
-        var isNewModeLight = true
-        
         if userInterfaceStyle == .dark {
-            isNewModeLight = false
             title.append("-Dark")
         } else {
             title.append("-Light")
         }
+        print("Current user interface style: \(userInterfaceStyle.rawValue)")
+        print("Saved user interface style: \(userDefaultsManager.userInterfaceStyle().rawValue)")
         
-        if isNewModeLight != isDarkMode {
+        if userDefaultsManager.userInterfaceStyle() != userInterfaceStyle {
+            
             UIApplication.shared.setAlternateIconName(title) { (error) in
                 if let error = error {
                     print("Failed request to update the app’s icon: \(error) with Title: \(title)")
                 }
+                
+                userDefaultsManager.setUserInterfaceStyle(userInterfaceStyle)
+                print("Updated user interface style: \(userDefaultsManager.userInterfaceStyle().rawValue)")
             }
-            isDarkMode = isNewModeLight
+            
+            
+          
         }
+        
     }
+
     
     init() {
         

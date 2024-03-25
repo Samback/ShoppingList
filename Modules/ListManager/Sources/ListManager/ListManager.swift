@@ -51,8 +51,6 @@ public struct ListManager: View {
                     Appearance.apply()
                 }
                 .introspect(.viewController, on: .iOS(.v17)) { viewController in
-                    print("viewController: \(viewController)")
-                    print("nav: \(viewController.navigationController)")
                     viewController.setupBlurView()
                 }
                 .sheet(item: $store.scope(state: \.emojisSelector,

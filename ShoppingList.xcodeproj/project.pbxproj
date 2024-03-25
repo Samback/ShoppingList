@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		24C30C762BADCF2700AC0028 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 24C30C752BADCF2700AC0028 /* ComposableArchitecture */; };
 		3408D42C2B001C6F0059C5F5 /* SwiftUISplashScreen in Frameworks */ = {isa = PBXBuildFile; productRef = 3408D42B2B001C6F0059C5F5 /* SwiftUISplashScreen */; };
 		3425F7E02AD95E43002BF8CF /* Gen in Frameworks */ = {isa = PBXBuildFile; productRef = 3425F7DF2AD95E43002BF8CF /* Gen */; };
 		343BFB3B2B0D455300793D89 /* ScannerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343BFB3A2B0D455300793D89 /* ScannerApp.swift */; };
 		343BFB3F2B0D455800793D89 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 343BFB3E2B0D455800793D89 /* Assets.xcassets */; };
 		343BFB422B0D455800793D89 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 343BFB412B0D455800793D89 /* Preview Assets.xcassets */; };
 		343BFB472B0D463600793D89 /* Scanner in Frameworks */ = {isa = PBXBuildFile; productRef = 343BFB462B0D463600793D89 /* Scanner */; };
-		343BFB492B0D469100793D89 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 343BFB482B0D469100793D89 /* ComposableArchitecture */; };
 		343E2B342AA4D25C00F76D2C /* ShoppingListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343E2B332AA4D25C00F76D2C /* ShoppingListApp.swift */; };
 		343E2B382AA4D25E00F76D2C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 343E2B372AA4D25E00F76D2C /* Assets.xcassets */; };
 		343E2B3B2AA4D25E00F76D2C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 343E2B3A2AA4D25E00F76D2C /* Preview Assets.xcassets */; };
@@ -28,7 +28,6 @@
 		346316CC2B024FB60062898A /* ProductListFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346316CB2B024FB60062898A /* ProductListFeatureTests.swift */; };
 		346316D62B024FB60062898A /* ProductListFeatureUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346316D52B024FB60062898A /* ProductListFeatureUITests.swift */; };
 		346316D82B024FB60062898A /* ProductListFeatureUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346316D72B024FB60062898A /* ProductListFeatureUITestsLaunchTests.swift */; };
-		347F52922AD95229003C55A8 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 347F52912AD95229003C55A8 /* ComposableArchitecture */; };
 		349C45DB2AD97DE6003228C5 /* ListManager in Frameworks */ = {isa = PBXBuildFile; productRef = 349C45DA2AD97DE6003228C5 /* ListManager */; };
 		349C45DD2AD97DE6003228C5 /* Models in Frameworks */ = {isa = PBXBuildFile; productRef = 349C45DC2AD97DE6003228C5 /* Models */; };
 		349C45DF2AD97DE6003228C5 /* Note in Frameworks */ = {isa = PBXBuildFile; productRef = 349C45DE2AD97DE6003228C5 /* Note */; };
@@ -47,7 +46,6 @@
 		34CD7B482B0614060076C484 /* TipsLaboratoryUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CD7B472B0614060076C484 /* TipsLaboratoryUITestsLaunchTests.swift */; };
 		34CD7B532B0614CE0076C484 /* Tips in Frameworks */ = {isa = PBXBuildFile; productRef = 34CD7B522B0614CE0076C484 /* Tips */; };
 		34DE67952B02526800A45E61 /* PurchaseList in Frameworks */ = {isa = PBXBuildFile; productRef = 34DE67942B02526800A45E61 /* PurchaseList */; };
-		34DE67972B02529F00A45E61 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 34DE67962B02529F00A45E61 /* ComposableArchitecture */; };
 		34DE67992B0252AA00A45E61 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 34DE67982B0252AA00A45E61 /* FirebaseAnalytics */; };
 		34DE679B2B0252AA00A45E61 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 34DE679A2B0252AA00A45E61 /* FirebaseAnalyticsSwift */; };
 		34DE679D2B0252AA00A45E61 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 34DE679C2B0252AA00A45E61 /* FirebaseAnalyticsWithoutAdIdSupport */; };
@@ -151,7 +149,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				343BFB492B0D469100793D89 /* ComposableArchitecture in Frameworks */,
 				343BFB472B0D463600793D89 /* Scanner in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -162,6 +159,7 @@
 			files = (
 				349C45DF2AD97DE6003228C5 /* Note in Frameworks */,
 				349C45E12AD97DE6003228C5 /* PurchaseList in Frameworks */,
+				24C30C762BADCF2700AC0028 /* ComposableArchitecture in Frameworks */,
 				349C45DD2AD97DE6003228C5 /* Models in Frameworks */,
 				3425F7E02AD95E43002BF8CF /* Gen in Frameworks */,
 				34A80DB72AE04ED6006176F9 /* FirebaseAnalyticsSwift in Frameworks */,
@@ -169,7 +167,6 @@
 				349C45DB2AD97DE6003228C5 /* ListManager in Frameworks */,
 				34EAE8242B0664370069D686 /* Tips in Frameworks */,
 				34A80DB92AE04ED6006176F9 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
-				347F52922AD95229003C55A8 /* ComposableArchitecture in Frameworks */,
 				3408D42C2B001C6F0059C5F5 /* SwiftUISplashScreen in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -194,7 +191,6 @@
 			files = (
 				34DE679B2B0252AA00A45E61 /* FirebaseAnalyticsSwift in Frameworks */,
 				34DE679D2B0252AA00A45E61 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
-				34DE67972B02529F00A45E61 /* ComposableArchitecture in Frameworks */,
 				34DE67952B02526800A45E61 /* PurchaseList in Frameworks */,
 				34DE67992B0252AA00A45E61 /* FirebaseAnalytics in Frameworks */,
 				34CD7B1E2B02C6B40076C484 /* Inject in Frameworks */,
@@ -446,7 +442,6 @@
 			name = ScannerLaboratory;
 			packageProductDependencies = (
 				343BFB462B0D463600793D89 /* Scanner */,
-				343BFB482B0D469100793D89 /* ComposableArchitecture */,
 			);
 			productName = Scanner;
 			productReference = 343BFB382B0D455200793D89 /* ScannerLaboratory.app */;
@@ -467,7 +462,6 @@
 			);
 			name = ShoppingList;
 			packageProductDependencies = (
-				347F52912AD95229003C55A8 /* ComposableArchitecture */,
 				349D3D0F2AD95BD5001E1B0E /* Utils */,
 				3425F7DF2AD95E43002BF8CF /* Gen */,
 				349C45DA2AD97DE6003228C5 /* ListManager */,
@@ -478,6 +472,7 @@
 				34A80DB82AE04ED6006176F9 /* FirebaseAnalyticsWithoutAdIdSupport */,
 				3408D42B2B001C6F0059C5F5 /* SwiftUISplashScreen */,
 				34EAE8232B0664370069D686 /* Tips */,
+				24C30C752BADCF2700AC0028 /* ComposableArchitecture */,
 			);
 			productName = ShoppingList;
 			productReference = 343E2B302AA4D25C00F76D2C /* ShoppingList.app */;
@@ -534,7 +529,6 @@
 			name = ProductListFeature;
 			packageProductDependencies = (
 				34DE67942B02526800A45E61 /* PurchaseList */,
-				34DE67962B02529F00A45E61 /* ComposableArchitecture */,
 				34DE67982B0252AA00A45E61 /* FirebaseAnalytics */,
 				34DE679A2B0252AA00A45E61 /* FirebaseAnalyticsSwift */,
 				34DE679C2B0252AA00A45E61 /* FirebaseAnalyticsWithoutAdIdSupport */,
@@ -696,11 +690,11 @@
 			);
 			mainGroup = 343E2B272AA4D25B00F76D2C;
 			packageReferences = (
-				347F52902AD95229003C55A8 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				3425F7DE2AD95E43002BF8CF /* XCRemoteSwiftPackageReference "swift-gen" */,
 				34A80DB52AE04ED5006176F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				3408D42A2B001C6F0059C5F5 /* XCRemoteSwiftPackageReference "swiftui-splash-screen" */,
 				34CD7B1C2B02C6B40076C484 /* XCRemoteSwiftPackageReference "Inject" */,
+				24C30C742BADCF2700AC0028 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
 			productRefGroup = 343E2B312AA4D25C00F76D2C /* Products */;
 			projectDirPath = "";
@@ -950,7 +944,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "\"Scanner/Preview Content\"";
 				DEVELOPMENT_TEAM = 2AUX883V6A;
 				ENABLE_PREVIEWS = YES;
@@ -986,7 +980,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "\"Scanner/Preview Content\"";
 				DEVELOPMENT_TEAM = 2AUX883V6A;
 				ENABLE_PREVIEWS = YES;
@@ -1139,7 +1133,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_ASSET_PATHS = "\"ShoppingList/Preview Content\"";
 				DEVELOPMENT_TEAM = 2AUX883V6A;
 				ENABLE_PREVIEWS = YES;
@@ -1159,7 +1153,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				OTHER_LDFLAGS = (
 					"-fprofile-instr-generate",
 					"-Xlinker",
@@ -1186,7 +1180,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_ASSET_PATHS = "\"ShoppingList/Preview Content\"";
 				DEVELOPMENT_TEAM = 2AUX883V6A;
 				ENABLE_PREVIEWS = YES;
@@ -1206,7 +1200,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				OTHER_LDFLAGS = "-fprofile-instr-generate";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sebek.ShoppingNotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1226,7 +1220,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 2AUX883V6A;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
@@ -1246,7 +1240,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 2AUX883V6A;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
@@ -1265,7 +1259,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 2AUX883V6A;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -1283,7 +1277,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 2AUX883V6A;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -1304,7 +1298,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = ProductListFeature/ProductListFeature.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "\"ProductListFeature/Preview Content\"";
 				DEVELOPMENT_TEAM = 2AUX883V6A;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1350,7 +1344,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = ProductListFeature/ProductListFeature.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "\"ProductListFeature/Preview Content\"";
 				DEVELOPMENT_TEAM = 2AUX883V6A;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1390,7 +1384,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 2AUX883V6A;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1417,7 +1411,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 2AUX883V6A;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1442,7 +1436,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 2AUX883V6A;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1468,7 +1462,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 2AUX883V6A;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1494,7 +1488,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "\"TipsLaboratory/Preview Content\"";
 				DEVELOPMENT_TEAM = 2AUX883V6A;
 				ENABLE_PREVIEWS = YES;
@@ -1532,7 +1526,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "\"TipsLaboratory/Preview Content\"";
 				DEVELOPMENT_TEAM = 2AUX883V6A;
 				ENABLE_PREVIEWS = YES;
@@ -1565,7 +1559,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 2AUX883V6A;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1589,7 +1583,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 2AUX883V6A;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1611,7 +1605,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 2AUX883V6A;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1634,7 +1628,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 2AUX883V6A;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1755,6 +1749,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		24C30C742BADCF2700AC0028 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 1.9.2;
+			};
+		};
 		3408D42A2B001C6F0059C5F5 /* XCRemoteSwiftPackageReference "swiftui-splash-screen" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/globulus/swiftui-splash-screen";
@@ -1769,14 +1771,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.4.0;
-			};
-		};
-		347F52902AD95229003C55A8 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.2.0;
 			};
 		};
 		34A80DB52AE04ED5006176F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
@@ -1798,6 +1792,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		24C30C752BADCF2700AC0028 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 24C30C742BADCF2700AC0028 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
 		3408D42B2B001C6F0059C5F5 /* SwiftUISplashScreen */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3408D42A2B001C6F0059C5F5 /* XCRemoteSwiftPackageReference "swiftui-splash-screen" */;
@@ -1812,11 +1811,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Scanner;
 		};
-		343BFB482B0D469100793D89 /* ComposableArchitecture */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 347F52902AD95229003C55A8 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
-			productName = ComposableArchitecture;
-		};
 		3441D7BC2B0651BE007434E7 /* Inject */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 34CD7B1C2B02C6B40076C484 /* XCRemoteSwiftPackageReference "Inject" */;
@@ -1825,11 +1819,6 @@
 		3441D7BE2B065330007434E7 /* Analytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Analytics;
-		};
-		347F52912AD95229003C55A8 /* ComposableArchitecture */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 347F52902AD95229003C55A8 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
-			productName = ComposableArchitecture;
 		};
 		349C45DA2AD97DE6003228C5 /* ListManager */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1873,11 +1862,6 @@
 		34DE67942B02526800A45E61 /* PurchaseList */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PurchaseList;
-		};
-		34DE67962B02529F00A45E61 /* ComposableArchitecture */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 347F52902AD95229003C55A8 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
-			productName = ComposableArchitecture;
 		};
 		34DE67982B0252AA00A45E61 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;

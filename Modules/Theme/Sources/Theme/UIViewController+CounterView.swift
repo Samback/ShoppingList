@@ -72,10 +72,7 @@ public extension UIViewController {
 //        navigationBar.addSubview(_backgroundBlureView)
         navigationBar.insertSubview(_backgroundBlureView, at: 0)
         _backgroundBlureView.layoutIfNeeded()
-        print("=================")
-        print("views \( navigationBar.subviews)")
-        print("=================")
-        
+       
         navigationBar.subviews.forEach {
             if $0 is VisualEffectView {
                 
